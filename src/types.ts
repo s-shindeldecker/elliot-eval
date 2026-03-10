@@ -13,6 +13,15 @@ export const FAILURE_CODES = [
 
 export type FailureCode = (typeof FAILURE_CODES)[number];
 
+export const HARD_FAIL_CODES: ReadonlySet<FailureCode> = new Set([
+  'HALLUCINATED_CITATION',
+  'SCHEMA_INVALID',
+  'JSON_PARSE_ERROR',
+  'ADAPTER_ERROR',
+  'CONFIG_ERROR',
+  'TIMEOUT',
+] as const);
+
 export type Stage = 'screening' | 'gold';
 
 // ---------------------------------------------------------------------------
@@ -131,6 +140,7 @@ export interface AgentSummary {
   failed: number;
   disqualified_count: number;
   passRate: number;
+  hard_fail_count: number;
   meetsThreshold: boolean;
   avg_latency_ms: number;
   p50_latency_ms: number;

@@ -80,6 +80,18 @@ See `src/schemas/agent-response.ts` for the exact AJV schema.
 | `TIMEOUT` | Adapter invocation exceeded `--timeoutMs` |
 | `CONFIG_ERROR` | Dataset row has malformed expected object |
 
+## Pass/fail rules
+
+**Screening stage:** An agent passes only if every case passes (zero failures of any kind). `--failFast` aborts on the first failure.
+
+**Gold stage:** An agent passes only if **both** conditions are met:
+
+1. `passRate >= threshold` (default 85%)
+2. `hard_fail_count == 0` — zero results containing any of the **hard-gate failure codes**:
+   `HALLUCINATED_CITATION`, `SCHEMA_INVALID`, `JSON_PARSE_ERROR`, `ADAPTER_ERROR`, `CONFIG_ERROR`, `TIMEOUT`
+
+Soft failures (`DECISION_MISMATCH`, `FIELD_MISMATCH`, `RANGE_VIOLATION`, `MISSING_REQUIRED_FIELD`) reduce pass rate but do not trigger the hard gate.
+
 ## Fixture configs
 
 Use the **stable fixture configs** for local testing and CI. Each targets a specific mock agent:
@@ -91,16 +103,31 @@ Use the **stable fixture configs** for local testing and CI. Each targets a spec
 | `fixtures/eval-config.bad-json.json` | mock-bad-json | 1 (JSON_PARSE_ERROR / SCHEMA_INVALID) |
 | `fixtures/eval-config.all-mocks.json` | all three | 1 (mixed failures) |
 
+**Gold-stage configs** (dataset: `data/elliot.gold.v0.1.jsonl`):
+
+| Config file | Agent(s) | Expected exit |
+|-------------|----------|---------------|
+| `fixtures/eval-config.gold.json` | all three gold mocks | 1 (mixed) |
+
+Scripts use `--agents` to filter from the gold config.
+
 > **Note:** `fixtures/eval-config.json` is a legacy convenience file and may be overwritten during development. Do not rely on it for scripted tests. Use the named configs above instead.
 
 ## npm scripts
 
 ```bash
+# Screening
 npm run test:screening              # CI gate: mock-perfect, --failFast → exit 0
 npm run test:screening:perfect      # same as above (explicit name)
 npm run test:screening:hallucinator # hallucinator mock, --failFast → exit 1
 npm run test:screening:bad-json     # bad-json mock, --failFast → exit 1
 npm run test:screening:all          # runs all three sequentially → exit 1
+
+# Gold
+npm run test:gold:perfect           # gold mock-perfect, --failFast → exit 0
+npm run test:gold:hallucinator      # gold hallucinator, --failFast → exit 1 (hard fail: HALLUCINATED_CITATION)
+npm run test:gold:bad-json          # gold bad-json, --failFast → exit 1 (hard fail: JSON_PARSE_ERROR + SCHEMA_INVALID)
+npm run eval:gold                   # all 3 gold agents, no --failFast
 
 npm run eval:sample                 # screening run without --failFast
 npm run eval -- [flags]             # ad-hoc run with any flags

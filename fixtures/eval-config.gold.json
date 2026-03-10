@@ -1,0 +1,25 @@
+{
+  "agents": [
+    {
+      "name": "mock-perfect",
+      "adapter": "mock",
+      "config": { "responsesPath": "./fixtures/mock-responses/gold-perfect.jsonl" }
+    },
+    {
+      "name": "mock-hallucinator",
+      "adapter": "mock",
+      "config": { "responsesPath": "./fixtures/mock-responses/gold-hallucinator.jsonl" }
+    },
+    {
+      "name": "mock-bad-json",
+      "adapter": "mock",
+      "config": { "responsesPath": "./fixtures/mock-responses/gold-bad-json.jsonl" }
+    }
+  ],
+  "dataset": "./data/elliot.gold.v0.1.jsonl",
+  "stage": "gold",
+  "threshold": 0.85,
+  "maxConcurrency": 2,
+  "seed": 42,
+  "timeoutMs": 30000
+}

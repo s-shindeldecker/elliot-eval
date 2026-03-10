@@ -2,6 +2,7 @@ import { mkdirSync, writeFileSync, appendFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   FAILURE_CODES,
+  HARD_FAIL_CODES,
   type AgentSummary,
   type EvalResult,
   type FailureCode,
@@ -45,6 +46,7 @@ export class Reporter {
       'passed',
       'failed',
       'disqualified_count',
+      'hard_fail_count',
       'pass_rate',
       'meets_threshold',
       'avg_latency_ms',
@@ -61,6 +63,7 @@ export class Reporter {
       s.passed,
       s.failed,
       s.disqualified_count,
+      s.hard_fail_count,
       s.passRate.toFixed(4),
       s.meetsThreshold,
       s.avg_latency_ms.toFixed(1),
@@ -82,6 +85,9 @@ export class Reporter {
       console.error(`  [${status}] ${s.agentName} (${s.stage})`);
       console.error(`    Cases: ${s.totalCases} | Passed: ${s.passed} | Failed: ${s.failed} | Disqualified: ${s.disqualified_count}`);
       console.error(`    Pass rate: ${(s.passRate * 100).toFixed(1)}%`);
+      if (s.stage === 'gold') {
+        console.error(`    Hard fails: ${s.hard_fail_count}`);
+      }
       console.error(`    Latency: avg=${s.avg_latency_ms.toFixed(0)}ms  p50=${s.p50_latency_ms.toFixed(0)}ms  p90=${s.p90_latency_ms.toFixed(0)}ms`);
       console.error(`    Parse success: ${(s.parse_success_rate * 100).toFixed(1)}%`);
 
@@ -119,16 +125,20 @@ export function buildSummaries(
 
     const passRate = scoredCount > 0 ? passed / scoredCount : 0;
 
-    const meetsThreshold = stage === 'screening'
-      ? failed === 0 && disqualifiedCount === 0
-      : passRate >= threshold && disqualifiedCount === 0;
-
     const failureCounts: Partial<Record<FailureCode, number>> = {};
     for (const r of agentResults) {
       for (const code of r.failure_reasons) {
         failureCounts[code] = (failureCounts[code] ?? 0) + 1;
       }
     }
+
+    const hardFailCount = scoredResults.filter(r =>
+      r.failure_reasons.some(c => HARD_FAIL_CODES.has(c)),
+    ).length;
+
+    const meetsThreshold = stage === 'screening'
+      ? failed === 0 && disqualifiedCount === 0
+      : passRate >= threshold && disqualifiedCount === 0 && hardFailCount === 0;
 
     return {
       agentName: name,
@@ -137,6 +147,7 @@ export function buildSummaries(
       passed,
       failed,
       disqualified_count: disqualifiedCount,
+      hard_fail_count: hardFailCount,
       passRate,
       meetsThreshold,
       avg_latency_ms: latencies.length > 0 ? latencies.reduce((a, b) => a + b, 0) / latencies.length : 0,

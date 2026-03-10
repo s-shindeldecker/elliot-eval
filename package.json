@@ -14,7 +14,13 @@
     "test:screening:perfect": "tsx src/index.ts --config fixtures/eval-config.perfect.json --stage screening --failFast",
     "test:screening:hallucinator": "tsx src/index.ts --config fixtures/eval-config.hallucinator.json --stage screening --failFast",
     "test:screening:bad-json": "tsx src/index.ts --config fixtures/eval-config.bad-json.json --stage screening --failFast",
-    "test:screening:all": "F=0; npm run test:screening:perfect || F=1; npm run test:screening:hallucinator || F=1; npm run test:screening:bad-json || F=1; exit $F"
+    "test:screening:all": "F=0; npm run test:screening:perfect || F=1; npm run test:screening:hallucinator || F=1; npm run test:screening:bad-json || F=1; exit $F",
+    "eval:gold": "tsx src/index.ts --config fixtures/eval-config.gold.json --stage gold",
+    "test:gold": "tsx src/index.ts --config fixtures/eval-config.gold.json --stage gold --failFast --agents mock-perfect",
+    "test:gold:perfect": "tsx src/index.ts --config fixtures/eval-config.gold.json --stage gold --failFast --agents mock-perfect",
+    "test:gold:hallucinator": "tsx src/index.ts --config fixtures/eval-config.gold.json --stage gold --failFast --agents mock-hallucinator",
+    "test:gold:bad-json": "tsx src/index.ts --config fixtures/eval-config.gold.json --stage gold --failFast --agents mock-bad-json",
+    "lint:json": "node -e \"JSON.parse(require('fs').readFileSync('package.json','utf8')); console.log('package.json ok')\""
   },
   "dependencies": {
     "ajv": "^8.17.1",
