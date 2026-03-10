@@ -1,0 +1,15 @@
+{
+  "agents": [
+    {
+      "name": "mock-hallucinator",
+      "adapter": "mock",
+      "config": { "responsesPath": "./fixtures/mock-responses/hallucinator.jsonl" }
+    }
+  ],
+  "dataset": "./data/gold.sample.jsonl",
+  "stage": "screening",
+  "threshold": 0.85,
+  "maxConcurrency": 2,
+  "seed": 42,
+  "timeoutMs": 30000
+}

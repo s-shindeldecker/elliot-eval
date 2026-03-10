@@ -1,0 +1,25 @@
+{
+  "agents": [
+    {
+      "name": "mock-perfect",
+      "adapter": "mock",
+      "config": { "responsesPath": "./fixtures/mock-responses/perfect.jsonl" }
+    },
+    {
+      "name": "mock-hallucinator",
+      "adapter": "mock",
+      "config": { "responsesPath": "./fixtures/mock-responses/hallucinator.jsonl" }
+    },
+    {
+      "name": "mock-bad-json",
+      "adapter": "mock",
+      "config": { "responsesPath": "./fixtures/mock-responses/bad-json.jsonl" }
+    }
+  ],
+  "dataset": "./data/gold.sample.jsonl",
+  "stage": "screening",
+  "threshold": 0.85,
+  "maxConcurrency": 2,
+  "seed": 42,
+  "timeoutMs": 30000
+}

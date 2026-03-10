@@ -1,0 +1,29 @@
+{
+  "name": "elliot-eval",
+  "version": "0.1.0",
+  "description": "Elliot Evaluation Harness — Experimentation Line-of-sight & Impact Observation Tracker",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "eval": "tsx src/index.ts",
+    "eval:sample": "tsx src/index.ts --config fixtures/eval-config.json --stage screening",
+    "test:screening": "tsx src/index.ts --config fixtures/eval-config.perfect.json --stage screening --failFast",
+    "test:screening:perfect": "tsx src/index.ts --config fixtures/eval-config.perfect.json --stage screening --failFast",
+    "test:screening:hallucinator": "tsx src/index.ts --config fixtures/eval-config.hallucinator.json --stage screening --failFast",
+    "test:screening:bad-json": "tsx src/index.ts --config fixtures/eval-config.bad-json.json --stage screening --failFast",
+    "test:screening:all": "F=0; npm run test:screening:perfect || F=1; npm run test:screening:hallucinator || F=1; npm run test:screening:bad-json || F=1; exit $F"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "commander": "^13.1.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}

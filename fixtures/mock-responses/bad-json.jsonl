@@ -1,0 +1,3 @@
+{"id":"screening-001","rawText":"Sure, here is my analysis:\n\nI think this opportunity looks promising but {{incomplete json truncated"}
+{"id":"screening-002","response":{"human_summary":["This response has valid summary"],"json":{"create_eic":true,"eic":null}}}
+{"id":"screening-003","rawText":"Error: model returned empty response with no JSON payload at all."}

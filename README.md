@@ -1,0 +1,145 @@
+# elliot-eval
+
+**Elliot Evaluation Harness** — Experimentation Line-of-sight & Impact Observation Tracker
+
+A CLI tool that runs a gold dataset of evaluation packets through multiple agent candidates, validates strict JSON output against the Elliot EIC schema, scores via deterministic rule-based checks, and produces `results.jsonl` + `summary.csv` + console summary.
+
+## Quick start
+
+```bash
+npm install
+npm run test:screening          # CI regression gate (mock-perfect, exit 0)
+npm run eval:sample             # same dataset, no --failFast
+```
+
+## Dataset schema
+
+Each line in the JSONL dataset must conform to:
+
+```jsonc
+{
+  "id": "string",               // unique case identifier
+  "input_text": "string",       // full text fed to the agent
+  "expected": {
+    "create_eic": true | false,  // required — primary decision to score
+    "eic": {                     // optional — only when create_eic=true
+      // exact-match fields (FIELD_MISMATCH if wrong)
+      "status": "Active" | "Monitoring" | "Under Review" | "CW" | "CL",
+      "primary_influence_tag": "string",
+      "secondary_tag": "string | null",
+      "ai_configs_adjacent": "Yes" | "No" | "Unknown",
+      "competitive_mention": "Yes" | "No" | "Unknown",
+      "exec_sponsor_mentioned": "Yes" | "No" | "Unknown",
+      "experimentation_team_engaged": "Yes" | "No" | "Unknown",
+      "stage_bucket": "Early" | "Mid" | "Late" | "Closed",
+      "motion": "Net-new" | "Expansion" | "Renewal" | "Other",
+
+      // range/set checks (RANGE_VIOLATION if outside)
+      "influence_strength_range": [min, max],   // integers within 0..5
+      "impact_priority_range": [min, max],       // integers within 1..5
+      "confidence_allowed": ["Medium", "High"]   // allowed values
+    }
+  },
+  "tags": ["screening"]         // optional — used for stage filtering
+}
+```
+
+Only fields present in `expected.eic` are scored. Omitted fields are not checked.
+
+## Agent output contract
+
+Every agent must return a response containing JSON that matches:
+
+```jsonc
+{
+  "human_summary": ["string"],  // 1–8 non-empty bullet strings
+  "json": {
+    "create_eic": true | false,
+    "eic": { /* full EIC object */ } | null
+  }
+}
+```
+
+When `create_eic=true`, `eic` must be a full object with all 22 required fields.
+When `create_eic=false`, `eic` must be `null`.
+
+See `src/schemas/agent-response.ts` for the exact AJV schema.
+
+## Failure codes
+
+| Code | Trigger |
+|------|---------|
+| `JSON_PARSE_ERROR` | No parseable JSON found in agent response |
+| `SCHEMA_INVALID` | JSON parsed but fails AJV schema validation |
+| `DECISION_MISMATCH` | `create_eic` does not match expected |
+| `FIELD_MISMATCH` | Exact-match field mismatch (status, tags, enums, booleans) |
+| `RANGE_VIOLATION` | `influence_strength`, `impact_priority` outside range, or `confidence` not in allowed set |
+| `HALLUCINATED_CITATION` | URL in `evidence_citation_1`/`evidence_citation_2` not found verbatim in `input_text` |
+| `MISSING_REQUIRED_FIELD` | `create_eic=true` but agent returned `eic: null` |
+| `ADAPTER_ERROR` | Adapter returned an error (e.g. LD stub missing env vars) |
+| `TIMEOUT` | Adapter invocation exceeded `--timeoutMs` |
+| `CONFIG_ERROR` | Dataset row has malformed expected object |
+
+## Fixture configs
+
+Use the **stable fixture configs** for local testing and CI. Each targets a specific mock agent:
+
+| Config file | Agent(s) | Expected exit |
+|-------------|----------|---------------|
+| `fixtures/eval-config.perfect.json` | mock-perfect | 0 (all pass) |
+| `fixtures/eval-config.hallucinator.json` | mock-hallucinator | 1 (HALLUCINATED_CITATION) |
+| `fixtures/eval-config.bad-json.json` | mock-bad-json | 1 (JSON_PARSE_ERROR / SCHEMA_INVALID) |
+| `fixtures/eval-config.all-mocks.json` | all three | 1 (mixed failures) |
+
+> **Note:** `fixtures/eval-config.json` is a legacy convenience file and may be overwritten during development. Do not rely on it for scripted tests. Use the named configs above instead.
+
+## npm scripts
+
+```bash
+npm run test:screening              # CI gate: mock-perfect, --failFast → exit 0
+npm run test:screening:perfect      # same as above (explicit name)
+npm run test:screening:hallucinator # hallucinator mock, --failFast → exit 1
+npm run test:screening:bad-json     # bad-json mock, --failFast → exit 1
+npm run test:screening:all          # runs all three sequentially → exit 1
+
+npm run eval:sample                 # screening run without --failFast
+npm run eval -- [flags]             # ad-hoc run with any flags
+```
+
+## How to wire LaunchDarkly AI SDK
+
+1. Set environment variables: `LD_SDK_KEY`, `LD_AI_CONFIG_KEY`
+2. Install packages: `@launchdarkly/node-server-sdk`, `@launchdarkly/server-sdk-ai`
+3. Edit `src/adapter/launchdarkly.ts` — replace the stub `invoke()` body with SDK calls
+4. Add an agent entry to your config file:
+   ```json
+   { "name": "my-ld-agent", "adapter": "launchdarkly", "config": { "configKey": "my-ai-config-key" } }
+   ```
+
+## How to add new agents
+
+Add a new entry to a config JSON file under `agents`:
+
+```json
+{ "name": "agent-name", "adapter": "mock", "config": { "responsesPath": "./path/to/responses.jsonl" } }
+```
+
+Mock response files are JSONL with one of two formats per line:
+- `{"id": "case-id", "response": { ... }}` — wrapped in fenced JSON (normal)
+- `{"id": "case-id", "rawText": "..."}` — passed through verbatim (for testing parse failures)
+
+## How to add new datasets
+
+1. Create a JSONL file following the dataset schema above
+2. Tag screening rows with `"tags": ["screening"]`
+3. Point your config or `--dataset` flag to the new file
+
+## How to run regression tests
+
+```bash
+# CI: exit 0 only if all screening packets pass
+npm run test:screening
+
+# Local: run all mocks to verify both pass and fail behavior
+npm run test:screening:all
+```
