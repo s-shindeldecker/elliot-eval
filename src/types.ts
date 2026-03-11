@@ -123,6 +123,7 @@ export interface EvalResult {
   score: number;
   latencyMs: number;
   rawTextLength: number;
+  rawTextSnippet: string;
   parsed_json_present: boolean;
   error?: string;
   timestamp: string;

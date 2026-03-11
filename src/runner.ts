@@ -111,6 +111,8 @@ async function runSingleCase(
 
   const output = await invokeWithTimeout(adapter, input, config.timeoutMs);
 
+  const rawTextSnippet = output.rawText.slice(0, 2000);
+
   // Adapter-level errors (ADAPTER_ERROR or TIMEOUT)
   if (output.error) {
     const code = output.error.includes('timed out') ? 'TIMEOUT' : 'ADAPTER_ERROR';
@@ -124,6 +126,7 @@ async function runSingleCase(
       score: 0,
       latencyMs: output.latencyMs,
       rawTextLength: output.rawText.length,
+      rawTextSnippet,
       parsed_json_present: false,
       timestamp: new Date().toISOString(),
     };
@@ -131,7 +134,7 @@ async function runSingleCase(
 
   // Validate + score
   const extraction = extractAndValidate(output.rawText);
-  return scoreCase(row, extraction, adapter.name, output.latencyMs, output.rawText.length);
+  return scoreCase(row, extraction, adapter.name, output.latencyMs, output.rawText.length, rawTextSnippet);
 }
 
 // ---------------------------------------------------------------------------
@@ -186,6 +189,7 @@ function buildDisqualifiedResult(caseId: string, agentName: string): EvalResult 
     score: 0,
     latencyMs: 0,
     rawTextLength: 0,
+    rawTextSnippet: '',
     parsed_json_present: false,
     timestamp: new Date().toISOString(),
   };

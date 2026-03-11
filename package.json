@@ -20,11 +20,17 @@
     "test:gold:perfect": "tsx src/index.ts --config fixtures/eval-config.gold.json --stage gold --failFast --agents mock-perfect",
     "test:gold:hallucinator": "tsx src/index.ts --config fixtures/eval-config.gold.json --stage gold --failFast --agents mock-hallucinator",
     "test:gold:bad-json": "tsx src/index.ts --config fixtures/eval-config.gold.json --stage gold --failFast --agents mock-bad-json",
+    "eval:ld:screening": "tsx src/index.ts --config fixtures/eval-config.ld.json --stage screening",
+    "eval:ld:gold": "tsx src/index.ts --config fixtures/eval-config.ld.json --stage gold --dataset ./data/elliot.gold.v0.1.jsonl",
     "lint:json": "node -e \"JSON.parse(require('fs').readFileSync('package.json','utf8')); console.log('package.json ok')\""
   },
   "dependencies": {
+    "@launchdarkly/node-server-sdk": "^9.10.9",
+    "@launchdarkly/server-sdk-ai": "^0.16.5",
     "ajv": "^8.17.1",
     "commander": "^13.1.0",
+    "dotenv": "^17.3.1",
+    "openai": "^6.27.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {

@@ -1,0 +1,15 @@
+{
+  "agents": [
+    {
+      "name": "ld-agent",
+      "adapter": "launchdarkly",
+      "config": {}
+    }
+  ],
+  "dataset": "./data/gold.sample.jsonl",
+  "stage": "screening",
+  "threshold": 0.85,
+  "maxConcurrency": 1,
+  "seed": 42,
+  "timeoutMs": 60000
+}

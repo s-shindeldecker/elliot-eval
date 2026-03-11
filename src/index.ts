@@ -1,6 +1,8 @@
 import { Command } from 'commander';
 import { resolveConfig, type CliOpts } from './config.js';
 import { runEval } from './runner.js';
+import { closeLDClient } from './adapter/ld-client.js';
+import 'dotenv/config';
 
 const program = new Command()
   .name('elliot-eval')
@@ -26,8 +28,10 @@ try {
   console.error(`[elliot-eval] reportDir=${config.reportDir} maxConcurrency=${config.maxConcurrency} timeoutMs=${config.timeoutMs} failFast=${config.failFast}`);
 
   const { exitCode } = await runEval(config);
+  await closeLDClient();
   process.exit(exitCode);
 } catch (err) {
   console.error('[elliot-eval] Fatal error:', err instanceof Error ? err.message : err);
+  await closeLDClient();
   process.exit(1);
 }

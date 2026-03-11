@@ -1,71 +1,67 @@
 import type { AgentAdapter, AdapterInput, AdapterOutput } from './types.js';
+import { invokeLDAIConfig } from './ld-client.js';
 
 // ---------------------------------------------------------------------------
-// LaunchDarkly AI Config adapter — STUB for v0.1
+// LaunchDarkly AI Config adapter
 //
-// Wiring points:
-//   1. Set env vars: LD_SDK_KEY, LD_AI_CONFIG_KEY
-//   2. Install @launchdarkly/node-server-sdk + @launchdarkly/server-sdk-ai
-//   3. Replace the invoke() body with actual SDK calls
+// Reads model configuration and prompt template from a LaunchDarkly AI Config,
+// calls the model via OpenAI, and returns the raw text for downstream validation.
+//
+// Config fields (all optional, env-var fallbacks shown):
+//   aiConfigKey  → LD_AI_CONFIG_KEY
+//   contextKey   → LD_CONTEXT_KEY   (default "elliot-eval")
+//   contextKind  → LD_CONTEXT_KIND  (default "user")
 // ---------------------------------------------------------------------------
-
-const REQUIRED_ENV = ['LD_SDK_KEY', 'LD_AI_CONFIG_KEY'] as const;
 
 export class LaunchDarklyAdapter implements AgentAdapter {
   readonly name: string;
-  private readonly configKey: string;
+  private readonly aiConfigKey: string;
+  private readonly contextKey: string;
+  private readonly contextKind: string;
 
   constructor(name: string, config: Record<string, unknown>) {
     this.name = name;
-    this.configKey = (config['configKey'] as string) ?? '';
+    this.aiConfigKey =
+      (config['aiConfigKey'] as string) ?? process.env.LD_AI_CONFIG_KEY ?? '';
+    this.contextKey =
+      (config['contextKey'] as string) ?? process.env.LD_CONTEXT_KEY ?? 'elliot-eval';
+    this.contextKind =
+      (config['contextKind'] as string) ?? process.env.LD_CONTEXT_KIND ?? 'user';
 
-    // Validate env vars exist but do NOT read real credentials
-    const missing = REQUIRED_ENV.filter(k => !process.env[k]);
-    if (missing.length > 0) {
+    if (!this.aiConfigKey) {
       console.error(
-        `[LaunchDarklyAdapter "${name}"] WARNING: missing env vars: ${missing.join(', ')}. ` +
-          'Invocations will fail with ADAPTER_ERROR until these are set.',
+        `[LaunchDarklyAdapter "${name}"] WARNING: no aiConfigKey in config and LD_AI_CONFIG_KEY not set. ` +
+          'Invocations will fail with ADAPTER_ERROR.',
       );
     }
   }
 
-  async invoke(_input: AdapterInput): Promise<AdapterOutput> {
-    const start = performance.now();
-
-    // Guard: fail clearly if env vars are not set
-    const missing = REQUIRED_ENV.filter(k => !process.env[k]);
-    if (missing.length > 0) {
+  async invoke(input: AdapterInput): Promise<AdapterOutput> {
+    if (!this.aiConfigKey) {
       return {
         rawText: '',
-        latencyMs: Math.round(performance.now() - start),
+        latencyMs: 0,
         error:
-          `LaunchDarklyAdapter "${this.name}" is a stub. ` +
-          `Set env vars [${missing.join(', ')}] and implement SDK integration. ` +
-          `AI Config key: "${this.configKey}"`,
+          `LaunchDarklyAdapter "${this.name}": aiConfigKey not configured ` +
+          '(set in agent config or LD_AI_CONFIG_KEY env var)',
       };
     }
 
-    // TODO: Wire LaunchDarkly AI SDK here
-    //
-    // Implementation steps:
-    //   1. Initialize LD client (cache across invocations or pass in)
-    //   2. Retrieve AI config variation using this.configKey
-    //   3. Call the model provider using the config (model, prompt template, etc.)
-    //   4. Return the raw text response
-    //
-    // Example (pseudo-code):
-    //   const client = ld.init(process.env.LD_SDK_KEY);
-    //   await client.waitForInitialization();
-    //   const aiConfig = client.variation(this.configKey, context, defaultValue);
-    //   const completion = await callModel(aiConfig, input.inputText);
-    //   return { rawText: completion.text, latencyMs: ... };
+    const result = await invokeLDAIConfig({
+      aiConfigKey: this.aiConfigKey,
+      contextKind: this.contextKind,
+      contextKey: this.contextKey,
+      variables: { input_text: input.inputText },
+    });
 
-    return {
-      rawText: '',
-      latencyMs: Math.round(performance.now() - start),
-      error:
-        `LaunchDarklyAdapter "${this.name}": SDK integration not yet implemented. ` +
-        'This is a v0.1 stub. See src/adapter/launchdarkly.ts for wiring instructions.',
-    };
+    if (result.error) {
+      return {
+        rawText: result.rawText,
+        latencyMs: result.latencyMs,
+        error: `LaunchDarklyAdapter "${this.name}": ${result.error}`,
+      };
+    }
+
+    return { rawText: result.rawText, latencyMs: result.latencyMs };
   }
 }

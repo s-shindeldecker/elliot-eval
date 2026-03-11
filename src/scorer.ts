@@ -24,6 +24,7 @@ export function scoreCase(
   agentName: string,
   latencyMs: number,
   rawTextLength: number,
+  rawTextSnippet: string,
 ): EvalResult {
   const failures: Failure[] = [];
   const timestamp = new Date().toISOString();
@@ -33,7 +34,7 @@ export function scoreCase(
     for (const f of extraction.failures) {
       failures.push(f);
     }
-    return buildResult(row.id, agentName, failures, latencyMs, rawTextLength, extraction.parsed_json_present, timestamp);
+    return buildResult(row.id, agentName, failures, latencyMs, rawTextLength, rawTextSnippet, extraction.parsed_json_present, timestamp);
   }
 
   const response = extraction.response;
@@ -44,7 +45,7 @@ export function scoreCase(
       code: 'CONFIG_ERROR',
       detail: 'expected.create_eic is not defined — cannot score this case',
     });
-    return buildResult(row.id, agentName, failures, latencyMs, rawTextLength, true, timestamp);
+    return buildResult(row.id, agentName, failures, latencyMs, rawTextLength, rawTextSnippet, true, timestamp);
   }
 
   // Check 1: decision match — only create_eic uses DECISION_MISMATCH
@@ -55,19 +56,22 @@ export function scoreCase(
     });
   }
 
-  // Check 2: if create_eic=true with expected EIC fields, score them
-  if (row.expected.create_eic && row.expected.eic) {
-    if (response.json.eic == null) {
-      failures.push({
-        code: 'MISSING_REQUIRED_FIELD',
-        detail: 'create_eic=true but eic is null',
-      });
-    } else {
-      scoreEicFields(row.expected.eic, response.json.eic, failures);
-    }
+  // Check 2: MISSING_REQUIRED_FIELD — agent self-contradiction only.
+  // Fires when the AGENT output has create_eic=true but eic=null.
+  // Must NOT depend on expected.create_eic (that path is DECISION_MISMATCH).
+  if (response.json.create_eic === true && response.json.eic == null) {
+    failures.push({
+      code: 'MISSING_REQUIRED_FIELD',
+      detail: 'Agent output has create_eic=true but eic is null',
+    });
   }
 
-  // Check 3: CONFIG_ERROR if create_eic=true but no expected.eic to score against
+  // Check 3: EIC field scoring — only when agent provided an eic AND expected has scoring fields
+  if (row.expected.create_eic && row.expected.eic && response.json.eic != null) {
+    scoreEicFields(row.expected.eic, response.json.eic, failures);
+  }
+
+  // Check 3b: CONFIG_ERROR if create_eic=true but no expected.eic to score against
   if (row.expected.create_eic && !row.expected.eic) {
     failures.push({
       code: 'CONFIG_ERROR',
@@ -80,7 +84,7 @@ export function scoreCase(
     checkHallucination(row.input_text, response.json.eic, failures);
   }
 
-  return buildResult(row.id, agentName, failures, latencyMs, rawTextLength, true, timestamp);
+  return buildResult(row.id, agentName, failures, latencyMs, rawTextLength, rawTextSnippet, true, timestamp);
 }
 
 // ---------------------------------------------------------------------------
@@ -189,6 +193,7 @@ function buildResult(
   failures: Failure[],
   latencyMs: number,
   rawTextLength: number,
+  rawTextSnippet: string,
   parsedJsonPresent: boolean,
   timestamp: string,
 ): EvalResult {
@@ -206,6 +211,7 @@ function buildResult(
     score,
     latencyMs,
     rawTextLength,
+    rawTextSnippet,
     parsed_json_present: parsedJsonPresent,
     timestamp,
   };

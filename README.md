@@ -131,17 +131,81 @@ npm run eval:gold                   # all 3 gold agents, no --failFast
 
 npm run eval:sample                 # screening run without --failFast
 npm run eval -- [flags]             # ad-hoc run with any flags
+
+# LaunchDarkly (requires env vars: LD_SDK_KEY, LD_AI_CONFIG_KEY, OPENAI_API_KEY)
+npm run eval:ld:screening           # screening with LD agent
+npm run eval:ld:gold                # gold with LD agent
 ```
 
-## How to wire LaunchDarkly AI SDK
+## LaunchDarkly AI Config integration
 
-1. Set environment variables: `LD_SDK_KEY`, `LD_AI_CONFIG_KEY`
-2. Install packages: `@launchdarkly/node-server-sdk`, `@launchdarkly/server-sdk-ai`
-3. Edit `src/adapter/launchdarkly.ts` — replace the stub `invoke()` body with SDK calls
-4. Add an agent entry to your config file:
-   ```json
-   { "name": "my-ld-agent", "adapter": "launchdarkly", "config": { "configKey": "my-ai-config-key" } }
-   ```
+The `launchdarkly` adapter retrieves prompt templates and model configuration from a LaunchDarkly AI Config, calls OpenAI with the interpolated messages, and returns the raw text for downstream validation/scoring.
+
+### Required environment variables
+
+| Variable | Description |
+|----------|-------------|
+| `LD_SDK_KEY` | LaunchDarkly server-side SDK key (Project settings → Environments) |
+| `LD_AI_CONFIG_KEY` | AI Config key (can be overridden per-agent via `aiConfigKey` in config) |
+| `OPENAI_API_KEY` | OpenAI API key for model invocation |
+
+### Optional environment variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `LD_CONTEXT_KIND` | `"user"` | Context kind sent to LaunchDarkly |
+| `LD_CONTEXT_KEY` | `"elliot-eval"` | Context key sent to LaunchDarkly |
+
+### Running with LaunchDarkly
+
+```bash
+# Set credentials
+export LD_SDK_KEY="sdk-..."
+export LD_AI_CONFIG_KEY="my-ai-config"
+export OPENAI_API_KEY="sk-..."
+
+# Run screening (uses data/gold.sample.jsonl)
+npm run eval:ld:screening
+
+# Run gold (uses data/elliot.gold.v0.1.jsonl)
+npm run eval:ld:gold
+```
+
+### Agent config options
+
+Per-agent overrides in the config file:
+
+```json
+{
+  "name": "my-agent",
+  "adapter": "launchdarkly",
+  "config": {
+    "aiConfigKey": "my-ai-config-key",
+    "contextKey": "custom-context-key",
+    "contextKind": "service"
+  }
+}
+```
+
+All fields are optional — env vars are used as fallbacks.
+
+### How it works
+
+1. The LD server-side SDK initializes once (singleton) and reuses the connection across all invocations
+2. `completionConfig()` retrieves the AI Config variation for the given context, interpolating `{{ input_text }}` into the prompt template
+3. The adapter calls OpenAI `chat.completions.create` with the interpolated messages and model parameters from the AI Config
+4. Token usage and duration are reported back to LaunchDarkly via `tracker.trackOpenAIMetrics`
+5. The raw model response is returned to the harness for AJV validation and scoring
+
+### Troubleshooting
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `LD_SDK_KEY environment variable is required` | Missing SDK key | `export LD_SDK_KEY="sdk-..."` |
+| `OPENAI_API_KEY environment variable is required` | Missing OpenAI key | `export OPENAI_API_KEY="sk-..."` |
+| `AI Config "..." is disabled or unavailable` | Config key not found, targeting returned fallback, or config is toggled off | Verify the AI Config key exists and is enabled in the LaunchDarkly dashboard |
+| `waitForInitialization` timeout | LD_SDK_KEY is invalid or network unreachable | Check key validity and network access to LaunchDarkly |
+| `ADAPTER_ERROR` in results | Any unhandled error in the adapter pipeline | Check `failure_details` in results.jsonl for the full error message |
 
 ## How to add new agents
 
