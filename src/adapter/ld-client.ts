@@ -107,6 +107,7 @@ export async function invokeLDAIConfig(opts: LDInvokeOptions): Promise<LDInvokeR
       openai.chat.completions.create({
         model: modelName,
         messages,
+        response_format: { type: "json_object" },
         ...(params.temperature != null && { temperature: Number(params.temperature) }),
         ...(params.maxTokens != null && { max_tokens: Number(params.maxTokens) }),
       });
