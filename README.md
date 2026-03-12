@@ -4,6 +4,11 @@
 
 A CLI tool that runs a gold dataset of evaluation packets through multiple agent candidates, validates strict JSON output against the Elliot EIC schema, scores via deterministic rule-based checks, and produces `results.jsonl` + `summary.csv` + console summary.
 
+## Architecture docs
+
+- [Pipeline overview](docs/architecture/elliot-pipeline.md) — Scout → Curator → Judge → Scribe responsibilities and contracts
+- [ADR-0001: Scribe separation](docs/decisions/ADR-0001-scribe-separation.md) — why Judge returns JSON only
+
 ## Quick start
 
 ```bash
