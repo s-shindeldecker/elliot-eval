@@ -1,3 +1,7 @@
+import type { YesNoUnknown, StageBucket, Motion, Confidence, EicStatus } from './shared/enums.js';
+
+export type { YesNoUnknown, StageBucket, Motion, Confidence, EicStatus };
+
 export const FAILURE_CODES = [
   'SCHEMA_INVALID',
   'JSON_PARSE_ERROR',
@@ -23,16 +27,6 @@ export const HARD_FAIL_CODES: ReadonlySet<FailureCode> = new Set([
 ] as const);
 
 export type Stage = 'screening' | 'gold';
-
-// ---------------------------------------------------------------------------
-// Elliot EIC enums
-// ---------------------------------------------------------------------------
-
-export type YesNoUnknown = 'Yes' | 'No' | 'Unknown';
-export type StageBucket = 'Early' | 'Mid' | 'Late' | 'Closed';
-export type Motion = 'Net-new' | 'Expansion' | 'Renewal' | 'Other';
-export type Confidence = 'Medium' | 'High';
-export type EicStatus = 'Active' | 'Monitoring' | 'Under Review' | 'CW' | 'CL';
 
 // ---------------------------------------------------------------------------
 // Dataset row — the input JSONL contract

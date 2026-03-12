@@ -23,7 +23,8 @@
     "eval:ld:screening": "tsx src/index.ts --config fixtures/eval-config.ld.json --stage screening",
     "eval:ld:gold": "tsx src/index.ts --config fixtures/eval-config.ld.json --stage gold --dataset ./data/elliot.gold.v0.1.jsonl",
     "lint:json": "node -e \"JSON.parse(require('fs').readFileSync('package.json','utf8')); console.log('package.json ok')\"",
-    "eval:ld:holdout": "tsx src/index.ts --config fixtures/eval-config.holdout.json --stage gold"
+    "eval:ld:holdout": "tsx src/index.ts --config fixtures/eval-config.holdout.json --stage gold",
+    "test:curator": "tsx scripts/curator-smoke.ts"
   },
   "dependencies": {
     "@launchdarkly/node-server-sdk": "^9.10.9",
