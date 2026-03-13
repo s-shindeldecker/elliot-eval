@@ -1,6 +1,24 @@
-import type { YesNoUnknown, StageBucket, Motion, Confidence, EicStatus } from './shared/enums.js';
+import type {
+  YesNoUnknown,
+  StageBucket,
+  Motion,
+  Confidence,
+  EicStatus,
+  Action,
+  ImpactClassification,
+  CommercialOutcome,
+} from './shared/enums.js';
 
-export type { YesNoUnknown, StageBucket, Motion, Confidence, EicStatus };
+export type {
+  YesNoUnknown,
+  StageBucket,
+  Motion,
+  Confidence,
+  EicStatus,
+  Action,
+  ImpactClassification,
+  CommercialOutcome,
+};
 
 export const FAILURE_CODES = [
   'SCHEMA_INVALID',
@@ -29,6 +47,33 @@ export const HARD_FAIL_CODES: ReadonlySet<FailureCode> = new Set([
 export type Stage = 'screening' | 'gold';
 
 // ---------------------------------------------------------------------------
+// Evidence reference — replaces evidence_citation_1 / evidence_citation_2
+// ---------------------------------------------------------------------------
+
+export interface EvidenceRef {
+  evidence_id: string;
+  source_type: string;
+  url: string;
+  timestamp_utc?: string | null;
+  snippet?: string | null;
+}
+
+// ---------------------------------------------------------------------------
+// Structured rationale — evidence-referenced reasoning
+// ---------------------------------------------------------------------------
+
+export interface RationaleClaim {
+  claim: string;
+  evidence_refs: string[];
+}
+
+export interface Rationale {
+  because: RationaleClaim[];
+  assumptions: string[];
+  open_questions: string[];
+}
+
+// ---------------------------------------------------------------------------
 // Dataset row — the input JSONL contract
 // ---------------------------------------------------------------------------
 
@@ -40,7 +85,8 @@ export interface DatasetRow {
 }
 
 export interface ExpectedOutput {
-  create_eic: boolean;
+  create_eic?: boolean;
+  action?: Action;
   eic?: ExpectedEic;
 }
 
@@ -55,6 +101,7 @@ export interface ExpectedEic {
   experimentation_team_engaged?: YesNoUnknown;
   stage_bucket?: StageBucket;
   motion?: Motion;
+  impact_classification?: ImpactClassification;
 
   // Range / set checks → RANGE_VIOLATION
   influence_strength_range?: [number, number];
@@ -63,7 +110,7 @@ export interface ExpectedEic {
 }
 
 // ---------------------------------------------------------------------------
-// EIC (Experimentation Impact Card) — the agent's structured output
+// EIC (Experimentation Impact Card) — the agent's structured output (v2)
 // ---------------------------------------------------------------------------
 
 export interface EICFields {
@@ -76,8 +123,9 @@ export interface EICFields {
   motion: Motion;
   ae_owner: string;
   experimentation_team_engaged: YesNoUnknown;
-  influence_strength: number;
+  influence_strength: number | null;
   confidence: Confidence;
+  impact_classification: ImpactClassification;
   impact_priority: number;
   primary_influence_tag: string;
   secondary_tag: string | null;
@@ -85,20 +133,29 @@ export interface EICFields {
   competitive_mention: YesNoUnknown;
   exec_sponsor_mentioned: YesNoUnknown;
   summary_why_it_matters: string;
-  evidence_citation_1: string;
-  evidence_citation_2: string | null;
+  evidence: EvidenceRef[];
   next_checkpoint: string | null;
   status: EicStatus;
+
+  // Optional v2 aliases / additions
+  intelligence_status?: EicStatus;
+  commercial_outcome?: CommercialOutcome;
+
+  // v1 back-compat (populated by normalizer from legacy payloads)
+  evidence_citation_1?: string;
+  evidence_citation_2?: string | null;
 }
 
 // ---------------------------------------------------------------------------
-// Agent response — the strict output contract for every agent
+// Agent response — the strict output contract for every agent (v2)
 // ---------------------------------------------------------------------------
 
 export interface AgentResponse {
   human_summary: string[];
+  rationale?: Rationale;
   json: {
-    create_eic: boolean;
+    action: Action;
+    create_eic?: boolean;
     eic: EICFields | null;
   };
 }
@@ -114,6 +171,7 @@ export interface EvalResult {
   disqualified: boolean;
   failure_reasons: FailureCode[];
   failure_details: string[];
+  warnings: string[];
   score: number;
   latencyMs: number;
   rawTextLength: number;

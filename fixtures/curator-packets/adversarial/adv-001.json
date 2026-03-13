@@ -1,0 +1,93 @@
+{
+  "id": "adv-001",
+  "theme": "Conflicting evidence — one source says critical, another denies",
+  "category": "adversarial",
+  "bundle": {
+    "id": "adv-001",
+    "title": "Conflicting Signals — Fourth Coffee Experimentation Assessment",
+    "snapshot": {
+      "account": "Fourth Coffee",
+      "opportunity": "Fourth Coffee - Growth Platform",
+      "opportunity_link": "https://crm.example.com/opps/fc-grow-001",
+      "stage": "3 - Proposal",
+      "stage_bucket": "Mid",
+      "motion": "Expansion",
+      "ae_owner": "Tom Richards",
+      "experimentation_team_engaged": "Unknown",
+      "ai_configs_adjacent": "No",
+      "competitive_mention": "No",
+      "exec_sponsor_mentioned": "No",
+      "next_checkpoint": "2026-04-05"
+    },
+    "evidence": [
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/fc-eng-001",
+        "timestamp": "00:14:22",
+        "snippet": "Our engineering team considers A/B testing absolutely critical for our next product release. We cannot ship without it."
+      },
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/fc-ae-followup",
+        "timestamp": "00:06:45",
+        "snippet": "Spoke to the AE afterward — they said the engineering team overstated it. The company doesn't actually do any experimentation today."
+      }
+    ],
+    "notes": [
+      "Engineering says experimentation is critical; AE says it is overstated",
+      "Requires follow-up to resolve conflicting signals"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "Fourth Coffee has conflicting signals: engineering claims experimentation is critical but AE says interest was overstated",
+      "Conservative assessment given unresolved conflict"
+    ],
+    "rationale": {
+      "because": [
+        { "claim": "Engineering team says A/B testing is critical for next release", "evidence_refs": ["ev-1"] },
+        { "claim": "AE follow-up contradicts engineering, saying no experimentation is done today", "evidence_refs": ["ev-2"] }
+      ],
+      "assumptions": ["Conflict has not been resolved by follow-up meeting"],
+      "open_questions": ["Which stakeholder accurately represents the company's position?", "Is there a dedicated experimentation team or was engineering speaking aspirationally?"]
+    },
+    "json": {
+      "action": "CREATE",
+      "eic": {
+        "eic_id": "EIC-FC-001",
+        "account": "Fourth Coffee",
+        "opportunity": "Fourth Coffee - Growth Platform",
+        "opportunity_link": "https://crm.example.com/opps/fc-grow-001",
+        "stage": "3 - Proposal",
+        "stage_bucket": "Mid",
+        "motion": "Expansion",
+        "ae_owner": "Tom Richards",
+        "experimentation_team_engaged": "Unknown",
+        "influence_strength": 2,
+        "confidence": "Low",
+        "impact_classification": "HYPOTHESIZED",
+        "impact_priority": 2,
+        "primary_influence_tag": "conflicting_signal",
+        "secondary_tag": "needs_validation",
+        "ai_configs_adjacent": "No",
+        "competitive_mention": "No",
+        "exec_sponsor_mentioned": "No",
+        "summary_why_it_matters": "Conflicting evidence between engineering and AE. Conservative HYPOTHESIZED until resolved.",
+        "evidence": [
+          { "evidence_id": "ev-1", "source_type": "Gong", "url": "https://gong.example.com/calls/fc-eng-001", "timestamp_utc": "2026-03-04T14:22:00Z", "snippet": "Engineering says A/B testing is critical" },
+          { "evidence_id": "ev-2", "source_type": "Gong", "url": "https://gong.example.com/calls/fc-ae-followup", "timestamp_utc": "2026-03-04T06:45:00Z", "snippet": "AE says interest was overstated" }
+        ],
+        "next_checkpoint": "2026-04-05",
+        "status": "Active"
+      }
+    }
+  },
+  "expected": {
+    "action": "CREATE",
+    "impact_classification": "HYPOTHESIZED",
+    "confidence_allowed": ["Low", "Medium"],
+    "expected_warnings": [],
+    "hallucination_must_be_zero": true,
+    "notes": "Ambiguous: a legitimate agent could argue PROBABLE if it weights engineering input higher. Conservative HYPOTHESIZED is the expected safe default."
+  }
+}

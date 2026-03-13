@@ -1,0 +1,91 @@
+{
+  "id": "adv-004",
+  "theme": "Duplicate evidence pretending to be reinforcement",
+  "category": "adversarial",
+  "bundle": {
+    "id": "adv-004",
+    "title": "Duplicate Evidence — VanArsdel Experimentation Assessment",
+    "snapshot": {
+      "account": "VanArsdel Ltd",
+      "opportunity": "VanArsdel Ltd - Feature Testing Platform",
+      "opportunity_link": "https://crm.example.com/opps/va-ft-001",
+      "stage": "2 - Discovery",
+      "stage_bucket": "Early",
+      "motion": "Net-new",
+      "ae_owner": "Janet Green",
+      "experimentation_team_engaged": "Unknown",
+      "ai_configs_adjacent": "No",
+      "competitive_mention": "No",
+      "exec_sponsor_mentioned": "No",
+      "next_checkpoint": "2026-04-18"
+    },
+    "evidence": [
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/va-disc-001",
+        "timestamp": "00:10:00",
+        "snippet": "We want to test features before we roll them out to all users."
+      },
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/va-disc-001",
+        "timestamp": "00:25:00",
+        "snippet": "We want to test features before we roll them out to all users."
+      }
+    ],
+    "notes": [
+      "Two evidence items reference the same source at different timestamps",
+      "Both contain the same snippet — may be a curation error"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "VanArsdel expressed interest in pre-rollout feature testing from a single discovery call",
+      "Evidence appears duplicated — single source, single signal"
+    ],
+    "rationale": {
+      "because": [
+        { "claim": "Customer wants to test features before full rollout", "evidence_refs": ["ev-1"] }
+      ],
+      "assumptions": ["The duplicate evidence represents one real signal, not two"],
+      "open_questions": ["Is this feature flags or experimentation?"]
+    },
+    "json": {
+      "action": "CREATE",
+      "eic": {
+        "eic_id": "EIC-VA-001",
+        "account": "VanArsdel Ltd",
+        "opportunity": "VanArsdel Ltd - Feature Testing Platform",
+        "opportunity_link": "https://crm.example.com/opps/va-ft-001",
+        "stage": "2 - Discovery",
+        "stage_bucket": "Early",
+        "motion": "Net-new",
+        "ae_owner": "Janet Green",
+        "experimentation_team_engaged": "Unknown",
+        "influence_strength": 2,
+        "confidence": "Medium",
+        "impact_classification": "HYPOTHESIZED",
+        "impact_priority": 2,
+        "primary_influence_tag": "feature_testing",
+        "secondary_tag": "pre_rollout",
+        "ai_configs_adjacent": "No",
+        "competitive_mention": "No",
+        "exec_sponsor_mentioned": "No",
+        "summary_why_it_matters": "Single signal about pre-rollout testing. Evidence appears duplicated from same source.",
+        "evidence": [
+          { "evidence_id": "ev-1", "source_type": "Gong", "url": "https://gong.example.com/calls/va-disc-001", "timestamp_utc": "2026-03-05T10:00:00Z", "snippet": "Want to test features before full rollout" }
+        ],
+        "next_checkpoint": "2026-04-18",
+        "status": "Active"
+      }
+    }
+  },
+  "expected": {
+    "action": "CREATE",
+    "impact_classification": "HYPOTHESIZED",
+    "confidence_allowed": ["Low", "Medium"],
+    "expected_warnings": [],
+    "hallucination_must_be_zero": true,
+    "notes": "Bundle has duplicate source_links (curator validation should flag). Agent correctly de-duplicated to single evidence entry."
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "id": "adv-005",
+  "theme": "Dangling evidence refs in rationale",
+  "category": "adversarial",
+  "bundle": {
+    "id": "adv-005",
+    "title": "Evidence Ref Integrity — Munson's Pickles Experimentation Review",
+    "snapshot": {
+      "account": "Munson's Pickles",
+      "opportunity": "Munson's Pickles - Digital Optimization",
+      "opportunity_link": "https://crm.example.com/opps/mp-dig-001",
+      "stage": "3 - Proposal",
+      "stage_bucket": "Mid",
+      "motion": "Expansion",
+      "ae_owner": "Diana Prince",
+      "experimentation_team_engaged": "Yes",
+      "ai_configs_adjacent": "No",
+      "competitive_mention": "No",
+      "exec_sponsor_mentioned": "No",
+      "next_checkpoint": "2026-04-08"
+    },
+    "evidence": [
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/mp-review-001",
+        "timestamp": "00:20:15",
+        "snippet": "We have been running experiments on our checkout flow and seeing measurable conversion improvements."
+      }
+    ],
+    "notes": [
+      "Customer has active experimentation practice on checkout flow"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "Munson's Pickles is running experiments on checkout flow with measurable conversion improvements",
+      "Executive sponsor involvement strengthens the case"
+    ],
+    "rationale": {
+      "because": [
+        { "claim": "Active experimentation on checkout flow with conversion improvements", "evidence_refs": ["ev-1"] },
+        { "claim": "Executive sponsor confirmed commitment to experimentation", "evidence_refs": ["ev-GHOST"] }
+      ],
+      "assumptions": [],
+      "open_questions": []
+    },
+    "json": {
+      "action": "CREATE",
+      "eic": {
+        "eic_id": "EIC-MP-001",
+        "account": "Munson's Pickles",
+        "opportunity": "Munson's Pickles - Digital Optimization",
+        "opportunity_link": "https://crm.example.com/opps/mp-dig-001",
+        "stage": "3 - Proposal",
+        "stage_bucket": "Mid",
+        "motion": "Expansion",
+        "ae_owner": "Diana Prince",
+        "experimentation_team_engaged": "Yes",
+        "influence_strength": 3,
+        "confidence": "High",
+        "impact_classification": "CONFIRMED",
+        "impact_priority": 3,
+        "primary_influence_tag": "conversion_optimization",
+        "secondary_tag": "checkout_flow",
+        "ai_configs_adjacent": "No",
+        "competitive_mention": "No",
+        "exec_sponsor_mentioned": "No",
+        "summary_why_it_matters": "Active experimentation on checkout flow with measurable impact.",
+        "evidence": [
+          { "evidence_id": "ev-1", "source_type": "Gong", "url": "https://gong.example.com/calls/mp-review-001", "timestamp_utc": "2026-03-06T20:15:00Z", "snippet": "Running experiments on checkout flow with conversion improvements" }
+        ],
+        "next_checkpoint": "2026-04-08",
+        "status": "Active"
+      }
+    }
+  },
+  "expected": {
+    "action": "CREATE",
+    "impact_classification": "CONFIRMED",
+    "confidence_allowed": ["High"],
+    "expected_warnings": ["dangling_evidence_ref"],
+    "hallucination_must_be_zero": true,
+    "notes": "Rationale references ev-GHOST which does not exist in evidence array. Must trigger dangling_evidence_ref warning."
+  }
+}

@@ -6,7 +6,8 @@ A CLI tool that runs a gold dataset of evaluation packets through multiple agent
 
 ## Architecture docs
 
-- [Pipeline overview](docs/architecture/elliot-pipeline.md) — Scout → Curator → Judge → Scribe responsibilities and contracts
+- [Elliot documentation index](docs/architecture/elliot/README.md) — full documentation set
+- [Pipeline overview](docs/architecture/elliot/pipeline.md) — Scout → Curator → Judge → Scribe responsibilities and contracts
 - [ADR-0001: Scribe separation](docs/decisions/ADR-0001-scribe-separation.md) — why Judge returns JSON only
 
 ## Quick start

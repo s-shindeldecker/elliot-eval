@@ -1,0 +1,100 @@
+{
+  "id": "adv-003",
+  "theme": "Strong citations but ambiguous summary",
+  "category": "adversarial",
+  "bundle": {
+    "id": "adv-003",
+    "title": "Citation Rich — Margie's Travel Data Platform Evaluation",
+    "snapshot": {
+      "account": "Margie's Travel",
+      "opportunity": "Margie's Travel - Data Platform Modernization",
+      "opportunity_link": "https://crm.example.com/opps/mt-data-001",
+      "stage": "3 - Proposal",
+      "stage_bucket": "Mid",
+      "motion": "Net-new",
+      "ae_owner": "Chris Evans",
+      "experimentation_team_engaged": "Yes",
+      "ai_configs_adjacent": "Yes",
+      "competitive_mention": "No",
+      "exec_sponsor_mentioned": "No",
+      "next_checkpoint": "2026-04-12"
+    },
+    "evidence": [
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/mt-tech-deep-001",
+        "timestamp": "00:18:00",
+        "snippet": "We run around 200 experiments per month across our booking and pricing engines. This is core to our revenue optimization."
+      },
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/mt-tech-deep-002",
+        "timestamp": "00:42:30",
+        "snippet": "The experimentation team presented their ROI analysis showing 15% revenue lift from controlled experiments last quarter."
+      },
+      {
+        "source_type": "CRM Note",
+        "source_link": "https://crm.example.com/notes/mt-summary-019",
+        "timestamp": "2026-03-04",
+        "snippet": "Technical deep dive went well. Customer has strong experimentation practice. Evaluating our platform for consolidation."
+      }
+    ],
+    "notes": [
+      "Customer has mature experimentation practice with 200 experiments per month"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "Margie's Travel runs 200 experiments monthly with demonstrated 15% revenue lift",
+      "Evaluating platform consolidation for their mature experimentation practice"
+    ],
+    "rationale": {
+      "because": [
+        { "claim": "Customer runs 200 experiments/month across booking and pricing", "evidence_refs": ["ev-1"] },
+        { "claim": "Experimentation team demonstrated 15% revenue lift from controlled experiments", "evidence_refs": ["ev-2"] },
+        { "claim": "Technical evaluation is specifically for experimentation platform consolidation", "evidence_refs": ["ev-3"] }
+      ],
+      "assumptions": ["Revenue lift figures are accurately reported by customer"],
+      "open_questions": ["What is their current experimentation platform?", "Is consolidation driven by cost or capability?"]
+    },
+    "json": {
+      "action": "CREATE",
+      "eic": {
+        "eic_id": "EIC-MT-001",
+        "account": "Margie's Travel",
+        "opportunity": "Margie's Travel - Data Platform Modernization",
+        "opportunity_link": "https://crm.example.com/opps/mt-data-001",
+        "stage": "3 - Proposal",
+        "stage_bucket": "Mid",
+        "motion": "Net-new",
+        "ae_owner": "Chris Evans",
+        "experimentation_team_engaged": "Yes",
+        "influence_strength": 4,
+        "confidence": "Medium",
+        "impact_classification": "PROBABLE",
+        "impact_priority": 4,
+        "primary_influence_tag": "platform_consolidation",
+        "secondary_tag": "revenue_optimization",
+        "ai_configs_adjacent": "Yes",
+        "competitive_mention": "No",
+        "exec_sponsor_mentioned": "No",
+        "summary_why_it_matters": "Mature experimentation practice with 200 experiments/month and quantified revenue impact. Consolidation opportunity.",
+        "evidence": [
+          { "evidence_id": "ev-1", "source_type": "Gong", "url": "https://gong.example.com/calls/mt-tech-deep-001", "timestamp_utc": "2026-03-03T18:00:00Z", "snippet": "200 experiments per month across booking and pricing" },
+          { "evidence_id": "ev-2", "source_type": "Gong", "url": "https://gong.example.com/calls/mt-tech-deep-002", "timestamp_utc": "2026-03-03T42:30:00Z", "snippet": "15% revenue lift from controlled experiments" },
+          { "evidence_id": "ev-3", "source_type": "CRM Note", "url": "https://crm.example.com/notes/mt-summary-019", "snippet": "Strong experimentation practice, evaluating consolidation" }
+        ],
+        "next_checkpoint": "2026-04-12",
+        "status": "Active"
+      }
+    }
+  },
+  "expected": {
+    "action": "CREATE",
+    "impact_classification": "PROBABLE",
+    "confidence_allowed": ["Medium", "High"],
+    "expected_warnings": [],
+    "hallucination_must_be_zero": true,
+    "notes": "Strong evidence but summary is generic. Tests whether agent can produce correct classification despite summary ambiguity."
+  }
+}

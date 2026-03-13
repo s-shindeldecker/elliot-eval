@@ -59,8 +59,10 @@ function validateRow(obj: Record<string, unknown>, lineNum: number): DatasetRow 
   }
 
   const expected = obj.expected as Record<string, unknown>;
-  if (typeof expected.create_eic !== 'boolean') {
-    throw new Error(`"expected.create_eic" must be boolean (id=${obj.id}, line=${lineNum})`);
+  const hasAction = typeof expected.action === 'string' && ['CREATE', 'UPDATE', 'NO_ACTION'].includes(expected.action);
+  const hasCreateEic = typeof expected.create_eic === 'boolean';
+  if (!hasAction && !hasCreateEic) {
+    throw new Error(`"expected" must have a boolean "create_eic" or a valid "action" field (id=${obj.id}, line=${lineNum})`);
   }
 
   const tags = Array.isArray(obj.tags)

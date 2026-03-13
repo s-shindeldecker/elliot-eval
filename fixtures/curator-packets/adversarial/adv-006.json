@@ -1,0 +1,92 @@
+{
+  "id": "adv-006",
+  "theme": "Confidence/classification tension — CONFIRMED with Low confidence",
+  "category": "adversarial",
+  "bundle": {
+    "id": "adv-006",
+    "title": "Coupling Violation — Trey Research Experimentation Signal",
+    "snapshot": {
+      "account": "Trey Research",
+      "opportunity": "Trey Research - Analytics Platform",
+      "opportunity_link": "https://crm.example.com/opps/tr-ana-001",
+      "stage": "3 - Proposal",
+      "stage_bucket": "Mid",
+      "motion": "Net-new",
+      "ae_owner": "Steve Rogers",
+      "experimentation_team_engaged": "Yes",
+      "ai_configs_adjacent": "No",
+      "competitive_mention": "No",
+      "exec_sponsor_mentioned": "No",
+      "next_checkpoint": "2026-04-10"
+    },
+    "evidence": [
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/tr-disc-001",
+        "timestamp": "00:15:30",
+        "snippet": "We need robust experimentation for our analytics pipeline but honestly we are not sure yet how deep we will go."
+      },
+      {
+        "source_type": "CRM Note",
+        "source_link": "https://crm.example.com/notes/tr-note-007",
+        "timestamp": "2026-03-03",
+        "snippet": "Customer has confirmed experimentation interest. AE notes this is real but scope is unclear."
+      }
+    ],
+    "notes": [
+      "Evidence supports experimentation interest but scope is uncertain"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "Trey Research confirms experimentation need for analytics but scope unclear",
+      "Assessment is CONFIRMED with Low confidence which violates coupling rules"
+    ],
+    "rationale": {
+      "because": [
+        { "claim": "Customer explicitly stated need for robust experimentation", "evidence_refs": ["ev-1"] },
+        { "claim": "AE confirmed this is a real interest", "evidence_refs": ["ev-2"] }
+      ],
+      "assumptions": ["Scope will be clarified in next meeting"],
+      "open_questions": ["How deep will they go with experimentation?"]
+    },
+    "json": {
+      "action": "CREATE",
+      "eic": {
+        "eic_id": "EIC-TR-001",
+        "account": "Trey Research",
+        "opportunity": "Trey Research - Analytics Platform",
+        "opportunity_link": "https://crm.example.com/opps/tr-ana-001",
+        "stage": "3 - Proposal",
+        "stage_bucket": "Mid",
+        "motion": "Net-new",
+        "ae_owner": "Steve Rogers",
+        "experimentation_team_engaged": "Yes",
+        "influence_strength": 3,
+        "confidence": "Low",
+        "impact_classification": "CONFIRMED",
+        "impact_priority": 3,
+        "primary_influence_tag": "analytics_experimentation",
+        "secondary_tag": "scope_unclear",
+        "ai_configs_adjacent": "No",
+        "competitive_mention": "No",
+        "exec_sponsor_mentioned": "No",
+        "summary_why_it_matters": "Experimentation confirmed for analytics pipeline but deployment scope remains uncertain.",
+        "evidence": [
+          { "evidence_id": "ev-1", "source_type": "Gong", "url": "https://gong.example.com/calls/tr-disc-001", "timestamp_utc": "2026-03-02T15:30:00Z", "snippet": "Need robust experimentation for analytics pipeline" },
+          { "evidence_id": "ev-2", "source_type": "CRM Note", "url": "https://crm.example.com/notes/tr-note-007", "snippet": "AE confirms real experimentation interest" }
+        ],
+        "next_checkpoint": "2026-04-10",
+        "status": "Active"
+      }
+    }
+  },
+  "expected": {
+    "action": "CREATE",
+    "impact_classification": "CONFIRMED",
+    "confidence_allowed": ["Low"],
+    "expected_warnings": ["classification_confidence_mismatch"],
+    "hallucination_must_be_zero": true,
+    "notes": "CONFIRMED + Low violates Model B coupling rules. Must emit classification_confidence_mismatch warning. Schema still passes (soft check)."
+  }
+}

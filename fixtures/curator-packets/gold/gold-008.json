@@ -1,0 +1,86 @@
+{
+  "id": "gold-008",
+  "theme": "Closed-lost with minimal experimentation influence",
+  "category": "gold",
+  "bundle": {
+    "id": "gold-008",
+    "title": "Closed Lost — Litware Digital Competitive Loss",
+    "snapshot": {
+      "eic_id": "EIC-0063",
+      "account": "Litware Digital",
+      "opportunity": "Litware Digital - Platform Migration",
+      "opportunity_link": "https://crm.example.com/opps/lw-mig-001",
+      "stage": "CL - Closed Lost",
+      "stage_bucket": "Closed",
+      "motion": "Net-new",
+      "ae_owner": "Kevin Brown",
+      "experimentation_team_engaged": "No",
+      "ai_configs_adjacent": "No",
+      "competitive_mention": "Yes",
+      "competitive_detail": "Lost to Split.io on pricing",
+      "exec_sponsor_mentioned": "No",
+      "next_checkpoint": null
+    },
+    "evidence": [
+      {
+        "source_type": "CRM Note",
+        "source_link": "https://crm.example.com/notes/lw-loss-001",
+        "timestamp": "2026-03-06",
+        "snippet": "Deal lost to Split.io. Customer chose competitor primarily on pricing. Experimentation was discussed but was not a factor in the decision."
+      }
+    ],
+    "notes": [
+      "Competitor won on pricing, not experimentation capabilities",
+      "Experimentation was mentioned but not influential in outcome"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "Litware Digital lost to Split.io on pricing; experimentation was not a factor in the decision"
+    ],
+    "rationale": {
+      "because": [
+        { "claim": "Loss was driven by pricing, not experimentation capabilities", "evidence_refs": ["ev-1"] }
+      ],
+      "assumptions": [],
+      "open_questions": ["Could experimentation have been a differentiator if pricing was competitive?"]
+    },
+    "json": {
+      "action": "UPDATE",
+      "eic": {
+        "eic_id": "EIC-0063",
+        "account": "Litware Digital",
+        "opportunity": "Litware Digital - Platform Migration",
+        "opportunity_link": "https://crm.example.com/opps/lw-mig-001",
+        "stage": "CL - Closed Lost",
+        "stage_bucket": "Closed",
+        "motion": "Net-new",
+        "ae_owner": "Kevin Brown",
+        "experimentation_team_engaged": "No",
+        "influence_strength": 1,
+        "confidence": "Medium",
+        "impact_classification": "NO_IMPACT",
+        "impact_priority": 1,
+        "primary_influence_tag": "no_influence",
+        "secondary_tag": "pricing_loss",
+        "ai_configs_adjacent": "No",
+        "competitive_mention": "Yes",
+        "exec_sponsor_mentioned": "No",
+        "summary_why_it_matters": "Experimentation was not a factor in this loss. Competitor won on pricing alone.",
+        "evidence": [
+          { "evidence_id": "ev-1", "source_type": "CRM Note", "url": "https://crm.example.com/notes/lw-loss-001", "timestamp_utc": "2026-03-06T00:00:00Z", "snippet": "Lost to Split.io on pricing, experimentation not a factor" }
+        ],
+        "next_checkpoint": null,
+        "status": "Active",
+        "commercial_outcome": "CLOSED_LOST"
+      }
+    }
+  },
+  "expected": {
+    "action": "UPDATE",
+    "impact_classification": "NO_IMPACT",
+    "confidence_allowed": ["Medium", "High"],
+    "expected_warnings": [],
+    "hallucination_must_be_zero": true
+  }
+}

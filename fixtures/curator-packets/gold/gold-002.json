@@ -1,0 +1,92 @@
+{
+  "id": "gold-002",
+  "theme": "Clear expansion signal",
+  "category": "gold",
+  "bundle": {
+    "id": "gold-002",
+    "title": "Expansion Catalyst — Contoso Enterprise Tier Upgrade",
+    "snapshot": {
+      "account": "Contoso Ltd",
+      "opportunity": "Contoso Ltd - Enterprise Tier Upgrade FY26",
+      "opportunity_link": "https://crm.example.com/opps/contoso-exp-001",
+      "stage": "4 - Negotiation",
+      "stage_bucket": "Late",
+      "motion": "Expansion",
+      "ae_owner": "James Park",
+      "experimentation_team_engaged": "Yes",
+      "ai_configs_adjacent": "No",
+      "competitive_mention": "No",
+      "exec_sponsor_mentioned": "No",
+      "next_checkpoint": "2026-03-20"
+    },
+    "evidence": [
+      {
+        "source_type": "Customer Success Note",
+        "source_link": "https://crm.example.com/cs/contoso-q1-review",
+        "timestamp": "2026-02-28",
+        "snippet": "Contoso cited experimentation velocity as the primary reason for upgrading to Enterprise tier."
+      },
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/contoso-renewal-005",
+        "timestamp": "00:22:15",
+        "snippet": "Their experimentation team has grown from 2 to 8 engineers in the past year, driving the need for Enterprise features."
+      }
+    ],
+    "notes": [
+      "CSM confirmed experimentation usage grew 400% in last quarter",
+      "Customer requesting advanced targeting and mutual exclusion features"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "Contoso is upgrading to Enterprise tier driven by experimentation team growth",
+      "Experimentation velocity cited as primary upgrade reason by customer success"
+    ],
+    "rationale": {
+      "because": [
+        { "claim": "Customer explicitly cited experimentation velocity as upgrade driver", "evidence_refs": ["ev-1"] },
+        { "claim": "Experimentation team 4x growth creates genuine need for Enterprise features", "evidence_refs": ["ev-2"] }
+      ],
+      "assumptions": ["Expansion timeline holds for Q1 close"],
+      "open_questions": []
+    },
+    "json": {
+      "action": "CREATE",
+      "eic": {
+        "eic_id": "EIC-CONTOSO-001",
+        "account": "Contoso Ltd",
+        "opportunity": "Contoso Ltd - Enterprise Tier Upgrade FY26",
+        "opportunity_link": "https://crm.example.com/opps/contoso-exp-001",
+        "stage": "4 - Negotiation",
+        "stage_bucket": "Late",
+        "motion": "Expansion",
+        "ae_owner": "James Park",
+        "experimentation_team_engaged": "Yes",
+        "influence_strength": 4,
+        "confidence": "High",
+        "impact_classification": "PROBABLE",
+        "impact_priority": 4,
+        "primary_influence_tag": "expansion_catalyst",
+        "secondary_tag": "tier_upgrade",
+        "ai_configs_adjacent": "No",
+        "competitive_mention": "No",
+        "exec_sponsor_mentioned": "No",
+        "summary_why_it_matters": "Experimentation team growth and velocity are the primary drivers for Enterprise tier upgrade.",
+        "evidence": [
+          { "evidence_id": "ev-1", "source_type": "Customer Success Note", "url": "https://crm.example.com/cs/contoso-q1-review", "snippet": "Experimentation velocity cited as primary upgrade reason" },
+          { "evidence_id": "ev-2", "source_type": "Gong", "url": "https://gong.example.com/calls/contoso-renewal-005", "timestamp_utc": "2026-02-28T22:15:00Z", "snippet": "Experimentation team grew from 2 to 8 engineers" }
+        ],
+        "next_checkpoint": "2026-03-20",
+        "status": "Active"
+      }
+    }
+  },
+  "expected": {
+    "action": "CREATE",
+    "impact_classification": "PROBABLE",
+    "confidence_allowed": ["High"],
+    "expected_warnings": [],
+    "hallucination_must_be_zero": true
+  }
+}

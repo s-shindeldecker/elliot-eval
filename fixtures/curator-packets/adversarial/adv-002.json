@@ -1,0 +1,89 @@
+{
+  "id": "adv-002",
+  "theme": "Strong narrative but weak citations",
+  "category": "adversarial",
+  "bundle": {
+    "id": "adv-002",
+    "title": "Narrative Heavy — Relecloud Feature Optimization Story",
+    "snapshot": {
+      "account": "Relecloud",
+      "opportunity": "Relecloud - Feature Optimization Platform",
+      "opportunity_link": "https://crm.example.com/opps/rc-opt-001",
+      "stage": "2 - Discovery",
+      "stage_bucket": "Early",
+      "motion": "Net-new",
+      "ae_owner": "Nancy White",
+      "experimentation_team_engaged": "Unknown",
+      "ai_configs_adjacent": "No",
+      "competitive_mention": "No",
+      "exec_sponsor_mentioned": "No",
+      "next_checkpoint": "2026-04-20"
+    },
+    "evidence": [
+      {
+        "source_type": "Email",
+        "source_link": "https://mail.example.com/thread/rc-internal-fwd-003",
+        "timestamp": "2026-03-01",
+        "snippet": "Heard from someone at a conference that Relecloud might be interested in experimentation. Forwarding for awareness."
+      }
+    ],
+    "notes": [
+      "Relecloud is reportedly transforming their entire product development process around experimentation",
+      "Multiple internal discussions about Relecloud's experimentation maturity",
+      "Their VP of Engineering spoke at a conference about data-driven feature optimization",
+      "Team believes this could be a flagship account for experimentation adoption",
+      "Internal champion identified but not confirmed",
+      "Experimentation could fundamentally change how they build products"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "Relecloud has potential experimentation interest but only one weak evidence item supports it",
+      "Strong internal narrative not backed by direct customer evidence"
+    ],
+    "rationale": {
+      "because": [
+        { "claim": "Single email forward from conference hearsay is the only evidence", "evidence_refs": ["ev-1"] }
+      ],
+      "assumptions": ["Internal narrative about Relecloud may reflect real interest"],
+      "open_questions": ["Has anyone had a direct conversation with Relecloud about experimentation?", "Is the conference talk evidence or just general industry content?"]
+    },
+    "json": {
+      "action": "CREATE",
+      "eic": {
+        "eic_id": "EIC-RC-001",
+        "account": "Relecloud",
+        "opportunity": "Relecloud - Feature Optimization Platform",
+        "opportunity_link": "https://crm.example.com/opps/rc-opt-001",
+        "stage": "2 - Discovery",
+        "stage_bucket": "Early",
+        "motion": "Net-new",
+        "ae_owner": "Nancy White",
+        "experimentation_team_engaged": "Unknown",
+        "influence_strength": 1,
+        "confidence": "Low",
+        "impact_classification": "HYPOTHESIZED",
+        "impact_priority": 1,
+        "primary_influence_tag": "unverified_signal",
+        "secondary_tag": "narrative_heavy",
+        "ai_configs_adjacent": "No",
+        "competitive_mention": "No",
+        "exec_sponsor_mentioned": "No",
+        "summary_why_it_matters": "Strong internal narrative but only one weak third-hand evidence item. Requires direct customer validation.",
+        "evidence": [
+          { "evidence_id": "ev-1", "source_type": "Email", "url": "https://mail.example.com/thread/rc-internal-fwd-003", "timestamp_utc": "2026-03-01T00:00:00Z", "snippet": "Conference hearsay about experimentation interest" }
+        ],
+        "next_checkpoint": "2026-04-20",
+        "status": "Active"
+      }
+    }
+  },
+  "expected": {
+    "action": "CREATE",
+    "impact_classification": "HYPOTHESIZED",
+    "confidence_allowed": ["Low", "Medium"],
+    "expected_warnings": [],
+    "hallucination_must_be_zero": true,
+    "notes": "Tests whether agent resists inflating classification based on narrative weight vs actual evidence quality."
+  }
+}

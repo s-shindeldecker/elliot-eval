@@ -1,0 +1,94 @@
+{
+  "id": "gold-001",
+  "theme": "Clear competitive experimentation influence",
+  "category": "gold",
+  "bundle": {
+    "id": "gold-001",
+    "title": "Competitive Displacement — Northwind Industries Platform Evaluation",
+    "snapshot": {
+      "account": "Northwind Industries",
+      "opportunity": "Northwind Industries - Enterprise Platform",
+      "opportunity_link": "https://crm.example.com/opps/nw-001",
+      "stage": "3 - Proposal",
+      "stage_bucket": "Mid",
+      "motion": "Net-new",
+      "ae_owner": "Rachel Kim",
+      "experimentation_team_engaged": "Yes",
+      "ai_configs_adjacent": "No",
+      "competitive_mention": "Yes",
+      "competitive_detail": "Statsig in active bake-off",
+      "exec_sponsor_mentioned": "Yes",
+      "exec_sponsor_detail": "VP Eng Sarah Chen",
+      "next_checkpoint": "2026-04-01"
+    },
+    "evidence": [
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/nw-disc-001",
+        "timestamp": "00:12:30",
+        "snippet": "We are choosing between LaunchDarkly and Statsig primarily based on experimentation capabilities."
+      },
+      {
+        "source_type": "CRM Note",
+        "source_link": "https://crm.example.com/notes/nw-note-042",
+        "timestamp": "2026-03-05",
+        "snippet": "VP Eng Sarah Chen confirmed experimentation is the top evaluation criterion. Budget approved for Q2."
+      }
+    ],
+    "notes": [
+      "Active competitive bake-off with Statsig",
+      "Customer experimentation team has 4 engineers dedicated to A/B testing"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "Northwind is in active competitive eval where experimentation capability is the deciding factor",
+      "VP Engineering has approved budget and confirmed experimentation as top criterion"
+    ],
+    "rationale": {
+      "because": [
+        { "claim": "Experimentation is the deciding factor in the bake-off against Statsig", "evidence_refs": ["ev-1"] },
+        { "claim": "VP Engineering confirmed experimentation as top priority with budget approval", "evidence_refs": ["ev-2"] }
+      ],
+      "assumptions": ["Budget remains allocated for Q2"],
+      "open_questions": ["Which specific experimentation features are being compared?"]
+    },
+    "json": {
+      "action": "CREATE",
+      "eic": {
+        "eic_id": "EIC-NW-001",
+        "account": "Northwind Industries",
+        "opportunity": "Northwind Industries - Enterprise Platform",
+        "opportunity_link": "https://crm.example.com/opps/nw-001",
+        "stage": "3 - Proposal",
+        "stage_bucket": "Mid",
+        "motion": "Net-new",
+        "ae_owner": "Rachel Kim",
+        "experimentation_team_engaged": "Yes",
+        "influence_strength": 5,
+        "confidence": "High",
+        "impact_classification": "CONFIRMED",
+        "impact_priority": 5,
+        "primary_influence_tag": "competitive_displacement",
+        "secondary_tag": "platform_evaluation",
+        "ai_configs_adjacent": "No",
+        "competitive_mention": "Yes",
+        "exec_sponsor_mentioned": "Yes",
+        "summary_why_it_matters": "Experimentation is the primary evaluation criterion in active competitive bake-off with Statsig.",
+        "evidence": [
+          { "evidence_id": "ev-1", "source_type": "Gong", "url": "https://gong.example.com/calls/nw-disc-001", "timestamp_utc": "2026-03-01T12:30:00Z", "snippet": "Choosing between LD and Statsig based on experimentation" },
+          { "evidence_id": "ev-2", "source_type": "CRM Note", "url": "https://crm.example.com/notes/nw-note-042", "snippet": "VP Eng confirmed experimentation as top criterion" }
+        ],
+        "next_checkpoint": "2026-04-01",
+        "status": "Active"
+      }
+    }
+  },
+  "expected": {
+    "action": "CREATE",
+    "impact_classification": "CONFIRMED",
+    "confidence_allowed": ["High"],
+    "expected_warnings": [],
+    "hallucination_must_be_zero": true
+  }
+}

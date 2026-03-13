@@ -1,0 +1,94 @@
+{
+  "id": "gold-006",
+  "theme": "Update to existing EIC with new evidence",
+  "category": "gold",
+  "bundle": {
+    "id": "gold-006",
+    "title": "New Evidence Update — Alpine Ski House EIC-0042",
+    "snapshot": {
+      "eic_id": "EIC-0042",
+      "account": "Alpine Ski House",
+      "opportunity": "Alpine Ski House - Experimentation Scale-Up",
+      "opportunity_link": "https://crm.example.com/opps/ash-exp-002",
+      "stage": "4 - Negotiation",
+      "stage_bucket": "Late",
+      "motion": "Expansion",
+      "ae_owner": "Sarah Kim",
+      "experimentation_team_engaged": "Yes",
+      "ai_configs_adjacent": "No",
+      "competitive_mention": "No",
+      "exec_sponsor_mentioned": "Yes",
+      "exec_sponsor_detail": "CTO Alex Rivera",
+      "next_checkpoint": "2026-03-25"
+    },
+    "evidence": [
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/ash-qbr-012",
+        "timestamp": "00:31:10",
+        "snippet": "Our experimentation usage tripled this quarter. We need the higher-tier plan to support our growth."
+      },
+      {
+        "source_type": "CRM Note",
+        "source_link": "https://crm.example.com/notes/ash-note-088",
+        "timestamp": "2026-03-08",
+        "snippet": "CTO Alex Rivera approved budget increase for experimentation tooling. Deal expected to close by end of March."
+      }
+    ],
+    "notes": [
+      "Existing EIC-0042 needs updating with new QBR evidence",
+      "CTO involvement is new since last assessment"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "Alpine Ski House experimentation usage tripled, driving tier upgrade",
+      "CTO has approved budget increase for experimentation tooling"
+    ],
+    "rationale": {
+      "because": [
+        { "claim": "Experimentation usage tripled this quarter per QBR discussion", "evidence_refs": ["ev-1"] },
+        { "claim": "CTO approved budget increase specifically for experimentation", "evidence_refs": ["ev-2"] }
+      ],
+      "assumptions": ["Deal closes by end of March as expected"],
+      "open_questions": []
+    },
+    "json": {
+      "action": "UPDATE",
+      "eic": {
+        "eic_id": "EIC-0042",
+        "account": "Alpine Ski House",
+        "opportunity": "Alpine Ski House - Experimentation Scale-Up",
+        "opportunity_link": "https://crm.example.com/opps/ash-exp-002",
+        "stage": "4 - Negotiation",
+        "stage_bucket": "Late",
+        "motion": "Expansion",
+        "ae_owner": "Sarah Kim",
+        "experimentation_team_engaged": "Yes",
+        "influence_strength": 4,
+        "confidence": "High",
+        "impact_classification": "PROBABLE",
+        "impact_priority": 4,
+        "primary_influence_tag": "expansion_catalyst",
+        "secondary_tag": "usage_growth",
+        "ai_configs_adjacent": "No",
+        "competitive_mention": "No",
+        "exec_sponsor_mentioned": "Yes",
+        "summary_why_it_matters": "Experimentation usage tripled; CTO-approved budget increase confirms expansion commitment.",
+        "evidence": [
+          { "evidence_id": "ev-1", "source_type": "Gong", "url": "https://gong.example.com/calls/ash-qbr-012", "timestamp_utc": "2026-03-08T31:10:00Z", "snippet": "Experimentation usage tripled this quarter" },
+          { "evidence_id": "ev-2", "source_type": "CRM Note", "url": "https://crm.example.com/notes/ash-note-088", "snippet": "CTO approved budget increase for experimentation" }
+        ],
+        "next_checkpoint": "2026-03-25",
+        "status": "Active"
+      }
+    }
+  },
+  "expected": {
+    "action": "UPDATE",
+    "impact_classification": "PROBABLE",
+    "confidence_allowed": ["High"],
+    "expected_warnings": [],
+    "hallucination_must_be_zero": true
+  }
+}

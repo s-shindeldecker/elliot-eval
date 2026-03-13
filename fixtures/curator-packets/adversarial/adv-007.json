@@ -1,0 +1,105 @@
+{
+  "id": "adv-007",
+  "theme": "Noisy packet with irrelevant details burying the signal",
+  "category": "adversarial",
+  "bundle": {
+    "id": "adv-007",
+    "title": "Noisy Signal — Wide World Importers Infrastructure Review",
+    "snapshot": {
+      "account": "Wide World Importers",
+      "opportunity": "Wide World Importers - Infrastructure Modernization FY26",
+      "opportunity_link": "https://crm.example.com/opps/wwi-infra-001",
+      "stage": "2 - Discovery",
+      "stage_bucket": "Early",
+      "motion": "Net-new",
+      "ae_owner": "Peter Parker",
+      "experimentation_team_engaged": "Unknown",
+      "ai_configs_adjacent": "No",
+      "competitive_mention": "No",
+      "exec_sponsor_mentioned": "No",
+      "next_checkpoint": "2026-04-22"
+    },
+    "evidence": [
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/wwi-disc-001",
+        "timestamp": "00:45:00",
+        "snippet": "We are restructuring our engineering organization into 12 squads. Each squad owns their own deployment pipeline with feature flags. The platform team is exploring A/B testing for the recommendation engine."
+      },
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/wwi-disc-002",
+        "timestamp": "00:12:00",
+        "snippet": "Our CTO wants to migrate from on-prem to cloud by end of year. The roadmap includes Kubernetes adoption, CI/CD pipeline overhaul, and possibly experimentation tooling for the ML team."
+      },
+      {
+        "source_type": "CRM Note",
+        "source_link": "https://crm.example.com/notes/wwi-note-022",
+        "timestamp": "2026-03-05",
+        "snippet": "Large infrastructure deal. Customer is evaluating multiple vendors across feature management, observability, and CI/CD. Experimentation came up briefly in context of ML pipeline."
+      }
+    ],
+    "notes": [
+      "Massive infrastructure modernization project",
+      "12 squad restructuring with independent deployment pipelines",
+      "Kubernetes migration is the primary driver",
+      "CI/CD pipeline overhaul planned for Q2-Q3",
+      "Observability vendor evaluation running in parallel",
+      "Feature flags are in scope but primarily for operational use",
+      "ML team mentioned experimentation once in passing",
+      "CTO driving cloud migration initiative",
+      "Budget primarily allocated to infrastructure, not experimentation"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "Wide World Importers is focused on infrastructure modernization with experimentation as a minor secondary consideration for ML team"
+    ],
+    "rationale": {
+      "because": [
+        { "claim": "Experimentation was mentioned once by platform team for recommendation engine A/B testing", "evidence_refs": ["ev-1"] },
+        { "claim": "CTO roadmap includes experimentation tooling as a possibility, not a priority", "evidence_refs": ["ev-2"] }
+      ],
+      "assumptions": ["Infrastructure modernization is the primary initiative; experimentation is tangential"],
+      "open_questions": ["Will the ML team actually get budget for experimentation?", "Is the recommendation engine A/B testing a real project or aspirational?"]
+    },
+    "json": {
+      "action": "CREATE",
+      "eic": {
+        "eic_id": "EIC-WWI-001",
+        "account": "Wide World Importers",
+        "opportunity": "Wide World Importers - Infrastructure Modernization FY26",
+        "opportunity_link": "https://crm.example.com/opps/wwi-infra-001",
+        "stage": "2 - Discovery",
+        "stage_bucket": "Early",
+        "motion": "Net-new",
+        "ae_owner": "Peter Parker",
+        "experimentation_team_engaged": "Unknown",
+        "influence_strength": 1,
+        "confidence": "Medium",
+        "impact_classification": "HYPOTHESIZED",
+        "impact_priority": 1,
+        "primary_influence_tag": "tangential_signal",
+        "secondary_tag": "ml_pipeline",
+        "ai_configs_adjacent": "No",
+        "competitive_mention": "No",
+        "exec_sponsor_mentioned": "No",
+        "summary_why_it_matters": "Experimentation is a minor consideration buried in a large infrastructure initiative. Signal is weak and tangential.",
+        "evidence": [
+          { "evidence_id": "ev-1", "source_type": "Gong", "url": "https://gong.example.com/calls/wwi-disc-001", "timestamp_utc": "2026-03-04T45:00:00Z", "snippet": "Platform team exploring A/B testing for recommendation engine" },
+          { "evidence_id": "ev-2", "source_type": "Gong", "url": "https://gong.example.com/calls/wwi-disc-002", "timestamp_utc": "2026-03-05T12:00:00Z", "snippet": "CTO roadmap possibly includes experimentation for ML" }
+        ],
+        "next_checkpoint": "2026-04-22",
+        "status": "Active"
+      }
+    }
+  },
+  "expected": {
+    "action": "CREATE",
+    "impact_classification": "HYPOTHESIZED",
+    "confidence_allowed": ["Low", "Medium"],
+    "expected_warnings": [],
+    "hallucination_must_be_zero": true,
+    "notes": "Tests whether agent correctly identifies the weak experimentation signal buried in a noisy infrastructure-focused packet with many irrelevant details."
+  }
+}

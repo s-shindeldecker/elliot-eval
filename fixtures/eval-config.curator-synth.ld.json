@@ -1,0 +1,15 @@
+{
+  "agents": [
+    {
+      "name": "ld-agent",
+      "adapter": "launchdarkly",
+      "config": {}
+    }
+  ],
+  "dataset": "./data/curator.synthetic.dataset.v0.1.jsonl",
+  "stage": "gold",
+  "threshold": 0.85,
+  "maxConcurrency": 1,
+  "seed": 42,
+  "timeoutMs": 60000
+}

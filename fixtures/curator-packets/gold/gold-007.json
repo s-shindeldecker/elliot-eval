@@ -1,0 +1,95 @@
+{
+  "id": "gold-007",
+  "theme": "Closed-won with experimentation as key factor",
+  "category": "gold",
+  "bundle": {
+    "id": "gold-007",
+    "title": "Closed Won — Proseware Enterprise Deal",
+    "snapshot": {
+      "eic_id": "EIC-0055",
+      "account": "Proseware Inc",
+      "opportunity": "Proseware Inc - Enterprise Deal FY26",
+      "opportunity_link": "https://crm.example.com/opps/pw-ent-001",
+      "stage": "CW - Closed Won",
+      "stage_bucket": "Closed",
+      "motion": "Expansion",
+      "ae_owner": "Angela Martinez",
+      "experimentation_team_engaged": "Yes",
+      "ai_configs_adjacent": "No",
+      "competitive_mention": "No",
+      "exec_sponsor_mentioned": "Yes",
+      "exec_sponsor_detail": "VP Product Dana Lee",
+      "next_checkpoint": null
+    },
+    "evidence": [
+      {
+        "source_type": "Salesforce",
+        "source_link": "https://salesforce.example.com/oppty/pw-ent-001/close-notes",
+        "timestamp": "2026-03-07",
+        "snippet": "Deal closed. Customer specifically cited built-in experimentation as the reason for choosing the Enterprise tier over competitor."
+      },
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/pw-close-001",
+        "timestamp": "00:03:15",
+        "snippet": "VP Product Dana Lee: Experimentation was the tipping point for us. We looked at others but your platform had it built in."
+      }
+    ],
+    "notes": [
+      "Customer won, experimentation confirmed as deciding factor",
+      "VP Product explicitly referenced experimentation in close call"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "Proseware closed won with experimentation cited as the key differentiator",
+      "VP Product confirmed experimentation was the tipping point vs competitors"
+    ],
+    "rationale": {
+      "because": [
+        { "claim": "Close notes explicitly cite experimentation as reason for Enterprise tier selection", "evidence_refs": ["ev-1"] },
+        { "claim": "VP Product stated experimentation was the tipping point", "evidence_refs": ["ev-2"] }
+      ],
+      "assumptions": [],
+      "open_questions": []
+    },
+    "json": {
+      "action": "UPDATE",
+      "eic": {
+        "eic_id": "EIC-0055",
+        "account": "Proseware Inc",
+        "opportunity": "Proseware Inc - Enterprise Deal FY26",
+        "opportunity_link": "https://crm.example.com/opps/pw-ent-001",
+        "stage": "CW - Closed Won",
+        "stage_bucket": "Closed",
+        "motion": "Expansion",
+        "ae_owner": "Angela Martinez",
+        "experimentation_team_engaged": "Yes",
+        "influence_strength": 5,
+        "confidence": "High",
+        "impact_classification": "CONFIRMED",
+        "impact_priority": 5,
+        "primary_influence_tag": "deal_differentiator",
+        "secondary_tag": "experimentation_influence",
+        "ai_configs_adjacent": "No",
+        "competitive_mention": "No",
+        "exec_sponsor_mentioned": "Yes",
+        "summary_why_it_matters": "Experimentation confirmed as the deciding factor in closed-won Enterprise deal.",
+        "evidence": [
+          { "evidence_id": "ev-1", "source_type": "Salesforce", "url": "https://salesforce.example.com/oppty/pw-ent-001/close-notes", "timestamp_utc": "2026-03-07T00:00:00Z", "snippet": "Customer cited experimentation as reason for Enterprise tier" },
+          { "evidence_id": "ev-2", "source_type": "Gong", "url": "https://gong.example.com/calls/pw-close-001", "timestamp_utc": "2026-03-07T03:15:00Z", "snippet": "VP Product: experimentation was the tipping point" }
+        ],
+        "next_checkpoint": null,
+        "status": "Active",
+        "commercial_outcome": "CLOSED_WON"
+      }
+    }
+  },
+  "expected": {
+    "action": "UPDATE",
+    "impact_classification": "CONFIRMED",
+    "confidence_allowed": ["High"],
+    "expected_warnings": [],
+    "hallucination_must_be_zero": true
+  }
+}

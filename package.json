@@ -24,7 +24,11 @@
     "eval:ld:gold": "tsx src/index.ts --config fixtures/eval-config.ld.json --stage gold --dataset ./data/elliot.gold.v0.1.jsonl",
     "lint:json": "node -e \"JSON.parse(require('fs').readFileSync('package.json','utf8')); console.log('package.json ok')\"",
     "eval:ld:holdout": "tsx src/index.ts --config fixtures/eval-config.holdout.json --stage gold",
-    "test:curator": "tsx scripts/curator-smoke.ts"
+    "test:curator": "tsx scripts/curator-smoke.ts",
+    "test:contract-v2": "tsx scripts/contract-v2-tests.ts",
+    "build:curator:synth": "tsx scripts/build-dataset-from-bundles.ts --in data/curator.synthetic.v0.1.jsonl --out data/curator.synthetic.dataset.v0.1.jsonl --tag gold",
+    "eval:ld:curator-synth": "npm run build:curator:synth && tsx src/index.ts --config fixtures/eval-config.curator-synth.ld.json --stage gold",
+    "test:curator-judge-e2e": "tsx scripts/curator-judge-e2e-tests.ts"
   },
   "dependencies": {
     "@launchdarkly/node-server-sdk": "^9.10.9",

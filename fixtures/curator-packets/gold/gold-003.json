@@ -1,0 +1,84 @@
+{
+  "id": "gold-003",
+  "theme": "AI-config-adjacent but not decisive",
+  "category": "gold",
+  "bundle": {
+    "id": "gold-003",
+    "title": "AI Config Interest — Woodgrove Health Prompt Management",
+    "snapshot": {
+      "account": "Woodgrove Health",
+      "opportunity": "Woodgrove Health - AI Platform Evaluation",
+      "opportunity_link": "https://crm.example.com/opps/wg-ai-001",
+      "stage": "2 - Discovery",
+      "stage_bucket": "Early",
+      "motion": "Net-new",
+      "ae_owner": "Lisa Chen",
+      "experimentation_team_engaged": "Unknown",
+      "ai_configs_adjacent": "Yes",
+      "competitive_mention": "No",
+      "exec_sponsor_mentioned": "No",
+      "next_checkpoint": "2026-04-15"
+    },
+    "evidence": [
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/wg-disc-001",
+        "timestamp": "00:08:42",
+        "snippet": "We need a way to compare different prompts side by side before rolling them out. Experimentation might help but our primary concern is prompt versioning."
+      }
+    ],
+    "notes": [
+      "Customer interest is primarily in AI Config / prompt management",
+      "Experimentation is a secondary consideration, not the driving need"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "Woodgrove Health is evaluating AI Config for prompt management with experimentation as secondary interest",
+      "No direct experimentation team engagement confirmed yet"
+    ],
+    "rationale": {
+      "because": [
+        { "claim": "Customer mentions experimentation as secondary to prompt versioning needs", "evidence_refs": ["ev-1"] }
+      ],
+      "assumptions": ["Interest may grow as AI Config adoption deepens"],
+      "open_questions": ["Does Woodgrove have a dedicated experimentation team?", "Is prompt comparison the full scope or is A/B testing desired?"]
+    },
+    "json": {
+      "action": "CREATE",
+      "eic": {
+        "eic_id": "EIC-WG-001",
+        "account": "Woodgrove Health",
+        "opportunity": "Woodgrove Health - AI Platform Evaluation",
+        "opportunity_link": "https://crm.example.com/opps/wg-ai-001",
+        "stage": "2 - Discovery",
+        "stage_bucket": "Early",
+        "motion": "Net-new",
+        "ae_owner": "Lisa Chen",
+        "experimentation_team_engaged": "Unknown",
+        "influence_strength": 2,
+        "confidence": "Medium",
+        "impact_classification": "HYPOTHESIZED",
+        "impact_priority": 2,
+        "primary_influence_tag": "ai_config_adjacent",
+        "secondary_tag": "prompt_management",
+        "ai_configs_adjacent": "Yes",
+        "competitive_mention": "No",
+        "exec_sponsor_mentioned": "No",
+        "summary_why_it_matters": "AI Config interest may lead to experimentation adoption, but experimentation is not the primary driver.",
+        "evidence": [
+          { "evidence_id": "ev-1", "source_type": "Gong", "url": "https://gong.example.com/calls/wg-disc-001", "timestamp_utc": "2026-03-10T08:42:00Z", "snippet": "Experimentation mentioned as secondary to prompt versioning" }
+        ],
+        "next_checkpoint": "2026-04-15",
+        "status": "Active"
+      }
+    }
+  },
+  "expected": {
+    "action": "CREATE",
+    "impact_classification": "HYPOTHESIZED",
+    "confidence_allowed": ["Low", "Medium"],
+    "expected_warnings": [],
+    "hallucination_must_be_zero": true
+  }
+}

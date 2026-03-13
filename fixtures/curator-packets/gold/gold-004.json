@@ -1,0 +1,83 @@
+{
+  "id": "gold-004",
+  "theme": "Weak evidence leads to HYPOTHESIZED",
+  "category": "gold",
+  "bundle": {
+    "id": "gold-004",
+    "title": "Weak Signal — Fabrikam Internal Email Forward",
+    "snapshot": {
+      "account": "Fabrikam Inc",
+      "opportunity": "Fabrikam Inc - Platform Consolidation",
+      "opportunity_link": "https://crm.example.com/opps/fab-plat-001",
+      "stage": "1 - Qualification",
+      "stage_bucket": "Early",
+      "motion": "Net-new",
+      "ae_owner": "David Lee",
+      "experimentation_team_engaged": "Unknown",
+      "ai_configs_adjacent": "No",
+      "competitive_mention": "No",
+      "exec_sponsor_mentioned": "No",
+      "next_checkpoint": "2026-05-01"
+    },
+    "evidence": [
+      {
+        "source_type": "Email",
+        "source_link": "https://mail.example.com/thread/fab-fwd-0091",
+        "timestamp": "2026-03-02",
+        "snippet": "FYI — their eng team mentioned they might want to do some A/B testing at some point. Not sure how serious."
+      }
+    ],
+    "notes": [
+      "Single internal email forward with vague experimentation mention",
+      "No direct customer evidence"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "Fabrikam has a vague, unconfirmed mention of potential A/B testing interest from a forwarded internal email"
+    ],
+    "rationale": {
+      "because": [
+        { "claim": "A single internal email forward mentions potential A/B testing interest", "evidence_refs": ["ev-1"] }
+      ],
+      "assumptions": ["The email accurately represents customer intent"],
+      "open_questions": ["Is this a genuine signal or noise?", "Has anyone followed up with the engineering team?"]
+    },
+    "json": {
+      "action": "CREATE",
+      "eic": {
+        "eic_id": "EIC-FAB-001",
+        "account": "Fabrikam Inc",
+        "opportunity": "Fabrikam Inc - Platform Consolidation",
+        "opportunity_link": "https://crm.example.com/opps/fab-plat-001",
+        "stage": "1 - Qualification",
+        "stage_bucket": "Early",
+        "motion": "Net-new",
+        "ae_owner": "David Lee",
+        "experimentation_team_engaged": "Unknown",
+        "influence_strength": 1,
+        "confidence": "Low",
+        "impact_classification": "HYPOTHESIZED",
+        "impact_priority": 1,
+        "primary_influence_tag": "early_signal",
+        "secondary_tag": "unconfirmed_interest",
+        "ai_configs_adjacent": "No",
+        "competitive_mention": "No",
+        "exec_sponsor_mentioned": "No",
+        "summary_why_it_matters": "Weak, unconfirmed signal from internal email forward. Requires follow-up to validate.",
+        "evidence": [
+          { "evidence_id": "ev-1", "source_type": "Email", "url": "https://mail.example.com/thread/fab-fwd-0091", "timestamp_utc": "2026-03-02T00:00:00Z", "snippet": "Eng team mentioned possible A/B testing" }
+        ],
+        "next_checkpoint": "2026-05-01",
+        "status": "Active"
+      }
+    }
+  },
+  "expected": {
+    "action": "CREATE",
+    "impact_classification": "HYPOTHESIZED",
+    "confidence_allowed": ["Low", "Medium"],
+    "expected_warnings": [],
+    "hallucination_must_be_zero": true
+  }
+}

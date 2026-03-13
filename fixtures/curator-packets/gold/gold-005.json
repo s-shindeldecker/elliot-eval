@@ -1,0 +1,49 @@
+{
+  "id": "gold-005",
+  "theme": "No-action due to insufficient evidence",
+  "category": "gold",
+  "bundle": {
+    "id": "gold-005",
+    "title": "Config Management Only — Tailspin Toys Feature Flags",
+    "snapshot": {
+      "account": "Tailspin Toys",
+      "opportunity": "Tailspin Toys - Feature Flag Rollout",
+      "opportunity_link": "https://crm.example.com/opps/ts-ff-001",
+      "stage": "3 - Proposal",
+      "stage_bucket": "Mid",
+      "motion": "Net-new",
+      "ae_owner": "Mike Torres",
+      "experimentation_team_engaged": "No",
+      "ai_configs_adjacent": "No",
+      "competitive_mention": "No",
+      "exec_sponsor_mentioned": "No",
+      "next_checkpoint": "2026-04-10"
+    },
+    "evidence": [
+      {
+        "source_type": "Gong",
+        "source_link": "https://gong.example.com/calls/ts-disc-003",
+        "timestamp": "00:05:20",
+        "snippet": "We need feature flags for safe deployments and kill switches. We have no plans to do A/B testing or experimentation."
+      }
+    ],
+    "notes": [
+      "Customer is clear about feature flag use for config management only",
+      "No experimentation signal detected"
+    ]
+  },
+  "mock_response": {
+    "human_summary": [
+      "Tailspin Toys needs feature flags for deployment safety only, no experimentation signal"
+    ],
+    "json": {
+      "action": "NO_ACTION",
+      "eic": null
+    }
+  },
+  "expected": {
+    "action": "NO_ACTION",
+    "expected_warnings": [],
+    "hallucination_must_be_zero": true
+  }
+}
