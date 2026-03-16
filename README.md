@@ -240,3 +240,18 @@ npm run test:screening
 # Local: run all mocks to verify both pass and fail behavior
 npm run test:screening:all
 ```
+
+## How to generate a candidate evaluation report
+
+```bash
+# Generate from a specific run (or multiple runs):
+npm run report:candidate -- --run out/<run-dir> --candidate <name> --model <model>
+
+# Auto-detect the most recent run:
+npm run report:candidate -- --candidate elliot-judge-v0.2 --model gpt-4o
+
+# Multiple stages combined:
+npm run report:candidate -- --run out/<screening-run> --run out/<gold-run> --candidate <name>
+```
+
+Output: `out/candidate-eval.json` (override with `--out <path>`)
