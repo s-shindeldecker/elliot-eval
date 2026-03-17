@@ -1,0 +1,21 @@
+{
+  "id": "006-sf-sample-001",
+  "accountName": "Northwind Retail",
+  "opportunityName": "Northwind - Platform Consolidation FY26",
+  "opportunityUrl": "https://salesforce.example.com/oppty/nw-001",
+  "stageName": "4 - EB Approval",
+  "ownerName": "Alex Rivera",
+  "closeDate": "2026-04-15",
+  "nextStep": "Confirm decision criteria with VP Digital",
+  "description": "Northwind is evaluating LaunchDarkly vs Statsig for platform consolidation. Their engineering team considers built-in experimentation a must-have — the deciding factor is experimentation maturity, not just feature flags.",
+  "competitor": "Statsig",
+  "execSponsor": "VP Digital",
+  "notes": [
+    "AE: They want experimentation built-in, not bolted on.",
+    "Close window: under 30 days. VP Digital has final sign-off."
+  ],
+  "customFields": {
+    "LD_Region__c": "NA-East",
+    "LD_Use_Case__c": "experimentation_platform"
+  }
+}

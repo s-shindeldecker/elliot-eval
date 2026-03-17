@@ -32,7 +32,8 @@
     "report:candidate": "tsx scripts/report-candidate.ts",
     "test:scout:v0": "tsx scripts/scout-v0-smoke.ts",
     "build:scout:v0:dataset": "tsx scripts/build-scout-v0-dataset.ts",
-    "eval:ld:scout:v0": "npm run build:scout:v0:dataset && tsx src/index.ts --config fixtures/eval-config.scout-v0.ld.json --stage gold"
+    "eval:ld:scout:v0": "npm run build:scout:v0:dataset && tsx src/index.ts --config fixtures/eval-config.scout-v0.ld.json --stage gold",
+    "test:scout:salesforce": "tsx scripts/scout-salesforce-smoke.ts"
   },
   "dependencies": {
     "@launchdarkly/node-server-sdk": "^9.10.9",
