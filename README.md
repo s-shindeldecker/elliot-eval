@@ -255,3 +255,13 @@ npm run report:candidate -- --run out/<screening-run> --run out/<gold-run> --can
 ```
 
 Output: `out/candidate-eval.json` (override with `--out <path>`)
+
+## Scout v0 → Judge evaluation loop
+
+```bash
+# Build the dataset from Salesforce-shaped sample inputs:
+npm run build:scout:v0:dataset
+
+# Run the full Scout → Curator → Judge evaluation (requires LD env vars):
+npm run eval:ld:scout:v0
+```

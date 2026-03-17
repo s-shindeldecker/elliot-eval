@@ -1,0 +1,56 @@
+[
+  {
+    "id": "scout-sample-001",
+    "account": "Northwind Retail",
+    "opportunity": "Northwind - Platform Consolidation FY26",
+    "opportunity_link": "https://salesforce.example.com/oppty/nw-001",
+    "stage": "4 - EB Approval",
+    "ae_owner": "Alex Rivera",
+    "next_step": "Final procurement review scheduled for next week",
+    "description": "Northwind is choosing between LaunchDarkly and Statsig. The deciding factor is experimentation — their engineering team considers built-in experimentation a must-have for platform consolidation.",
+    "notes": [
+      "Close window: under 30 days",
+      "AE: They want experimentation built-in, not bolted on."
+    ],
+    "close_date": "2026-04-15",
+    "motion_hint": null,
+    "competitor": "Statsig",
+    "exec_sponsor": "VP Digital"
+  },
+  {
+    "id": "scout-sample-002",
+    "account": "Fabrikam Media",
+    "opportunity": "Fabrikam - Renewal FY26",
+    "opportunity_link": "https://salesforce.example.com/oppty/fab-001",
+    "stage": "2 - Value",
+    "ae_owner": "Jordan Lee",
+    "next_step": "Renewal call scheduled",
+    "description": "Maybe later we'll experiment, right now we need safer releases. Customer is focused on release stability for their media platform.",
+    "notes": [
+      "Current usage is feature flags only",
+      "No experimentation team in place"
+    ],
+    "close_date": "2026-06-30",
+    "motion_hint": null,
+    "competitor": null,
+    "exec_sponsor": null
+  },
+  {
+    "id": "scout-sample-003",
+    "account": "Tailspin Toys",
+    "opportunity": "Tailspin - Net-new Starter",
+    "opportunity_link": "https://salesforce.example.com/oppty/ts-001",
+    "stage": "1 - Validate Fit",
+    "ae_owner": "Morgan Chen",
+    "next_step": "Discovery call",
+    "description": "Tailspin needs feature flags for safe deployments and kill switches. No plans for A/B testing or experimentation.",
+    "notes": [
+      "Primary use case: operational feature flags",
+      "No experimentation signal detected"
+    ],
+    "close_date": null,
+    "motion_hint": null,
+    "competitor": null,
+    "exec_sponsor": null
+  }
+]

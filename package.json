@@ -29,7 +29,10 @@
     "build:curator:synth": "tsx scripts/build-dataset-from-bundles.ts --in data/curator.synthetic.v0.1.jsonl --out data/curator.synthetic.dataset.v0.1.jsonl --tag gold",
     "eval:ld:curator-synth": "npm run build:curator:synth && tsx src/index.ts --config fixtures/eval-config.curator-synth.ld.json --stage gold",
     "test:curator-judge-e2e": "tsx scripts/curator-judge-e2e-tests.ts",
-    "report:candidate": "tsx scripts/report-candidate.ts"
+    "report:candidate": "tsx scripts/report-candidate.ts",
+    "test:scout:v0": "tsx scripts/scout-v0-smoke.ts",
+    "build:scout:v0:dataset": "tsx scripts/build-scout-v0-dataset.ts",
+    "eval:ld:scout:v0": "npm run build:scout:v0:dataset && tsx src/index.ts --config fixtures/eval-config.scout-v0.ld.json --stage gold"
   },
   "dependencies": {
     "@launchdarkly/node-server-sdk": "^9.10.9",
