@@ -32,15 +32,18 @@ function buildSnapshot(r: SalesforceOpportunityRecord): OpportunitySnapshot {
     opportunity_link: r.opportunityUrl,
     stage: r.stageName,
     stage_bucket: inferStageBucket(r.stageName),
-    motion: inferMotion(r.opportunityName),
+    motion: inferMotion(r),
     ae_owner: r.ownerName ?? null,
-    experimentation_team_engaged: 'Unknown',
-    ai_configs_adjacent: 'Unknown',
+    experimentation_team_engaged: inferExperimentationEngaged(r),
+    ai_configs_adjacent: inferAiConfigsAdjacent(r),
     competitive_mention: yesOrUnknown(r.competitor),
-    competitive_detail: r.competitor ?? null,
+    competitive_detail: buildCompetitiveDetail(r),
     exec_sponsor_mentioned: yesOrUnknown(r.execSponsor),
     exec_sponsor_detail: r.execSponsor ?? null,
     next_checkpoint: validDate(r.closeDate),
+    amount: r.amount ?? null,
+    expected_revenue: r.expectedRevenue ?? null,
+    probability: r.probability ?? null,
   };
 }
 
@@ -58,13 +61,42 @@ function inferStageBucket(stage: string): StageBucket {
   return 'Early';
 }
 
-function inferMotion(oppName: string): Motion {
-  const lower = oppName.toLowerCase();
+function inferMotion(r: SalesforceOpportunityRecord): Motion {
+  if (nonEmpty(r.dealType)) {
+    const dt = r.dealType!.toLowerCase();
+    if (dt === 'expansion') return 'Expansion';
+    if (dt === 'renewal') return 'Renewal';
+  }
+  const lower = r.opportunityName.toLowerCase();
   if (lower.includes('renewal')) return 'Renewal';
   if (lower.includes('expansion') || lower.includes('enterprise tier') || lower.includes('multi-product')) {
     return 'Expansion';
   }
   return 'Net-new';
+}
+
+function inferExperimentationEngaged(r: SalesforceOpportunityRecord): YesNoUnknown {
+  if (r.launchX === true) return 'Yes';
+  if (r.launchX === false) return 'No';
+  return 'Unknown';
+}
+
+function inferAiConfigsAdjacent(r: SalesforceOpportunityRecord): YesNoUnknown {
+  const haystack = [
+    r.description, r.launchXNotes, r.nextStepsDetails, r.businessImpactNotes,
+    ...(r.notes ?? []),
+  ].filter(nonEmpty).join(' ').toLowerCase();
+  if (haystack.includes('ai config') || haystack.includes('ai-config') || haystack.includes('guardian')) {
+    return 'Yes';
+  }
+  return 'Unknown';
+}
+
+function buildCompetitiveDetail(r: SalesforceOpportunityRecord): string | null {
+  const parts: string[] = [];
+  if (nonEmpty(r.competitor)) parts.push(r.competitor!);
+  if (nonEmpty(r.competitionNotes)) parts.push(r.competitionNotes!);
+  return parts.length > 0 ? parts.join(' — ') : null;
 }
 
 function yesOrUnknown(value: string | null | undefined): YesNoUnknown {
@@ -96,6 +128,42 @@ function buildEvidence(r: SalesforceOpportunityRecord): EvidenceItem[] {
     snippet: primarySnippet,
   });
 
+  if (nonEmpty(r.nextStepsDetails) && r.nextStepsDetails !== primarySnippet) {
+    items.push({
+      source_type: 'Salesforce Activity',
+      source_link: `${r.opportunityUrl}/activities`,
+      timestamp: null,
+      snippet: r.nextStepsDetails!,
+    });
+  }
+
+  if (nonEmpty(r.businessImpactNotes) && r.businessImpactNotes !== primarySnippet) {
+    items.push({
+      source_type: 'Business Impact',
+      source_link: `${r.opportunityUrl}/impact`,
+      timestamp: null,
+      snippet: r.businessImpactNotes!,
+    });
+  }
+
+  if (nonEmpty(r.launchXNotes)) {
+    items.push({
+      source_type: 'LaunchX',
+      source_link: `${r.opportunityUrl}/launchx`,
+      timestamp: null,
+      snippet: r.launchXNotes!,
+    });
+  }
+
+  if (nonEmpty(r.competitionNotes)) {
+    items.push({
+      source_type: 'Competition Intel',
+      source_link: `${r.opportunityUrl}/competition`,
+      timestamp: null,
+      snippet: r.competitionNotes!,
+    });
+  }
+
   if (r.notes) {
     let added = 0;
     for (const note of r.notes) {
@@ -126,6 +194,10 @@ function buildNotes(r: SalesforceOpportunityRecord): string[] {
       if (n && n.trim().length > 0) notes.push(n);
     }
   }
+  if (nonEmpty(r.nextStepsDetails)) notes.push(`NEXT_STEPS: ${r.nextStepsDetails}`);
+  if (nonEmpty(r.businessImpactNotes)) notes.push(`BUSINESS_IMPACT: ${r.businessImpactNotes}`);
+  if (nonEmpty(r.launchXNotes)) notes.push(`LAUNCHX: ${r.launchXNotes}`);
+  if (nonEmpty(r.competitionNotes)) notes.push(`COMPETITION: ${r.competitionNotes}`);
   notes.push('SCOUT_SOURCE=Salesforce');
   notes.push('SCOUT_MODE=fixture');
   return notes;

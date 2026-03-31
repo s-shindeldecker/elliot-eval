@@ -25,6 +25,9 @@ export interface OpportunitySnapshot {
   exec_sponsor_mentioned?: YesNoUnknown | null;
   exec_sponsor_detail?: string | null;
   next_checkpoint?: string | null;
+  amount?: number | null;
+  expected_revenue?: number | null;
+  probability?: number | null;
 }
 
 export interface SignalBundle {

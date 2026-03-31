@@ -25,6 +25,9 @@ export function renderPacket(bundle: SignalBundle): string {
   lines.push(`- Competitive Mention?: ${formatWithDetail(s.competitive_mention, s.competitive_detail)}`);
   lines.push(`- Exec Sponsor Mentioned?: ${formatWithDetail(s.exec_sponsor_mentioned, s.exec_sponsor_detail)}`);
   lines.push(`- Next Checkpoint: ${blank(s.next_checkpoint)}`);
+  lines.push(`- Amount: ${formatCurrency(s.amount)}`);
+  lines.push(`- Expected Revenue: ${formatCurrency(s.expected_revenue)}`);
+  lines.push(`- Probability: ${s.probability != null ? `${s.probability}%` : ''}`);
 
   lines.push('');
   lines.push('EVIDENCE');
@@ -65,6 +68,11 @@ function formatWithDetail(
   if (base.length === 0) return '';
   if (detail != null && detail.length > 0) return `${base} (${detail})`;
   return base;
+}
+
+function formatCurrency(value: number | null | undefined): string {
+  if (value == null) return '';
+  return `$${value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 }
 
 function escapeQuotes(text: string): string {

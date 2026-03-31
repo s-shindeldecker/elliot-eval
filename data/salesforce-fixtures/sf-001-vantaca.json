@@ -1,0 +1,34 @@
+{
+  "id": "006TR00000Y4cntYAB",
+  "accountName": "Vantaca",
+  "opportunityName": "Vantaca - NB - Sales - 2026",
+  "opportunityUrl": "https://launchdarkly.lightning.force.com/lightning/r/Opportunity/006TR00000Y4cntYAB/view",
+  "stageName": "5 - Paper Process",
+  "ownerName": "Corey Frassica",
+  "closeDate": "2026-04-15",
+  "nextStep": null,
+  "description": "They are currently running a LaunchDarkly trial.",
+  "competitor": null,
+  "execSponsor": "Jeff (CTO)",
+  "launchX": true,
+  "launchXNotes": "Scott - Demo on 2/3\nhttps://us-13341.app.gong.io/call?id=5106596550380097668",
+  "dealType": "New Business",
+  "competitionNotes": null,
+  "nextStepsDetails": "03/27 - CF Received final approval from Jeff (CTO). Docusign and final quote sent over. Once we get the signature I will CW this opp.\n03/24 - CF Quotes sent over to Conner (VP) and Jeff (CTO) for final approvals - call scheduled Friday to discuss\n03/20 - CF Second pricing call with team - 33,750 will be final offer - VP and CTO asked for quotes to be sent over for both 1 yr and 3 yr\n03/13 - Pricing call with Vantaca team - SC total will be updated and sent over to us. Price point will change upon new number. Call scheduled for 03/18 to discuss new price point. Deal updated to 35k iARR\n02/28 CF - Trial extended until 03/21 as commercial conversations kick off. Pricing call scheduled for 03/13\n02/05 CF - Weekly syncs scheduled for every Friday with Scott S from LaunchX - Support them during the trial/POV process\n02/03 CF Agreed on extending trial to end of Feb - Working session was useful and they were wowed by product/experimentation capabilities - setting up weekly office hours during trial process to keep momentum/help with any questions that come up\n02/02 CF Working session scheduled with Vantaca team for 02/03 - Scott + Matt as technical experts\n01/30 CF Schedule joint working session with LaunchDarkly SE + LaunchX (Experimentation Expert) to support Vantaca's 2-3 month POC. Goal is to finalize experimentation setup, validate architecture, and launch first production-facing experiment within ~2 weeks",
+  "businessImpactNotes": "They need to discuss pricing as soon as possible and want to schedule a call to move things forward. Their VP of Engineering and Product Manager would like to join the discussion to evaluate production readiness and next steps.",
+  "amount": 28000,
+  "expectedRevenue": 23800,
+  "probability": 85,
+  "notes": [
+    "03/27 - CF Received final approval from Jeff (CTO). Docusign and final quote sent over.",
+    "02/03 CF Agreed on extending trial to end of Feb - Working session was useful and they were wowed by product/experimentation capabilities.",
+    "01/30 CF Goal is to finalize experimentation setup, validate architecture, and launch first production-facing experiment within ~2 weeks"
+  ],
+  "customFields": {
+    "LD_Lead_Source": "Product",
+    "LD_Owner_Role": "AE - Corporate AMS",
+    "LD_Fiscal_Period": "Q1-2027",
+    "LD_Age": 63,
+    "LD_Created_Date": "2026-01-27"
+  }
+}

@@ -19,6 +19,15 @@ export interface SalesforceOpportunityRecord {
   competitor?: string | null;
   execSponsor?: string | null;
   notes?: string[] | null;
+  launchX?: boolean | null;
+  launchXNotes?: string | null;
+  dealType?: string | null;
+  competitionNotes?: string | null;
+  nextStepsDetails?: string | null;
+  businessImpactNotes?: string | null;
+  amount?: number | null;
+  expectedRevenue?: number | null;
+  probability?: number | null;
   customFields?: Record<string, unknown> | null;
 }
 

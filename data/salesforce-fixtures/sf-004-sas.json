@@ -1,0 +1,30 @@
+{
+  "id": "006TR00000Sdg2UYAR",
+  "accountName": "SAS",
+  "opportunityName": "SAS - NB - Sales - 2026",
+  "opportunityUrl": "https://launchdarkly.lightning.force.com/lightning/r/Opportunity/006TR00000Sdg2UYAR/view",
+  "stageName": "Discovery",
+  "ownerName": "Scott Finder",
+  "closeDate": "2026-03-30",
+  "nextStep": null,
+  "description": "He didn't mention specific limitations, but he would be interested in learning more about rapid experimentation and prototyping and use feature flags on those prototypes to test in prod.",
+  "competitor": "Split.io",
+  "execSponsor": null,
+  "launchX": false,
+  "launchXNotes": null,
+  "dealType": "New Business",
+  "competitionNotes": "NOTE: Some SAS teams recently went with Split.io",
+  "nextStepsDetails": null,
+  "businessImpactNotes": null,
+  "amount": null,
+  "expectedRevenue": null,
+  "probability": 33,
+  "notes": [],
+  "customFields": {
+    "LD_Lead_Source": "Sales Prospecting",
+    "LD_Owner_Role": "AE - Strategic East",
+    "LD_Fiscal_Period": "Q1-2027",
+    "LD_Age": 182,
+    "LD_Created_Date": "2025-09-30"
+  }
+}

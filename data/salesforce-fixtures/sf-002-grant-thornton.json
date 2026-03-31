@@ -1,0 +1,33 @@
+{
+  "id": "006TR00000MC2CfYAL",
+  "accountName": "Grant Thornton International",
+  "opportunityName": "Grant Thornton International - NB -  - Sales - 2025",
+  "opportunityUrl": "https://launchdarkly.lightning.force.com/lightning/r/Opportunity/006TR00000MC2CfYAL/view",
+  "stageName": "4 - EB Approval",
+  "ownerName": "Mike Mygal",
+  "closeDate": "2026-04-17",
+  "nextStep": null,
+  "description": "No experimentation practices were mentioned.\n\nSince the focus is on feature flags, it's likely they are at an early stage or have not yet formalized experimentation strategies.",
+  "competitor": null,
+  "execSponsor": null,
+  "launchX": false,
+  "launchXNotes": null,
+  "dealType": "New Business",
+  "competitionNotes": "No direct competitors were mentioned.\n\nThe team has prior experience with LaunchDarkly, indicating existing familiarity and potentially some internal preference, which reduces competitive risk.",
+  "nextStepsDetails": "3/30- Finalizing final redlines this week\n3/16 - Filling out vendor form - they asked for call with legal for redlines so sent available times for mtg this week.\n3/8-Met with Joe and Marige from sourcing. They sent us a form to redline and set another call to connect on 3/11 to track progress.\n2/9 Met with GTIL tech and procurement and they are ready to move forward but will need to redline our MSA. I have submitted a request for exception since it falls below the $75k threshold\n11/10 Need to update with AI configs. Legal is looking at our MNDA. Timing could be at risk since they have to look at all our docs\n11/7/25 Pricing overview and RSA scoping.\nCustomer would like to sign in December and have net 45 in order to pay in Jan\n10/28 Budget is finally confirmed, need to review online terms, order is being evaluated\n9/10 Working on budget\n7/2 Meeting in next couple weeks to scope and discovery",
+  "businessImpactNotes": "The prospect is seeking a better understanding of how LaunchDarkly works, which could indicate a gap in tooling or process familiarity that's slowing down adoption or optimization of releases.\n\nThere may be inefficiencies or inconsistencies in rollout strategies if feature flags are not yet in place.",
+  "amount": 67000,
+  "expectedRevenue": 40200,
+  "probability": 60,
+  "notes": [
+    "3/30- Finalizing final redlines this week",
+    "2/9 Met with GTIL tech and procurement and they are ready to move forward but will need to redline our MSA."
+  ],
+  "customFields": {
+    "LD_Lead_Source": "Website",
+    "LD_Owner_Role": "AE - Enterprise Central",
+    "LD_Fiscal_Period": "Q1-2027",
+    "LD_Age": 356,
+    "LD_Created_Date": "2025-04-09"
+  }
+}

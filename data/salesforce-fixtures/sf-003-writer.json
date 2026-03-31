@@ -1,0 +1,32 @@
+{
+  "id": "006TR00000XaJU9YAN",
+  "accountName": "Writer",
+  "opportunityName": "Writer - Expansion - Sales - 2026",
+  "opportunityUrl": "https://launchdarkly.lightning.force.com/lightning/r/Opportunity/006TR00000XaJU9YAN/view",
+  "stageName": "2 - Value",
+  "ownerName": "Corey Webster",
+  "closeDate": "2026-04-17",
+  "nextStep": null,
+  "description": null,
+  "competitor": null,
+  "execSponsor": null,
+  "launchX": false,
+  "launchXNotes": null,
+  "dealType": "Expansion",
+  "competitionNotes": null,
+  "nextStepsDetails": "CW 1.15 - Connect Kyrylo Buha about their usage/growth and position Guardian, AI Configs, and the overage of SC's that they're currently at.",
+  "businessImpactNotes": null,
+  "amount": 75000,
+  "expectedRevenue": 26250,
+  "probability": 35,
+  "notes": [
+    "CW 1.15 - Connect Kyrylo Buha about their usage/growth and position Guardian, AI Configs, and the overage of SC's that they're currently at."
+  ],
+  "customFields": {
+    "LD_Lead_Source": "Product",
+    "LD_Owner_Role": "AE - Enterprise West",
+    "LD_Fiscal_Period": "Q1-2027",
+    "LD_Age": 75,
+    "LD_Created_Date": "2026-01-15"
+  }
+}

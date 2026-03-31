@@ -1,0 +1,33 @@
+{
+  "id": "006TR00000PBI3FYAX",
+  "accountName": "Ferguson Enterprise, LLC",
+  "opportunityName": "Ferguson Home - Expansion - Sales - 2025",
+  "opportunityUrl": "https://launchdarkly.lightning.force.com/lightning/r/Opportunity/006TR00000PBI3FYAX/view",
+  "stageName": "CW - Closed Won",
+  "ownerName": "Ali Kirk",
+  "closeDate": "2026-03-25",
+  "nextStep": null,
+  "description": null,
+  "competitor": "Sitespect",
+  "execSponsor": null,
+  "launchX": false,
+  "launchXNotes": null,
+  "dealType": "Expansion",
+  "competitionNotes": null,
+  "nextStepsDetails": "3/25: routing for signatures on their end\n3/24: came back to the table and said if we can do sub $100k deal for unlimited MAU and 25 extra seats we can get a deal done; draft OF sent over for approval on numbers\n2/9: procurement out today unexpectedly going to try to catch him on tues if he's back. they had a meeting on friday to discuss a path forward\n2/3: they have the pricing from Sitespect- talking with CIO about it; meeting with procurement on thursday for path forward\n1/26: talked with procurement last week - they are meeting with other vendor today and tomorrow, he said to follow up by EOD. they need some idea on price changes with other vendor and then this should be approved and off for signature\n1/20: followed up with procurement again today- still waiting to hear about the cost of Ferguson Home splitting off from Sitespect\n1/15: FU with procurement to get an update\n1/13: procurement reached out saying leadership is trying to understand if/how the contract will change with other vendor if they pull Ferguson Home- asked about the risk of Ferguson Home not moving at all\n1/12: reached out to procurement on Thurs for update- he had mentioned they will have decision by EOW. most likely moving forward with just Ferguson Home\n1/2: they couldn't get approval to have Ferguson Home move on separate tools by EOY, they are still considering the proposal, talking with procurement again on monday\n12/22: we are struggling with Ferguson.com getting onboard (ferguson home is bought in); we offered up a sweetheart deal to get this done, procurement is helping us, with a deadline for decision by EOD tomorrow.\n12/15: working through pricing and whether or not ferguson.com will be on onboarding now vs later; updated proposals sent on Friday for MAU vs Keys; meeting with Zilker on Wed\n12/8: meeting tues with team to align on product gaps and meeting set with Zilker next week\n12/1: meeting with procurement on Tues\n11/25: exec wrap up went well, product meeting today; working to schedule time with procurement next week to review proposal; order form has been sent\n11/17: extended PoV again to go through metrics on Thurs to ensure they line up with what we are showing. Exec wrap up on Friday\n11/10: extended PoV- results session on Thursday; Exec wrap up on Friday- met with procurement last week, working through proposal\n11/3: Currently in exp PoV, ending on 11/7 with exec wrap up; working w/ procurement on pricing- most likely will need more seats w/ exp MAU\n9/2: FU this week\n8/25: followed up on Friday, no response\n8/18: Followed up last week to get time on the cal for kick off- will follow up again this week\n8/12- champion was on vacation, working to FU to schedule POV Scoping session with broader team",
+  "businessImpactNotes": null,
+  "amount": 43750.69,
+  "expectedRevenue": 43750.69,
+  "probability": 100,
+  "notes": [
+    "2/3: they have the pricing from Sitespect- talking with CIO about it; meeting with procurement on thursday for path forward",
+    "11/3: Currently in exp PoV, ending on 11/7 with exec wrap up; working w/ procurement on pricing- most likely will need more seats w/ exp MAU"
+  ],
+  "customFields": {
+    "LD_Lead_Source": "Product",
+    "LD_Owner_Role": "AE - Enterprise East",
+    "LD_Fiscal_Period": "Q1-2027",
+    "LD_Age": 267,
+    "LD_Created_Date": "2025-07-01"
+  }
+}
