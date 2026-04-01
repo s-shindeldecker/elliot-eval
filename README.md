@@ -1,52 +1,45 @@
 # elliot-eval
 
-**Elliot Evaluation Harness** — Experimentation Line-of-sight & Impact Observation Tracker
+**Elliot** — Experimentation Line-of-sight & Impact Observation Tracker
 
 ## Purpose
 
-Elliot’s mission is to maintain a continuously updated, evidence-grounded intelligence system that detects, validates, and communicates how experimentation influences revenue motion, expansion, competitive positioning, and AI adoption at LaunchDarkly — especially in environments where ARR attribution is no longer directly observable.
+Elliot is an AI teammate that detects, validates, and communicates how experimentation influences revenue motion, expansion, competitive positioning, and AI adoption at LaunchDarkly — especially as direct ARR attribution becomes structurally invisible.
 
-The role exists to convert fragmented signals into defensible, structured impact intelligence.
-
-This repository contains the **evaluation harness and module scaffolding** used to build, test, and “hire” Elliot as an agentic teammate.
+This repository contains the **operational agent pipeline** and **evaluation harness** used to build, test, and continuously improve Elliot.
 
 ---
 
 ## Architecture
 
-Elliot has evolved from a four-stage pipeline to an **AI Config Agent** pattern:
-
-### Current: AI Config Agent (v2)
-
-A single LD AI Config Agent receives user queries (via Slack or CLI), uses tools to gather intelligence, and produces a natural-language response with optional scoring.
+Elliot runs as a three-stage pipeline orchestrated by TypeScript code (`ElliotAgent`):
 
 ```
-Slack Message → Slack Bot → LD AI Config Agent → Response → Slack Reply
-                                  │
-                                  ├── Wisdom Tools (Enterpret KG: Gong, Zendesk, Slack, Jira, G2)
-                                  ├── Salesforce Tools (API — pending credentials)
-                                  └── Pipeline Tools (Curator → Judge)
+User Query → Scout (LLM Agent via LD AI Config + Wisdom Tools)
+           → Curator (Deterministic Code)
+           → Judge (LLM Scorer via LD AI Config)
+           → Response + Scored EIC
 ```
 
-The LLM decides which tools to call, in what order, and how to interpret results. Scout orchestration logic lives in the AI Config prompt, not in code.
+**Scout** is an LLM agent managed by the `elliot-agent` LD AI Config (model: `gpt-4o`). It uses tools to gather intelligence from the Enterpret Knowledge Graph (Gong calls, Zendesk tickets, Slack mentions, feedback themes, account data). It handles multi-turn conversations with disambiguation when multiple accounts match a query.
+
+**Curator** is deterministic TypeScript code (`curateToolResults()`) that transforms the Scout's raw tool results into a structured `SignalBundle`. It infers opportunity metadata from Gong's Salesforce-linked fields, computes feedback trajectory (recency-weighted complaint/praise analysis), and renders a deterministic text packet for the Judge. No LLM involved — same inputs always produce the same output.
+
+**Judge** is a separate, tool-less LLM managed by the `elliot-candidate-a` LD AI Config (variation: `first-new-candidate`, model: `gpt-4o-mini`). It receives the Curator's rendered packet as `input_text` and returns structured JSON: action (CREATE/UPDATE/NO_ACTION), full EIC object, and human summary.
+
+The orchestration between stages happens entirely in code (`src/agent/elliot-agent.ts`), not inside any LLM. Each stage is isolated — they don't share a conversation or context window.
 
 | Component | Role | Status |
 |-----------|------|--------|
-| **Wisdom Tools** | Queries Enterpret Knowledge Graph for Gong calls, support tickets, Slack mentions, Jira tickets, G2 reviews | Implemented |
-| **Salesforce Tools** | Queries Salesforce API for opportunity, account, activity, contact data | Stubbed (pending API credentials) |
-| **AI Config Agent** | LLM-driven orchestrator using LD AI Config for prompt/model management | Implemented |
-| **Slack Bot** | Thin transport layer using Slack Bolt (Socket Mode) | Implemented |
-| **Curator** | Validates and normalizes bundles → renders deterministic packet | Implemented |
-| **Judge** | Classifies impact → outputs structured JSON (Decision Contract) | Implemented via LD AI Config evaluation |
-| **Scribe** | Persists decisions + lifecycle management | In-memory prototype only |
-
-### Legacy: Pipeline Mode (v1)
-
-The original four-stage pipeline (Scout → Curator → Judge → Scribe) remains for **offline evaluation** with fixture data. The deterministic mapper path (`mapSalesforceRecordToBundle`) and eval harness are unchanged.
-
-Validation, normalization, scoring, and reporting are **deterministic and auditable**.
-
-Model responses (LD/OpenAI) are **not deterministic**, but are evaluated under deterministic rules.
+| **Scout** | LLM agent with 6 Wisdom tools; gathers account intelligence with multi-turn disambiguation | Implemented |
+| **Curator** | Deterministic transform: tool results → SignalBundle → rendered packet; includes feedback trajectory computation | Implemented |
+| **Judge** | LLM scorer: curated packet → structured JSON assessment (EIC) | Implemented |
+| **Wisdom Tools** | Cypher queries against Enterpret KG (Gong, Zendesk, Slack, feedback themes) | Implemented |
+| **Salesforce Tools** | Direct Salesforce API for opportunity/account data | Stubbed (pending credentials) |
+| **CLI Harness** | Interactive multi-turn testing with conversation history | Implemented |
+| **Slack Bot** | Slack Bolt transport layer (Socket Mode) | Implemented (not primary interface) |
+| **Eval Harness** | Gold test dataset, adversarial packets, regression testing | Implemented (10/10 gold passing) |
+| **Scribe** | Persist decisions + lifecycle management | Planned |
 
 ---
 
@@ -67,42 +60,77 @@ Model responses (LD/OpenAI) are **not deterministic**, but are evaluated under d
 ```bash
 npm install
 
-npm run test:screening
-npm run test:contract-v2
-npm run eval:sample
+# Interactive CLI (full pipeline: Scout → Curator → Judge)
+npm run agent:cli
+
+# Run gold evaluation suite
+npm run eval:ld:gold
+
+# Replay saved Curator packets through the Judge
+npm run judge:test
 ```
 
 ---
 
-## Agent Output Contract (v2)
+## Key Files
 
-Agents must return:
+| File | Role |
+|------|------|
+| `src/agent/elliot-agent.ts` | Orchestrates Scout → Curator → Judge pipeline |
+| `src/curator/curate-tool-results.ts` | Deterministic tool results → SignalBundle transform |
+| `src/curator/render-packet.ts` | SignalBundle → deterministic input_text for Judge |
+| `src/curator/validate-bundle.ts` | SignalBundle structural validation |
+| `src/tools/wisdom/tools.ts` | Wisdom tool implementations (Cypher queries) |
+| `src/tools/wisdom/types.ts` | Tool parameter/result types and JSON schemas |
+| `src/adapter/ld-client.ts` | LD AI Config client (tool-use + simple invoke) |
+| `scripts/agent-cli.ts` | CLI harness with multi-turn conversation support |
+| `scripts/judge-test.ts` | Judge replay harness for A/B testing |
+| `docs/prompts/elliot-scout.md` | Scout system prompt (synced to LD AI Config) |
+| `docs/prompts/elliot-judge.md` | Judge system prompt (synced to LD AI Config) |
+
+---
+
+## Agent Output Contract
+
+The Judge returns:
 
 ```json
 {
-  "human_summary": ["string"],
-  "rationale": {
-    "because": [{ "claim": "string", "evidence_refs": ["ev-1"] }],
-    "assumptions": ["string"],
-    "open_questions": ["string"]
-  },
+  "human_summary": ["string (2-5 bullets)"],
   "json": {
-    "action": "CREATE" | "UPDATE" | "NO_ACTION",
+    "action": "CREATE | UPDATE | NO_ACTION",
     "eic": { ... } | null
   }
 }
 ```
 
-### Rules
+- `action` determines whether to create, update, or skip an Experimentation Impact Case (EIC)
+- `eic` is required for CREATE/UPDATE, must be null for NO_ACTION
+- All outputs pass AJV schema validation (`src/schemas/agent-response.ts`)
 
-- `action` replaces legacy `create_eic`
-- `eic` required for CREATE/UPDATE
-- `eic` must be null for NO_ACTION
-- All outputs must pass AJV schema validation
+---
 
-### Source of truth
+## LD AI Configs
 
-`src/schemas/agent-response.ts`
+| Config Key | Variation | Model | Role |
+|------------|-----------|-------|------|
+| `elliot-agent` | `baseline` | `gpt-4o` | Scout — gathers intelligence via tools |
+| `elliot-candidate-a` | `first-new-candidate` | `gpt-4o-mini` | Judge — scores curated packets |
+| `elliot-candidate-a` | `baseline` | `gpt-4o-mini` | Judge (legacy variation) |
+
+Prompts are maintained in `docs/prompts/` and can be synced to LD AI Configs programmatically via the LaunchDarkly MCP (`update-ai-config-variation`).
+
+---
+
+## Curator Features
+
+The Curator deterministically processes Scout tool results into a structured packet:
+
+- **OpportunitySnapshot inference**: Opportunity name, stage, amount, AE owner from Gong Salesforce-linked fields
+- **Enriched account data**: Account type, ARR, industry, owner, lifecycle stage from `search_account` results
+- **Boolean flag inference**: experimentation_team_engaged, ai_configs_adjacent, competitive_mention from call titles and feedback themes
+- **Feedback trajectory**: Recency-weighted analysis splitting feedback into early/recent windows to detect improving, declining, or stable trends
+- **Evidence items**: Source type, source ID, timestamp, and snippet for each Gong call, Zendesk ticket, and Slack message (with channel/author context)
 
 ---
 
@@ -115,15 +143,19 @@ Each JSONL row:
   "id": "string",
   "input_text": "string",
   "expected": {
-    "action": "CREATE" | "UPDATE" | "NO_ACTION",
+    "action": "CREATE | UPDATE | NO_ACTION",
     "create_eic": true | false,
     "eic": { ... }
   },
-  "tags": ["screening"]
+  "tags": ["gold"]
 }
 ```
 
-Only fields present in `expected.eic` are scored.
+Expected EIC fields support both exact match and set checks:
+- Exact: `"primary_influence_tag": "competitive_displacement"`
+- Set: `"primary_influence_tag_allowed": ["expansion_catalyst", "strategic_positioning"]`
+- Range: `"influence_strength_range": [3, 5]`
+- Allowed: `"confidence_allowed": ["Medium", "High"]`
 
 ---
 
@@ -136,7 +168,7 @@ Only fields present in `expected.eic` are scored.
 | DECISION_MISMATCH | Wrong action |
 | FIELD_MISMATCH | Enum / field mismatch |
 | RANGE_VIOLATION | Numeric bounds violation |
-| HALLUCINATED_CITATION | Evidence not in input |
+| HALLUCINATED_CITATION | Evidence URL not in input |
 | MISSING_REQUIRED_FIELD | eic missing when required |
 | ADAPTER_ERROR | Adapter failure |
 | TIMEOUT | Invocation timeout |
@@ -144,216 +176,114 @@ Only fields present in `expected.eic` are scored.
 
 ---
 
-## Pass / Fail Rules
-
-### Screening
-- Must pass **100% of cases**
-
-### Gold
-Must satisfy:
-- passRate ≥ threshold (85%)
-- zero hard failures
-
-Hard failures:
-- hallucination
-- schema failure
-- parse error
-- adapter failure
-- timeout
-
----
-
 ## Datasets
 
 | File | Purpose |
 |------|--------|
+| `data/elliot.gold.v0.1.jsonl` | Gold evaluation (10 cases) |
 | `data/gold.sample.jsonl` | Screening |
-| `data/elliot.gold.v0.1.jsonl` | Gold |
 | `data/elliot.gold.holdout.v0.1.jsonl` | Holdout |
-| `data/scout-v0.samples.json` | Scout input |
-| `data/scout-v0.dataset.jsonl` | Scout → Judge |
-
----
-
-## Fixtures
-
-| Directory | Purpose |
-|----------|--------|
-| `fixtures/mock-responses` | Mock agent outputs |
-| `fixtures/curator-packets/gold` | Gold packets |
-| `fixtures/curator-packets/adversarial` | Stress cases |
+| `data/scout-v0.samples.json` | Scout v0 input fixtures |
+| `data/scout-v0.dataset.jsonl` | Scout → Judge dataset |
 
 ---
 
 ## npm Scripts
 
-### Screening
+### Primary
+
 ```bash
-npm run test:screening
-npm run test:screening:perfect
-npm run test:screening:hallucinator
-npm run test:screening:bad-json
-npm run test:screening:all
+npm run agent:cli                # Interactive Scout → Curator → Judge pipeline
+npm run eval:ld:gold             # Run gold evaluation suite (10 cases)
+npm run judge:test               # Replay saved Curator packets through Judge
 ```
 
-> `test:screening:all` intentionally fails because it includes failing mocks
+### Evaluation
 
-### Gold
 ```bash
-npm run test:gold:perfect
-npm run test:gold:hallucinator
-npm run test:gold:bad-json
-npm run eval:gold
+npm run eval:ld:screening        # Screening eval via LD AI Config
+npm run eval:ld:holdout          # Holdout eval
+npm run eval:gold                # Gold with mock adapters
+npm run report:candidate         # Generate candidate evaluation report
 ```
 
-### LD Integration
+### Testing
+
 ```bash
-npm run eval:ld:screening
-npm run eval:ld:gold
-npm run eval:ld:holdout
+npm run test:screening           # Screening with mock agents
+npm run test:contract-v2         # Contract validation tests
+npm run test:curator             # Curator smoke test
+npm run test:curator-judge-e2e   # Curator → Judge end-to-end
+npm run test:scout:v0            # Scout v0 fixture tests
 ```
 
 ### Slack Bot
+
 ```bash
 npm run start:slack
 ```
 
-Requires: `SLACK_BOT_TOKEN`, `SLACK_APP_TOKEN`, `LD_SDK_KEY`, `OPENAI_API_KEY`
-
-Optional: `WISDOM_SERVER_URL`, `WISDOM_AUTH_TOKEN`, `ELLIOT_AI_CONFIG_KEY`
-
-### Curator / Scout
-```bash
-npm run test:curator
-npm run test:curator-judge-e2e
-npm run test:scout:v0
-npm run build:scout:v0:dataset
-npm run eval:ld:scout:v0
-```
-
-### Contract Tests
-```bash
-npm run test:contract-v2
-```
-
-### Reporting
-```bash
-npm run report:candidate
-```
-
 ---
 
-## LaunchDarkly Integration
+## Environment Variables
 
 Required:
 
 ```bash
 export LD_SDK_KEY=...
-export LD_AI_CONFIG_KEY=...
 export OPENAI_API_KEY=...
 ```
 
-For the Slack bot (Socket Mode):
+For the CLI agent:
 
 ```bash
-export SLACK_BOT_TOKEN=xoxb-...
-export SLACK_APP_TOKEN=xapp-...
 export WISDOM_SERVER_URL=...          # Enterpret KG MCP endpoint
 export WISDOM_AUTH_TOKEN=...          # Bearer token for Wisdom
 export ELLIOT_AI_CONFIG_KEY=elliot-agent  # optional, defaults to "elliot-agent"
 ```
 
-Run eval:
+For Slack bot (Socket Mode):
 
 ```bash
-npm run eval:ld:screening
-npm run eval:ld:gold
-```
-
----
-
-## Candidate Evaluation Report
-
-```bash
-npm run report:candidate -- --run out/<dir> --candidate <name>
-```
-
-Outputs:
-
-`out/candidate-eval.json`
-
----
-
-## Scout → Curator → Judge Loop
-
-### Scout v0
-
-```bash
-npm run test:scout:v0
-npm run build:scout:v0:dataset
-npm run eval:ld:scout:v0
-```
-
-### Salesforce Scout (v1 scaffold)
-
-```bash
-npm run test:scout:salesforce
-```
-
----
-
-## Adding Agents
-
-```json
-{
-  "name": "agent",
-  "adapter": "mock",
-  "config": { "responsesPath": "./file.jsonl" }
-}
-```
-
----
-
-## Adding Datasets
-
-1. Create JSONL file
-2. Add tags if needed
-3. Run with `--dataset`
-
----
-
-## Regression Tests
-
-```bash
-npm run test:screening
-npm run test:contract-v2
-npm run test:curator-judge-e2e
+export SLACK_BOT_TOKEN=xoxb-...
+export SLACK_APP_TOKEN=xapp-...
 ```
 
 ---
 
 ## Data Sources (via Wisdom / Enterpret KG)
 
-The Wisdom MCP provides unified access to:
-
 | Source | Records | Signals |
 |--------|---------|---------|
-| **Gong** | ~12,500 | Call transcripts, participants, opportunity linkage, MEDDPICC fields |
-| **Zendesk** | ~15,500 | Tickets, priority, satisfaction, product categories |
-| **Slack** | ~2,000 | Internal messages, channel context |
+| **Gong** | ~12,500 | Call transcripts, participants, Salesforce opportunity linkage (name, stage, amount) |
+| **Zendesk** | ~15,500 | Tickets, status |
+| **Slack** | ~2,000 | Internal messages across 21 indexed channels (with channel name and author) |
+| **Feedback themes** | Aggregated | NLP-derived themes with timeline data across all sources |
 | **Jira** | ~120 | Feature requests, engineering tickets |
 | **G2** | ~67 | Public product reviews |
 
-Salesforce data appears as metadata on Gong records (opportunity name, stage, amount) and as Account nodes with `salesforce_id` — enabling cross-source correlation.
+Account nodes carry Salesforce metadata (ID, name, type, ARR, industry, owner, lifecycle stage). The Curator enriches packets with this data when available.
+
+---
+
+## Current Eval Status
+
+**Gold eval (10 cases): 10/10 passing (100%)**
+
+- All action decisions correct
+- Influence tag expectations use set-based matching for ambiguous cases
+- Zero hard failures (no hallucinations, schema errors, or parse failures)
+- Average latency: ~6s per case
 
 ---
 
 ## Summary
 
-This repo contains both the **evaluation harness** for testing Elliot's decision-making and the **operational agent** that gathers intelligence and produces assessments.
+This repo contains the **operational agent pipeline** and **evaluation harness** for Elliot:
 
-- **Eval harness** — test candidate models, enforce contracts, prevent hallucination, validate evidence-grounded reasoning
-- **AI Config Agent** — production agent using Wisdom + Salesforce tools, deployed via Slack
-- **Pipeline stages** — Curator, Judge, Scribe remain modular and independently testable
+- **Agent pipeline** — Scout (LLM) → Curator (deterministic) → Judge (LLM), with multi-turn CLI and Slack interfaces
+- **Eval harness** — Gold test cases, adversarial packets, regression suites, hallucination detection
+- **LD AI Config integration** — Prompts managed via LaunchDarkly AI Configs, syncable via MCP
+- **Wisdom integration** — 6 tools querying the Enterpret Knowledge Graph via Cypher
 
-Elliot becomes a dependable agent teammate through this process.
+Elliot becomes a dependable agent teammate through structured evaluation, evidence-grounded reasoning, and continuous calibration.

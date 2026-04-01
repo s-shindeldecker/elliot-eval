@@ -29,12 +29,14 @@ const bundle1: SignalBundle = {
   evidence: [
     {
       source_type: 'Gong',
+      source_id: 'smoke-abc',
       source_link: 'https://gong/call/smoke-abc',
       timestamp: '00:18:42',
       snippet: 'We\'re choosing between you and Statsig. The deciding factor is experimentation.',
     },
     {
       source_type: 'Slack',
+      source_id: 'smoke-slack-1',
       source_link: 'https://slack/thread/northwind',
       snippet: 'AE: "They want experimentation built-in, not bolted on."',
     },
@@ -65,6 +67,7 @@ const bundle2: SignalBundle = {
   evidence: [
     {
       source_type: 'Gong',
+      source_id: 'smoke-ghi',
       source_link: 'https://gong/call/smoke-ghi',
       timestamp: '00:09:20',
       snippet: 'Our main goal is feature flagging for stability. No experiments.',
@@ -85,8 +88,8 @@ const bundle3: SignalBundle = {
     next_checkpoint: 'not-a-date',
   },
   evidence: [
-    { source_type: '', source_link: 'https://example.com/a', snippet: 'ok' },
-    { source_type: 'Gong', source_link: 'https://example.com/a', snippet: '' },
+    { source_type: '', source_id: 'bad-1', source_link: 'https://example.com/a', snippet: 'ok' },
+    { source_type: 'Gong', source_id: 'bad-1', source_link: 'https://example.com/b', snippet: '' },
   ],
 };
 
@@ -123,10 +126,14 @@ for (const { name, bundle } of bundles) {
   console.log(rendered);
   console.log('--- End packet ---');
 
-  // Assertion: evidence URLs must appear verbatim in rendered output
+  // Assertion: evidence source_id and source_link (when present) must appear in rendered output
   for (const ev of bundle.evidence) {
+    if (ev.source_id && !rendered.includes(ev.source_id)) {
+      console.error(`  FAIL: evidence source_id "${ev.source_id}" not found in rendered output`);
+      allPassed = false;
+    }
     if (ev.source_link && !rendered.includes(ev.source_link)) {
-      console.error(`  FAIL: evidence URL "${ev.source_link}" not found in rendered output`);
+      console.error(`  FAIL: evidence source_link "${ev.source_link}" not found in rendered output`);
       allPassed = false;
     }
   }
@@ -144,7 +151,8 @@ if (v3.warnings.length < 2) { console.error(`FAIL: bundle3 should have >=2 warni
 const r1 = renderPacket(bundle1);
 if (!r1.includes('Competitive Mention?: Yes (Statsig)')) { console.error('FAIL: missing competitive detail'); allPassed = false; }
 if (!r1.includes('Exec Sponsor Mentioned?: Yes (VP Digital)')) { console.error('FAIL: missing exec detail'); allPassed = false; }
-if (!r1.includes('https://gong/call/smoke-abc')) { console.error('FAIL: evidence URL missing from render'); allPassed = false; }
+if (!r1.includes('Source ID: smoke-abc')) { console.error('FAIL: evidence source_id missing from render'); allPassed = false; }
+if (!r1.includes('https://gong/call/smoke-abc')) { console.error('FAIL: evidence source_link missing from render'); allPassed = false; }
 
 console.log(`\n${'='.repeat(60)}`);
 console.log(allPassed ? '  ALL CHECKS PASSED' : '  SOME CHECKS FAILED');

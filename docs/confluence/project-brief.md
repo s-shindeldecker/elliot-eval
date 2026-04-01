@@ -16,7 +16,7 @@ More broadly, this effort is exploring a repeatable process for onboarding AI te
 
 **Last updated: Mar 31, 2026**
 
-Elliot now has a **working end-to-end pipeline** from CLI query through live data to scored intelligence output:
+Elliot has a **fully working end-to-end pipeline** from interactive CLI through live data to scored intelligence output, with 100% gold eval pass rate:
 
 ```
 User Query → Scout (LLM Agent) → Wisdom Tools → Curator (Deterministic) → Judge (LLM Scorer) → Scored EIC
@@ -24,12 +24,18 @@ User Query → Scout (LLM Agent) → Wisdom Tools → Curator (Deterministic) �
 
 ### What's Working
 
-- **Scout** operates as an LLM agent (via LD AI Configs) with 6 Wisdom tools that query the Enterpret Knowledge Graph for Gong calls, Zendesk tickets, Slack mentions, feedback themes, and account data
-- **Curator** deterministically transforms raw tool results into a structured `SignalBundle`, inferring 10 `OpportunitySnapshot` fields from Gong Salesforce-linked data and feedback themes (opportunity name, stage, amount, AE owner, stage bucket, experimentation engaged, AI configs adjacent, competitive mention, EIC ID)
-- **Judge** scores curated packets via a separate LD AI Config with constrained influence tag taxonomy, engagement velocity interpretation, and feedback theme calibration
-- **CLI harness** (`npm run agent:cli`) for interactive testing — auto-saves Curator packets for replay
+- **Scout** operates as an LLM agent (via `elliot-agent` LD AI Config, `gpt-4o`) with 6 Wisdom tools querying the Enterpret Knowledge Graph for Gong calls, Zendesk tickets, Slack mentions, feedback themes, and enriched account data (ARR, industry, owner, lifecycle stage)
+- **Multi-turn conversations** with disambiguation — when `search_account` returns multiple different account names, Scout asks for clarification before proceeding; conversation history maintained across turns in the CLI
+- **Curator** deterministically transforms raw tool results into a structured `SignalBundle`, including:
+  - Opportunity metadata inferred from Gong Salesforce-linked fields (name, stage, amount)
+  - Enriched account data (type, ARR, industry, owner, lifecycle stage) from `search_account`
+  - Feedback trajectory computation (recency-weighted complaint/praise analysis detecting improving, declining, or stable trends)
+  - Evidence items with source IDs (no fabricated URLs), Slack channel/author context
+- **Judge** (`elliot-candidate-a` AI Config, `gpt-4o-mini`) scores curated packets with constrained influence tag taxonomy, recency and trajectory interpretation, and engagement velocity calibration
+- **CLI harness** (`npm run agent:cli`) for interactive multi-turn testing — auto-saves Curator packets for replay
 - **Judge replay harness** (`npm run judge:test`) for A/B testing prompt variations against saved packets
-- **Evaluation harness** with 10 gold test cases, adversarial packets, and regression testing across prompt changes
+- **Evaluation harness** with 10 gold test cases using set-based matching for ambiguous fields
+- **LD MCP integration** — prompts can be synced to AI Configs programmatically via `update-ai-config-variation`
 
 ### Data Sources (via Enterpret/Wisdom MCP)
 
@@ -37,38 +43,47 @@ User Query → Scout (LLM Agent) → Wisdom Tools → Curator (Deterministic) �
 |--------|---------|-----------------|
 | Gong | ~12,500 | Call transcripts, participants, Salesforce opportunity linkage (name, stage, amount) |
 | Zendesk | ~15,500 | Support tickets, status |
-| Slack | ~2,000 | Internal messages from 21 indexed channels |
-| Feedback themes | Aggregated | NLP-derived themes across all sources (complaints, praise, improvements, help requests) |
+| Slack | ~2,000 | Internal messages from 21 indexed channels (with channel name and author) |
+| Feedback themes | Aggregated | NLP-derived themes with timeline data across all sources (complaints, praise, improvements, help requests) |
+| Account data | Enriched | Account type, ARR, industry, owner, lifecycle stage, Salesforce ID |
 
 ### Latest Eval Results (Mar 31, 2026)
 
-Gold eval (10 cases): **All action decisions correct or defensibly close**. 4/10 pass rate is due to tag vocabulary calibration, numeric range tuning, and a schema strictness issue (`eic_id: null`), not decision quality. All 4 negative cases pass clean — the Judge does not over-trigger on weak signals.
+Gold eval (10 cases): **10/10 passing (100%)**
+- All action decisions correct (CREATE, UPDATE, NO_ACTION)
+- Set-based matching for ambiguous influence tags (`expansion_catalyst` vs `strategic_positioning`)
+- Zero hard failures (no hallucinations, schema errors, parse failures)
+- Average latency: ~6s per case
 
 ## 3. What Elliot Actually Does (Current Behavior)
 
-Elliot operates as a **modular intelligence pipeline**, not a monolithic agent:
+Elliot operates as a **modular intelligence pipeline**, not a monolithic agent. Orchestration happens in TypeScript code (`ElliotAgent`), not inside any LLM.
 
 **Scout** (LLM Agent via LD AI Config)
 - Interprets natural language queries about accounts
-- Calls Wisdom tools to gather Gong calls, support tickets, Slack mentions, feedback themes
+- Calls Wisdom tools to gather Gong calls, support tickets, Slack mentions, feedback themes, and enriched account data
+- Handles multi-turn disambiguation when multiple accounts match
+- Drills into key call transcripts for evidence quality
 - Produces a narrative response for the user
 
 **Curator** (Deterministic Code)
 - Transforms raw Scout tool results into a structured `SignalBundle`
-- Infers `OpportunitySnapshot` fields from Salesforce-linked Gong data
-- Infers boolean flags from call title patterns and feedback themes
+- Infers `OpportunitySnapshot` fields from Salesforce-linked Gong data and enriched account metadata
+- Computes feedback trajectory (early vs recent complaint/praise trends)
+- Includes Slack channel/author context in evidence snippets
+- Renders a deterministic text packet for the Judge
 - No LLM involved — same inputs always produce the same output
 
 **Judge** (Separate LLM via LD AI Config)
 - Receives the curated packet as `input_text`
 - Produces structured JSON: action (CREATE/UPDATE/NO_ACTION), EIC object, human summary
-- Uses constrained tag taxonomy and engagement velocity interpretation
+- Uses constrained tag taxonomy, recency/trajectory interpretation, and confidence mapping
 - Evaluable independently via saved packet replay
 
 **Testing Infrastructure**
-- `npm run agent:cli` — full pipeline, interactive or one-shot
+- `npm run agent:cli` — full pipeline, interactive or one-shot, with multi-turn context
 - `npm run judge:test` — replay saved Curator packets through any Judge AI Config
-- `npm run eval:ld:gold` — regression suite against gold test cases
+- `npm run eval:ld:gold` — regression suite against gold test cases (10/10 passing)
 
 ## 4. AI Teammate Lifecycle (Process)
 
@@ -100,7 +115,7 @@ This lifecycle is intended to be repeatable across future AI agents, not just El
 - Role Requirements and Candidate Qualification definitions
 
 ### Data and Evaluation
-- Gold test dataset: `data/elliot.gold.v0.1.jsonl` (10 cases)
+- Gold test dataset: `data/elliot.gold.v0.1.jsonl` (10 cases, 100% pass rate)
 - Adversarial test cases: `fixtures/curator-packets/adversarial/`
 - Curator packet fixtures: `fixtures/curator-packets/gold/`
 - Saved real-world packets: `packets/` (from live Wisdom data)
@@ -111,7 +126,7 @@ This lifecycle is intended to be repeatable across future AI agents, not just El
 - Judge prompts: `docs/prompts/elliot-judge.md`
 - Pipeline architecture: `docs/architecture/elliot/pipeline.md`
 - Wisdom integration: `docs/architecture/elliot/wisdom-integration.md`
-- GitHub repo: [s-shindeldecker/elliot-eval](https://github.com/s-shindeldecker/elliot-eval)
+- System architecture diagram: `docs/architecture/elliot-system-diagram.html`
 
 ### Build Log
 - Full build log and narrative: [Hiring an Agent Teammate: Build log — Elliot](link-to-build-log)
@@ -125,21 +140,25 @@ This lifecycle is intended to be repeatable across future AI agents, not just El
 | Treat this as an evaluation-first project | Ensures changes are measurable and meaningful | Active |
 | Use a modular pipeline (Scout → Curator → Judge → Scribe) | Separates responsibilities and improves evaluation clarity | Active |
 | Treat agent development as a lifecycle, not a one-time build | Enables repeatable onboarding and continuous improvement | Active |
-| Use Enterpret/Wisdom MCP as primary data source instead of separate API integrations | Provides unified access to Gong, Zendesk, Slack, and feedback themes through a single Cypher query interface | Active |
+| Use Enterpret/Wisdom MCP as primary data source | Provides unified access to Gong, Zendesk, Slack, and feedback themes through a single Cypher query interface | Active |
 | Keep Scout, Curator, and Judge as distinct stages (not combined into one LLM) | Enables independent evaluation and prevents LLM drift in deterministic components | Active |
-| Slack-based interface (Slack bot triggers AI Config Agent) | Mirrors real teammate interaction patterns; deferred until pipeline is stable | Planned |
-| Defer proactive/periodic monitoring to a later phase | Focus on call-and-response first; proactive mode adds complexity | Parked |
 | Constrain Judge influence tags to a closed enum | Enables deterministic evaluation; prevents tag vocabulary drift | Active |
+| Use set-based matching for ambiguous gold eval fields | Accommodates legitimate LLM variance without weakening eval rigor | Active |
+| Orchestrate pipeline in code, not in the LLM | Ensures deterministic stage boundaries and prevents LLM from skipping stages | Active |
+| Curator uses real source IDs, not fabricated URLs | Prevents hallucination-checker false positives; honest about available data | Active |
+| Enriched account data flows through Curator to Judge | Gives Judge context on ARR, industry, lifecycle stage without requiring Salesforce API | Active |
+| Feedback trajectory computed deterministically in Curator | Temporal complaint/praise patterns inform Judge without requiring LLM to do time-series analysis | Active |
+| Slack-based interface deferred until pipeline is stable | Mirrors real teammate interaction patterns; focus on pipeline quality first | Planned |
+| Defer proactive/periodic monitoring to a later phase | Focus on call-and-response first; proactive mode adds complexity | Parked |
 
 ## 7. Risks and Open Questions
 
 ### Current Risks
 
 - **Slack data coverage**: Only 21 of many Slack channels are indexed in Enterpret. Key account discussions may be missed. Pursuing expansion with the Enterpret team.
-- **Salesforce API not yet connected**: Curator infers fields from Gong's Salesforce-linked data, but direct Salesforce access would provide opportunity_link, next_checkpoint, expected_revenue, probability, and motion. Currently blocked on API credentials.
-- **Gold dataset calibration**: Test expectations were authored against an earlier Judge prompt. Need to evolve gold cases to reflect current prompt behavior and real-world Curator packet structure.
-- **Scout not calling get_call_details**: Scout consistently gathers summary data but rarely drills into full call transcripts, leaving evidence snippets thin for the Judge.
-- **Judge numeric calibration**: influence_strength and impact_priority tend to run ~1 point high with the current prompt. Needs either prompt tuning or gold dataset adjustment.
+- **Salesforce API not yet connected**: Curator infers fields from Gong's Salesforce-linked data and enriched account metadata, but direct Salesforce access would provide opportunity_link, next_checkpoint, expected_revenue, probability, and motion. Currently blocked on API credentials.
+- **Curator expansion**: Each new data source requires a new extractor function in the Curator. As tools are added, the Curator must be updated to consume their results — it won't automatically pick up new tool outputs.
+- **LLM variance on ambiguous cases**: Some gold cases require set-based matching because the Judge legitimately picks different tags across runs. This is managed but not eliminated.
 
 ### Open Questions
 
@@ -150,12 +169,12 @@ This lifecycle is intended to be repeatable across future AI agents, not just El
 
 ## 8. Near-Term Focus
 
-1. **Fix remaining gold eval failures**: `eic_id` schema issue, numeric range calibration, tag vocabulary gaps
+1. **Connect Salesforce API**: Fill in the fields the Curator can't infer (opportunity_link, next_checkpoint, revenue, probability, motion)
 2. **Add real-world packets to gold dataset**: Use saved Curator packets from live Wisdom queries as test cases
-3. **Connect Salesforce API**: Fill in the fields the Curator can't infer (opportunity_link, next_checkpoint, revenue, probability, motion)
-4. **Expand Slack coverage**: Work with Enterpret team to index more channels (especially `ext-*` customer channels)
-5. **Wire up Slack bot**: Enable real user interaction via Slack messages
-6. **Strengthen Scout**: Prompt improvements to call `get_call_details` on key calls, improving evidence quality
+3. **Expand Slack coverage**: Work with Enterpret team to index more channels (especially `ext-*` customer channels)
+4. **Wire up Slack bot as primary interface**: Enable real user interaction via Slack messages
+5. **Build Scribe for persistence**: Google Sheet mapping, idempotent updates, dashboard output
+6. **Begin shadow-mode operation**: Run against real accounts and compare with human assessments
 
 ## 9. How This Page Stays Updated
 

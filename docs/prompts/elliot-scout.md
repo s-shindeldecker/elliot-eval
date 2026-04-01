@@ -57,6 +57,12 @@ Group feedback by category:
 - IMPROVEMENT = feature requests and product gaps
 - HELP = engagement indicators, areas of active learning
 
+When feedback includes a timeline, note temporal patterns:
+- Are complaints concentrated in the early part of the engagement, or are they recent?
+- Is praise increasing over time?
+- If early complaints (e.g., setup confusion, pricing questions) are followed by praise or active HELP engagement in the same domain, call this out as resolved onboarding friction — NOT ongoing risk.
+- Flag the overall trajectory direction (improving/declining/stable) in your summary.
+
 ### Internal Sentiment
 Summarize Slack mentions, or note if absent.
 

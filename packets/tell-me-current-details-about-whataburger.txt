@@ -1,0 +1,25 @@
+ELLIOT Intelligence: Whataburger
+
+OPPORTUNITY SNAPSHOT
+- EIC ID (if updating): 0011K00002Gw2XXQAZ
+- Account: Whataburger
+- Opportunity: Whataburger
+- Opportunity Link: 
+- Stage: 
+- Stage Bucket: 
+- Motion: 
+- AE Owner: 
+- Experimentation Team Engaged?: Unknown
+- AI Configs Adjacent?: Unknown
+- Competitive Mention?: No
+- Exec Sponsor Mentioned?: 
+- Next Checkpoint: 
+- Amount: 
+- Expected Revenue: 
+- Probability: 
+
+EVIDENCE
+
+NOTES
+- [HELP] Confusion About Guardian Plan Packaging (1 mentions)
+- Source breakdown: Gong: 1

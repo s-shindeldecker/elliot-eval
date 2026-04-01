@@ -25,6 +25,7 @@ import type {
   GetAccountFeedbackParams,
   AccountFeedbackResult,
   FeedbackThemeSummary,
+  FeedbackTimelineItem,
   GetSlackMentionsParams,
   SlackMention,
 } from './types.js';
@@ -58,7 +59,11 @@ export async function searchAccount(
 ): Promise<AccountResult[]> {
   const limit = params.limit ?? 10;
   const escaped = escapeCypher(params.query);
-  const cypher = `
+
+  // Enriched query — includes metadata for disambiguation.
+  // Falls back to basic query if KG returns 0 rows (properties that
+  // don't exist on a node silently drop the entire row).
+  const enrichedCypher = `
     MATCH (a:Account)
     WHERE a.salesforce_name CONTAINS '${escaped}'
     RETURN DISTINCT
@@ -73,21 +78,47 @@ export async function searchAccount(
     LIMIT ${limit * 2}
   `;
 
-  const result = await client.executeCypher(cypher, `Search accounts matching "${params.query}"`);
-  if (!result.success || !result.rows) return [];
+  const enrichedResult = await client.executeCypher(
+    enrichedCypher,
+    `Search accounts matching "${params.query}" (enriched)`,
+  );
 
-  const raw: AccountResult[] = result.rows.map((r: Row) => ({
+  if (enrichedResult.success && enrichedResult.rows?.length) {
+    const raw: AccountResult[] = enrichedResult.rows.map((r: Row) => ({
+      record_id: str(r.record_id),
+      name: str(r.name),
+      salesforce_id: str(r.salesforce_id) || undefined,
+      account_type: str(r.account_type) || undefined,
+      arr: num(r.arr),
+      industry: str(r.industry) || undefined,
+      owner: str(r.owner) || undefined,
+      lifecycle_stage: str(r.lifecycle_stage) || undefined,
+    }));
+    return deduplicateAccounts(raw, limit);
+  }
+
+  // Fallback: basic query (always works — no optional SF properties)
+  const basicCypher = `
+    MATCH (a:Account)
+    WHERE a.salesforce_name CONTAINS '${escaped}'
+    RETURN DISTINCT
+      a.record_id AS record_id,
+      a.salesforce_name AS name,
+      a.salesforce_id AS salesforce_id
+    LIMIT ${limit}
+  `;
+
+  const basicResult = await client.executeCypher(
+    basicCypher,
+    `Search accounts matching "${params.query}" (basic)`,
+  );
+  if (!basicResult.success || !basicResult.rows) return [];
+
+  return basicResult.rows.map((r: Row) => ({
     record_id: str(r.record_id),
     name: str(r.name),
     salesforce_id: str(r.salesforce_id) || undefined,
-    account_type: str(r.account_type) || undefined,
-    arr: num(r.arr),
-    industry: str(r.industry) || undefined,
-    owner: str(r.owner) || undefined,
-    lifecycle_stage: str(r.lifecycle_stage) || undefined,
   }));
-
-  return deduplicateAccounts(raw, limit);
 }
 
 // ---------------------------------------------------------------------------
@@ -277,9 +308,22 @@ export async function getAccountFeedback(
     LIMIT 10
   `;
 
-  const [themeResult, sourceResult] = await Promise.all([
+  const timelineQuery = `
+    MATCH (nli:NaturalLanguageInteraction)
+    WHERE nli.gong_account_account_name CONTAINS '${escaped}'
+      AND nli.record_timestamp >= now() - INTERVAL ${days} DAY
+    MATCH (nli)-[:SUMMARIZED_BY]->(fi:FeedbackInsight)-[:HAS_TAGS]->(cft:CustomerFeedbackTags)-[:HAS_THEME]->(t:Theme)
+    WHERE t.type != 'MISC'
+    RETURN t.name AS theme, t.category_enum AS category,
+           nli.record_timestamp AS ts, nli.source AS source
+    ORDER BY nli.record_timestamp ASC
+    LIMIT 50
+  `;
+
+  const [themeResult, sourceResult, timelineResult] = await Promise.all([
     client.executeCypher(themeQuery, `Feedback themes for ${params.account_name}`),
     client.executeCypher(sourceQuery, `Feedback sources for ${params.account_name}`),
+    client.executeCypher(timelineQuery, `Feedback timeline for ${params.account_name}`),
   ]);
 
   const themes: FeedbackThemeSummary[] = (themeResult.rows ?? []).map((r: Row) => ({
@@ -293,10 +337,18 @@ export async function getAccountFeedback(
     total: num(r.total) ?? 0,
   }));
 
+  const timeline: FeedbackTimelineItem[] = (timelineResult.rows ?? []).map((r: Row) => ({
+    theme: str(r.theme),
+    category: str(r.category),
+    date: str(r.ts),
+    source: str(r.source),
+  }));
+
   return {
     account_name: params.account_name,
     themes,
     source_breakdown,
+    timeline: timeline.length > 0 ? timeline : undefined,
   };
 }
 

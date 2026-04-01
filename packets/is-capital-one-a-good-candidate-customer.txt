@@ -1,0 +1,147 @@
+ELLIOT Intelligence: Capital One
+
+OPPORTUNITY SNAPSHOT
+- EIC ID (if updating): 001TR00000dJtlcYAC
+- Account: Capital One
+- Opportunity: Capital One - NB - Sales - AutoLoan - 2026
+- Opportunity Link: 
+- Stage: 1 - Validate Fit
+- Stage Bucket: Early
+- Motion: 
+- AE Owner: Brianna Alwell
+- Experimentation Team Engaged?: Unknown
+- AI Configs Adjacent?: Unknown
+- Competitive Mention?: No
+- Exec Sponsor Mentioned?: 
+- Next Checkpoint: 
+- Amount: $250,000
+- Expected Revenue: 
+- Probability: 
+
+EVIDENCE
+1) Source Type: Gong
+  Source Link: gong://call/4810902198748898572
+  Timestamp: 2026-03-13T14:36:26Z
+  Snippet: "Call with Capital One - Tolga Tuncoglu — Participants: Brianna Alwell, Tolga Tuncoglu"
+
+2) Source Type: Gong
+  Source Link: gong://call/6201404754057925028
+  Timestamp: 2026-03-12T13:39:47Z
+  Snippet: "Call with Deepak Soni — Participants: Brianna Alwell, Deepak Soni"
+
+3) Source Type: Slack
+  Source Link: slack://message/8f939451-7c5b-5de9-9836-41ac380be18f
+  Timestamp: 2026-03-26T22:23:09Z
+  Snippet: "Unfortunately the call with them ended up being a breakup call. They confirmed they're proceeding with Statsig based on our experimentation gaps. I was surprised since they have no FSI customers but Cap1 said they're willing to roll the dice since the data team strongly prefers their solution
+Damn, that sucks. What was the delta from when you and I spoke?
+I swear you'd said they had us back in the mix as long as we were confident about roadmap??
+I'm also surprised they're rolling the dice on ..."
+
+4) Source Type: Slack
+  Source Link: slack://message/92319b11-b464-578a-baaa-8cd52383f52a
+  Timestamp: 2026-03-26T21:54:11Z
+  Snippet: "Marcus Holm – earlier this week in Oakland we discussed Cap1 completed their internal leadership roadshow and came back with LD as frontrunner (provided some roadmap confidence)
+Can you share all specifics for what they shared? I want to ensure the EXP product team has every detail available so we can ensure we're making all of the right moves
+_P.S. anyone and everyone that knows any new info, pour it on!_
+"
+
+5) Source Type: Slack
+  Source Link: slack://message/90df3464-74fb-5e96-9c6c-6fb75e710cb9
+  Timestamp: 2026-03-18T22:56:38Z
+  Snippet: "Mike Bender i'm supportive. Please nudge Marzi Charles to send based on your form
+"
+
+6) Source Type: Slack
+  Source Link: slack://message/9e66e10d-fbdc-555d-bc89-38dadafb7715
+  Timestamp: 2026-03-18T16:38:32Z
+  Snippet: "Mike Bender can we build a teaming model with Accenture before we put them in the position to own all post-sales?
+of course we can. But right now we have to win the deal. Accenture will vouch for us and should be abe to instill confidence that LD is the right, long-term decision
+which we can do even better if we do that together
+have a consistent, combined story
+I'm personally open to this if it gets Accenture thinking about putting resources behind a combinded delivery model - I can ask my c..."
+
+7) Source Type: Slack
+  Source Link: slack://message/54f46af8-0813-55e7-9195-efd5a169e135
+  Timestamp: 2026-03-18T16:24:18Z
+  Snippet: "Marcus Holm We connected with Accenture yesterday to get them up to speed on where we stand with C1. I think it could be valuable for Accenture to meet with Will. Accenture supports LD, has an experimentation COE that can support Will's initiative, and they can be instrumental in a successful rollout. Accenture has tried to use their existing connections to back door into Will but they haven't been successful. I thought we could introduce them. If you agree, I've ghost written a note for you ..."
+
+8) Source Type: Slack
+  Source Link: slack://message/b8354e19-5c04-5329-a31a-5acd3ff591f3
+  Timestamp: 2026-03-16T22:46:03Z
+  Snippet: "Mike Bender seeking some fresh intel here. Do we have any recent engagements or updates from Capital One after our last discussions about probable paths forward? Anything you could use support on from the Product POV?
+"
+
+9) Source Type: Slack
+  Source Link: slack://message/ed23d590-11d6-5738-973d-15cfe5b926a2
+  Timestamp: 2026-03-06T15:46:42Z
+  Snippet: "Aaron Montana and Cameron Savage - curious if you heard back from from Klaus and/or Karthik? Would like to follow up with Will and team and ideally tell him we have these conversations teed up.
+not yet :( 
+I bumped Karthic this morning :fingerscrossed:
+Klaus might be on pto or something, he doesn't seem to be online. I can get other folks at Rivian lined up, ut they wouldn’t be data science roles
+Ok - little white lie never hurt anyone.
+"
+
+10) Source Type: Slack
+  Source Link: slack://message/37bbfd69-acdc-5f54-b02a-6ee76dde49c0
+  Timestamp: 2026-03-05T20:00:07Z
+  Snippet: "Go for it
+"
+
+11) Source Type: Slack
+  Source Link: slack://message/cea5083b-7209-5b0f-bab5-f979082c1413
+  Timestamp: 2026-03-05T18:12:23Z
+  Snippet: "Mike Bender - Utkarsh didn’t actually get back to me about our sandbox for them. I was thinking about reaching out to him again today and get him in there. Thoughts?
+"
+
+12) Source Type: Slack
+  Source Link: slack://message/f37f34e7-c9d9-5ee6-8f5a-fc715a39687b
+  Timestamp: 2026-03-03T15:22:56Z
+  Snippet: "Quick feedback from my debrief with Will just now:
+• LD won the FM evaluation, Statsig won the experimentation and AI evaluation. Unfortunately they're weighing experimentation/AI as more important and so therefore Statsig has a higher overall score. However, his leadership has tremendous angst about choosing a solution with an unclear future and owned by OpenAI -- data privacy concerns + if they don't continue investing in Statsig then they'd have to migrate off which is a 2 year effort
+• Th..."
+
+13) Source Type: Slack
+  Source Link: slack://message/21cd303a-b4d8-54b3-a8ef-503b741ff9f1
+  Timestamp: 2026-03-03T14:11:59Z
+  Snippet: "Marcus Holm Tanner Heaphy Ryan Schertzer Looking or advice on how to approach pricing and to make sure we're all aligned
+• C1 has told is they are unsure how they will roll out - they are unsure of scope
+• Despite us asking many times both of procurement and of the teams we're working with, they claim they can not provide scoping information.
+• They've asked us to to give them a volume pricing table focusing on 50M, 100M, and 200M cMAU
+• They've told us this is just to get a ballpark and they..."
+
+14) Source Type: Slack
+  Source Link: slack://message/2bbc5fd3-a1db-57d3-b5dd-79f9e7b95e64
+  Timestamp: 2026-02-26T19:07:25Z
+  Snippet: "Rough notes from today's call:
+For INTERNAL use only and not to be shared with customer at all: Once work starts, 6 months on the highly optimistic end and 12 months on the more likely end. The big consideration is that it doesn't come for free and will require trading off items on the existing roadmap that already covers many of their other P0s.
+I don't want us making any promises about anything until we understand how serious they are and can partner with them on what they're willing to tra..."
+
+15) Source Type: Slack
+  Source Link: slack://message/23d650c7-7372-5d5c-ac16-b3ad12753dd8
+  Timestamp: 2026-02-25T20:17:07Z
+  Snippet: "Aaron Montana and Cameron Savage Aside from the roadmap and gap analysis, C1 also asked for some proof points around industry trends towards consolidating FF and Experimentation into a unified platform. Curious if you have anything you can provide?
+We do. Aaron Montana and I were just jamming on how to structure a presentation that also addresses some of the higher order \"questions lurking in the room\"
+This deck is VERY DRAFT outline, and ignore lack of wordsmithing, but you can see the begin..."
+
+16) Source Type: Slack
+  Source Link: slack://message/3a52a722-15f6-5c76-9bfb-143993070906
+  Timestamp: 2026-02-25T18:04:45Z
+  Snippet: "Mike Bender Gideon Goldman Aaron Montana – pasting the plan outline talktrack notes for tomorrow's call from our Zoom discussion.
+Next steps:
+• Cameron Savage Aaron Montana Confirm slides we'll use to support #1 and #2 
+• Mike Bender Gideon Goldman to look at a Feature Management breakdown like on the<<STRICT_LINK> audit tab>
+• Sonesh Surana Cameron Savage need to connect on gameplan around #4 because this is also about capacity
+&gt; 1. Vision for EXP 
+&gt; a. (what is not aligned with LD pla..."
+
+17) Source Type: Slack
+  Source Link: slack://message/574fe026-ffde-5cfe-b576-666aea038e33
+  Timestamp: 2026-02-24T23:15:04Z
+  Snippet: "Ahead of tomorrow's prep call wanted to share an exercise Marlo Abramowitz and I did today to map <<STRICT_LINK> One's prioritized list> onto the previous <<STRICT_LINK> Requirements spreadsheet>.
+*Here's what we've done:*
+1. All tabs now have a `priority grade` and `on roadmap` column and values filled in
+2. Capital One's <<STRICT_LINK>> are mapped into the `priority grade` column
+3. We added <<STRICT_LINK> new tab to audit our coverage> against the full list vs. their P0 items to help more ..."
+
+NOTES
+- Source breakdown: Gong: 3

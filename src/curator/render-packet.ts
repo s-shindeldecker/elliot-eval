@@ -28,6 +28,11 @@ export function renderPacket(bundle: SignalBundle): string {
   lines.push(`- Amount: ${formatCurrency(s.amount)}`);
   lines.push(`- Expected Revenue: ${formatCurrency(s.expected_revenue)}`);
   lines.push(`- Probability: ${s.probability != null ? `${s.probability}%` : ''}`);
+  lines.push(`- Account Type: ${blank(s.account_type)}`);
+  lines.push(`- ARR: ${formatCurrency(s.arr)}`);
+  lines.push(`- Industry: ${blank(s.industry)}`);
+  lines.push(`- Account Owner: ${blank(s.owner)}`);
+  lines.push(`- Lifecycle Stage: ${blank(s.lifecycle_stage)}`);
 
   lines.push('');
   lines.push('EVIDENCE');
@@ -36,7 +41,10 @@ export function renderPacket(bundle: SignalBundle): string {
     const ev = bundle.evidence[i];
     if (i > 0) lines.push('');
     lines.push(`${i + 1}) Source Type: ${ev.source_type}`);
-    lines.push(`  Source Link: ${ev.source_link}`);
+    if (ev.source_link) {
+      lines.push(`  Source Link: ${ev.source_link}`);
+    }
+    lines.push(`  Source ID: ${ev.source_id}`);
     if (ev.timestamp != null && ev.timestamp.length > 0) {
       lines.push(`  Timestamp: ${ev.timestamp}`);
     }
@@ -49,6 +57,14 @@ export function renderPacket(bundle: SignalBundle): string {
     for (const note of bundle.notes) {
       lines.push(`- ${note}`);
     }
+  }
+
+  if (bundle.feedbackTrajectory) {
+    const ft = bundle.feedbackTrajectory;
+    lines.push('');
+    lines.push('FEEDBACK TRAJECTORY');
+    lines.push(`- Trend: ${ft.trend}`);
+    lines.push(`- ${ft.summary}`);
   }
 
   lines.push('');

@@ -108,6 +108,15 @@ Use ONLY these tags for `primary_influence_tag` and `secondary_tag`. Pick the on
 | `experimentation_poc` | Active proof-of-concept or pilot focused specifically on experimentation features |
 | `platform_consolidation` | Customer is consolidating tools onto LaunchDarkly, with experimentation as part of the platform story |
 
+## Recency and Trajectory
+
+When a FEEDBACK TRAJECTORY section is present in the packet, use it to inform your assessment:
+
+- **Improving trajectory** (complaints decreasing, praise increasing): Early-stage complaints followed by praise or active HELP engagement indicate successful onboarding friction, NOT deal risk. Do not penalize influence_strength or impact_priority for resolved early complaints. Increase confidence if the trajectory corroborates other positive signals.
+- **Declining trajectory** (complaints increasing, praise decreasing): This IS a risk signal. Bump impact_priority up by 1. Note the declining trend in human_summary.
+- **Stable trajectory**: No adjustment needed.
+- When evidence timestamps conflict (e.g., an old complaint vs a recent positive call), weigh the more recent evidence more heavily.
+
 ## Rules
 
 - Return ONLY valid JSON. No markdown, no explanation, no preamble.

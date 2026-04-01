@@ -57,15 +57,37 @@ Curator produces an `input_text` string in a fixed packet format:
 OPPORTUNITY SNAPSHOT
 - EIC ID (if updating): ...
 - Account: ...
+- Opportunity: ...
+- Stage: ...
+- Stage Bucket: ...
+- AE Owner: ...
+- Account Type: ...
+- ARR: ...
+- Industry: ...
+- Account Owner: ...
+- Lifecycle Stage: ...
 ...
+
 EVIDENCE
-1) Source Type: ...
-  Source Link: ...
+1) Source Type: Gong
+  Source ID: call-abc-123
+  Timestamp: 2026-03-28
   Snippet: "..."
 
+2) Source Type: Slack
+  Source ID: msg-456
+  Snippet: "[#account-acme @jdoe] ..."
+
 NOTES
-- ...
+- [COMPLAINT] Setup confusion (3 mentions)
+- [PRAISE] Release controls (5 mentions)
+
+FEEDBACK TRAJECTORY
+- Trend: improving
+- Early (2025-12-01 to 2026-02-15): 3 COMPLAINT, 1 PRAISE, 2 HELP. Recent (2026-02-15 to 2026-03-28): 0 COMPLAINT, 4 PRAISE, 1 HELP
 ```
+
+Evidence items use `source_id` (real record identifiers) rather than fabricated URLs. `source_link` is only present when a real URL is available (e.g., Salesforce opportunity links). The FEEDBACK TRAJECTORY section is only included when sufficient dated feedback items exist to compute a trend.
 
 Internally this is rendered from a `SignalBundle` struct, but Judge only sees the flat text.
 
@@ -77,8 +99,8 @@ Judge returns JSON conforming to the agent output contract:
 {
   "human_summary": ["..."],
   "json": {
-    "create_eic": true,
-    "eic": { /* 22-field EIC object */ }
+    "action": "CREATE | UPDATE | NO_ACTION",
+    "eic": { /* full EIC object */ } | null
   }
 }
 ```

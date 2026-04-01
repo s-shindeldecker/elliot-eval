@@ -117,6 +117,7 @@ function buildEvidence(input: SalesforceOpportunityInput): EvidenceItem[] {
 
   items.push({
     source_type: 'Salesforce',
+    source_id: input.id,
     source_link: input.opportunity_link,
     timestamp: null,
     snippet: primarySnippet,
@@ -130,6 +131,7 @@ function buildEvidence(input: SalesforceOpportunityInput): EvidenceItem[] {
       if (note === primarySnippet) continue;
       items.push({
         source_type: 'Salesforce Note',
+        source_id: `${input.id}-note-${added + 1}`,
         source_link: `${input.opportunity_link}/notes/${added + 1}`,
         timestamp: null,
         snippet: note,

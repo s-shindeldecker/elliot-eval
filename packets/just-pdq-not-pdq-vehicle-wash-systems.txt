@@ -1,0 +1,53 @@
+ELLIOT Intelligence: PDQ
+
+OPPORTUNITY SNAPSHOT
+- EIC ID (if updating): 
+- Account: PDQ
+- Opportunity: PDQ - Expansion - Sales - 2026
+- Opportunity Link: 
+- Stage: 2 - Value
+- Stage Bucket: Early
+- Motion: 
+- AE Owner: Spencer Gross
+- Experimentation Team Engaged?: Yes
+- AI Configs Adjacent?: Unknown
+- Competitive Mention?: No
+- Exec Sponsor Mentioned?: 
+- Next Checkpoint: 
+- Amount: $30,000
+- Expected Revenue: 
+- Probability: 
+
+EVIDENCE
+1) Source Type: Gong
+  Source Link: gong://call/3254610284790759077
+  Timestamp: 2026-03-12T20:31:33Z
+  Snippet: "LaunchDarkly x PDQ - follow-up — Participants: Spencer Gross, JSON, Spencer Lewis, Nicholas Guillory, Flo Hernandez"
+
+2) Source Type: Gong
+  Source Link: gong://call/8306811606809918521
+  Timestamp: 2026-03-04T21:30:26Z
+  Snippet: "LaunchDarkly || PDQ, Experimentation Demo — Participants: Erin, Nicholas Guillory, Cooper Kelley, JSON, Spencer Gross, Spencer Lewis, Scott Shindeldecker, Bradley Mcgregor"
+
+NOTES
+- [COMPLAINT] Access Blocked By Plan Tier (1 mentions)
+- [HELP] Help With Environment Setup Best Practices (1 mentions)
+- [PRAISE] General Praise For Data Export Destinations (1 mentions)
+- [COMPLAINT] Additional Invites Blocked By Seat Limits (1 mentions)
+- [HELP] Help With Unclear Product Domain Language (1 mentions)
+- [COMPLAINT] Concerns About Experimentation Pricing–quotas (1 mentions)
+- [HELP] Help With Setting Up Experiments (1 mentions)
+- [COMPLAINT] Confusion From Inconsistent Ui Terminology (1 mentions)
+- [PRAISE] Praise For Experimentation Capabilities (1 mentions)
+- [HELP] Help With Experimentation Learning Curve (2 mentions)
+- [HELP] Confusion About Experimentation Concepts (2 mentions)
+- [HELP] General Help With Multi Contexts (1 mentions)
+- [COMPLAINT] Feature Management Pricing Issues (1 mentions)
+- [COMPLAINT] Unclear Context-counting Rules Inflate Mau Billing (1 mentions)
+- [COMPLAINT] Snowflake Integration Activation Issues (1 mentions)
+- [IMPROVEMENT] Provide Experiment Analysis Enablement (1 mentions)
+- [HELP] Help With Making Sense Of Experiment Results (1 mentions)
+- [IMPROVEMENT] Expand Platform Integrations (1 mentions)
+- [PRAISE] Praise For Session Replay Value (1 mentions)
+- [HELP] Help With Billing Calculations (1 mentions)
+- Source breakdown: Gong: 4

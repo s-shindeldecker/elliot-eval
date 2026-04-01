@@ -1,0 +1,74 @@
+ELLIOT Intelligence: Relay Technologies
+
+OPPORTUNITY SNAPSHOT
+- EIC ID (if updating): 0016T000037iakbQAA
+- Account: Relay Technologies
+- Opportunity: Relay Technologies - Exp  - Sales - 2026
+- Opportunity Link: 
+- Stage: 4 - EB Approval
+- Stage Bucket: Late
+- Motion: 
+- AE Owner: Jordan Deo
+- Experimentation Team Engaged?: Unknown
+- AI Configs Adjacent?: Unknown
+- Competitive Mention?: No
+- Exec Sponsor Mentioned?: 
+- Next Checkpoint: 
+- Amount: $45,000
+- Expected Revenue: 
+- Probability: 
+- Account Type: Customer
+- ARR: $45,000
+- Industry: Transportation
+- Account Owner: Jordan Deo
+- Lifecycle Stage: Growth
+
+EVIDENCE
+1) Source Type: Gong
+  Source ID: 365399852914412056
+  Timestamp: 2026-03-13T10:32:17Z
+  Snippet: "agent: how are we doing?
+user: Yeah, good to be back.
+user: Good to be back.
+user: Sorry, Jordan, the reason we've been slow is because we've been out having fun this week, that's it.
+agent: Andy said that and funnily enough, the week before he said, sorry, been snowed under and I was like, I'm sure they are going on a skiing trip.
+agent: So I don't know if he actually means literally, he is in the snow or it's just been very busy because he's also had a baby recently, right?
+agent: Yeah, yes..."
+
+2) Source Type: Slack
+  Source ID: 13dc68dc-7067-54ab-aa9f-b1332869250e
+  Timestamp: 2026-03-20T23:38:59Z
+  Snippet: "[#newrevenue @U06B15E0HPY] Jordan Deo has won a deal with *Relay Technologies - Expansion - Enterprise 2023 - Sales - 2026* for $45,000 USD View in Salesforce button &gt;*Incremental ARR*: $45,000 USD
+&gt;*Customer Success Manager*: Emma Mailey
+&gt;*Solutions Engineer*: Celina Silva
+&gt;*Solutions Architect*: 
+&gt;*Opportunity Age*: 53 days
+&gt;
+&gt;*Internal thank yous*: A whole army of DarkLaunchers to be thanked here: Celina, Cece, Ciaran, James HM, Kevin, Mark J, Naoise, Nick G, Scott, Fa..."
+
+NOTES
+- [PRAISE] Praise For Experiment Analysis Capabilities (1 mentions)
+- [COMPLAINT] General Complaint About Launch Darkly (1 mentions)
+- [COMPLAINT] Concerns About Experimentation Pricing–quotas (1 mentions)
+- [COMPLAINT] Difficulty Changing Payment Terms (2 mentions)
+- [HELP] Confusion About Connection-based Usage Metering–billing Model (2 mentions)
+- [IMPROVEMENT] Enable Seamless Data Export For External Analysis (2 mentions)
+- [COMPLAINT] Inaccurate Dashboard Usage Data (1 mentions)
+- [IMPROVEMENT] Simplify Large-scale Access Administration (1 mentions)
+- [HELP] Help With Documentation–guidance (1 mentions)
+- [HELP] Help With Multi-armed Bandits Availability For Getting Started (1 mentions)
+- [COMPLAINT] Unreliable Analytics Data Delivery (1 mentions)
+- [PRAISE] Praise For Experimentation Capabilities (1 mentions)
+- [PRAISE] Praise For Developer Integration Tooling (1 mentions)
+- [HELP] Help With Confusion From Billing–service Connection Documentation (1 mentions)
+- [COMPLAINT] Overly Complex Procurement-contracting Process (2 mentions)
+- [COMPLAINT] Unclear Context-counting Rules Inflate Mau Billing (2 mentions)
+- [HELP] Help With Complex Integration Setup (1 mentions)
+- [IMPROVEMENT] Expand Data Warehouse Coverage (3 mentions)
+- [IMPROVEMENT] Improve Management Of Active Bandit Experiments (1 mentions)
+- [HELP] Help With Billing Calculations (2 mentions)
+- Source breakdown: Gong: 7
+
+FEEDBACK TRAJECTORY
+- Trend: stable
+- Early (2026-01-26 to 2026-02-18): 9 COMPLAINT, 4 PRAISE, 8 HELP. Recent (2026-02-18 to 2026-03-13): 5 COMPLAINT, 0 PRAISE, 3 HELP

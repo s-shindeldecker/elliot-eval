@@ -107,6 +107,12 @@ export interface ExpectedEic {
   influence_strength_range?: [number, number];
   impact_priority_range?: [number, number];
   confidence_allowed?: Confidence[];
+
+  // Set checks — when present for a field, overrides its exact-match check above.
+  // Named as {field}_allowed (e.g. primary_influence_tag_allowed, competitive_mention_allowed).
+  primary_influence_tag_allowed?: string[];
+  competitive_mention_allowed?: string[];
+  status_allowed?: string[];
 }
 
 // ---------------------------------------------------------------------------

@@ -9,6 +9,7 @@
 import type {
   SignalBundle,
   EvidenceItem,
+  FeedbackTrajectory,
   OpportunitySnapshot,
   StageBucket,
   YesNoUnknown,
@@ -24,6 +25,11 @@ interface AccountResult {
   record_id?: string;
   name?: string;
   salesforce_id?: string;
+  account_type?: string;
+  arr?: number;
+  industry?: string;
+  owner?: string;
+  lifecycle_stage?: string;
 }
 
 interface CallSummary {
@@ -62,10 +68,18 @@ interface FeedbackTheme {
   total?: number;
 }
 
+interface FeedbackTimelineItem {
+  theme?: string;
+  category?: string;
+  date?: string;
+  source?: string;
+}
+
 interface AccountFeedback {
   account_name?: string;
   themes?: FeedbackTheme[];
   source_breakdown?: Array<{ source?: string; total?: number }>;
+  timeline?: FeedbackTimelineItem[];
 }
 
 // ---------------------------------------------------------------------------
@@ -95,7 +109,7 @@ export function curateToolResults(
 
     evidence.push({
       source_type: 'Gong',
-      source_link: `gong://call/${call.call_id ?? 'unknown'}`,
+      source_id: call.call_id ?? 'unknown',
       timestamp: call.date ?? null,
       snippet,
     });
@@ -104,18 +118,23 @@ export function curateToolResults(
   for (const ticket of tickets) {
     evidence.push({
       source_type: 'Zendesk',
-      source_link: `zendesk://ticket/${ticket.record_id ?? 'unknown'}`,
+      source_id: ticket.record_id ?? 'unknown',
       timestamp: ticket.date ?? null,
       snippet: truncate(ticket.content ?? `Ticket ${ticket.record_id} — Status: ${ticket.status ?? 'unknown'}`, 500),
     });
   }
 
   for (const mention of slackMentions) {
+    const channelPrefix = mention.channel ? `#${mention.channel}` : '';
+    const authorPrefix = mention.author ? `@${mention.author}` : '';
+    const contextParts = [channelPrefix, authorPrefix].filter(Boolean);
+    const context = contextParts.length > 0 ? `[${contextParts.join(' ')}] ` : '';
+
     evidence.push({
       source_type: 'Slack',
-      source_link: `slack://message/${mention.record_id ?? 'unknown'}`,
+      source_id: mention.record_id ?? 'unknown',
       timestamp: mention.date ?? null,
-      snippet: truncate(mention.content ?? 'Slack mention', 500),
+      snippet: truncate(`${context}${mention.content ?? 'Slack mention'}`, 500),
     });
   }
 
@@ -140,7 +159,7 @@ export function curateToolResults(
   const now = new Date().toISOString().slice(0, 10);
 
   const oppData = inferOpportunityData(allCalls);
-  const aeOwner = inferAeOwner(allCalls);
+  const inferredAeOwner = inferAeOwner(allCalls);
   const stageBucket = inferStageBucket(allCalls, oppData.opportunity);
   const experimentEngaged = inferExperimentationEngaged(allCalls);
   const aiConfigsAdj = inferAiConfigsAdjacent(feedback);
@@ -153,11 +172,18 @@ export function curateToolResults(
     stage: oppData.stage ?? null,
     stage_bucket: stageBucket,
     amount: oppData.amount ?? null,
-    ae_owner: aeOwner,
+    ae_owner: account?.owner ?? inferredAeOwner,
     experimentation_team_engaged: experimentEngaged,
     ai_configs_adjacent: aiConfigsAdj,
     competitive_mention: competitiveMention,
+    account_type: account?.account_type ?? null,
+    arr: account?.arr ?? null,
+    industry: account?.industry ?? null,
+    owner: account?.owner ?? null,
+    lifecycle_stage: account?.lifecycle_stage ?? null,
   };
+
+  const feedbackTrajectory = computeFeedbackTrajectory(feedback);
 
   return {
     id: `elliot-${slugify(resolvedName)}-${now}`,
@@ -165,6 +191,7 @@ export function curateToolResults(
     snapshot,
     evidence,
     notes: notes.length > 0 ? notes : undefined,
+    feedbackTrajectory,
   };
 }
 
@@ -368,6 +395,69 @@ function inferCompetitiveMention(feedback: AccountFeedback | undefined): YesNoUn
     if (/compet/i.test(theme.theme ?? '')) return 'Yes';
   }
   return 'No';
+}
+
+// ---------------------------------------------------------------------------
+// Feedback trajectory — recency-weighted complaint/praise analysis
+// ---------------------------------------------------------------------------
+
+function computeFeedbackTrajectory(
+  feedback: AccountFeedback | undefined,
+): FeedbackTrajectory | undefined {
+  const items = feedback?.timeline;
+  if (!items || items.length < 3) return undefined;
+
+  const dated = items
+    .filter(i => i.date && i.category)
+    .map(i => ({ category: i.category!, ts: new Date(i.date!).getTime() }))
+    .filter(i => !isNaN(i.ts))
+    .sort((a, b) => a.ts - b.ts);
+
+  if (dated.length < 3) return undefined;
+
+  const midpoint = dated[0].ts + (dated[dated.length - 1].ts - dated[0].ts) / 2;
+
+  const early = dated.filter(d => d.ts <= midpoint);
+  const recent = dated.filter(d => d.ts > midpoint);
+
+  const count = (arr: typeof dated, cat: string) =>
+    arr.filter(d => d.category === cat).length;
+
+  const earlyComplaints = count(early, 'COMPLAINT');
+  const earlyPraise = count(early, 'PRAISE');
+  const recentComplaints = count(recent, 'COMPLAINT');
+  const recentPraise = count(recent, 'PRAISE');
+
+  let trend: FeedbackTrajectory['trend'] = 'stable';
+
+  const complaintDelta = recentComplaints - earlyComplaints;
+  const praiseDelta = recentPraise - earlyPraise;
+
+  if (complaintDelta < 0 && praiseDelta >= 0) trend = 'improving';
+  else if (complaintDelta <= 0 && praiseDelta > 0) trend = 'improving';
+  else if (complaintDelta > 0 && praiseDelta <= 0) trend = 'declining';
+  else if (complaintDelta >= 0 && praiseDelta < 0) trend = 'declining';
+
+  const earlyDate = new Date(dated[0].ts).toISOString().slice(0, 10);
+  const midDate = new Date(midpoint).toISOString().slice(0, 10);
+  const recentDate = new Date(dated[dated.length - 1].ts).toISOString().slice(0, 10);
+
+  const earlyHelp = count(early, 'HELP');
+  const recentHelp = count(recent, 'HELP');
+
+  const summary = [
+    `Early (${earlyDate} to ${midDate}): ${earlyComplaints} COMPLAINT, ${earlyPraise} PRAISE, ${earlyHelp} HELP`,
+    `Recent (${midDate} to ${recentDate}): ${recentComplaints} COMPLAINT, ${recentPraise} PRAISE, ${recentHelp} HELP`,
+  ].join('. ');
+
+  return {
+    trend,
+    early_complaints: earlyComplaints,
+    early_praise: earlyPraise,
+    recent_complaints: recentComplaints,
+    recent_praise: recentPraise,
+    summary,
+  };
 }
 
 // ---------------------------------------------------------------------------

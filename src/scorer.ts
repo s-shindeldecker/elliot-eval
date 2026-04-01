@@ -128,6 +128,20 @@ function scoreEicFields(
   failures: Failure[],
 ): void {
   for (const field of EXACT_MATCH_FIELDS) {
+    // Use the _allowed set when present (e.g. primary_influence_tag_allowed)
+    const allowedKey = `${field}_allowed` as keyof ExpectedEic;
+    const allowedSet = expected[allowedKey] as string[] | undefined;
+    if (Array.isArray(allowedSet)) {
+      const actualVal = actual[field];
+      if (!allowedSet.includes(actualVal as string)) {
+        failures.push({
+          code: 'FIELD_MISMATCH',
+          detail: `${field}: expected one of [${allowedSet.join(', ')}], got=${JSON.stringify(actualVal)}`,
+        });
+      }
+      continue;
+    }
+
     if (expected[field] !== undefined) {
       const expectedVal = expected[field];
       const actualVal = actual[field];

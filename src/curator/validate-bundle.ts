@@ -25,7 +25,7 @@ export function validateBundle(bundle: SignalBundle): ValidationResult {
     errors.push('snapshot.opportunity is empty');
   }
 
-  const seenLinks = new Set<string>();
+  const seenIds = new Set<string>();
   for (let i = 0; i < bundle.evidence.length; i++) {
     const ev = bundle.evidence[i];
     const prefix = `evidence[${i}]`;
@@ -33,12 +33,12 @@ export function validateBundle(bundle: SignalBundle): ValidationResult {
     if (!ev.source_type || ev.source_type.trim().length === 0) {
       errors.push(`${prefix}.source_type is empty`);
     }
-    if (!ev.source_link || ev.source_link.trim().length === 0) {
-      errors.push(`${prefix}.source_link is empty`);
-    } else if (seenLinks.has(ev.source_link)) {
-      errors.push(`${prefix}.source_link is duplicate: "${ev.source_link}"`);
+    if (!ev.source_id || ev.source_id.trim().length === 0) {
+      errors.push(`${prefix}.source_id is empty`);
+    } else if (seenIds.has(ev.source_id)) {
+      errors.push(`${prefix}.source_id is duplicate: "${ev.source_id}"`);
     } else {
-      seenLinks.add(ev.source_link);
+      seenIds.add(ev.source_id);
     }
     if (!ev.snippet || ev.snippet.trim().length === 0) {
       errors.push(`${prefix}.snippet is empty`);

@@ -6,7 +6,7 @@ The system converts fragmented internal signals into defensible, structured impa
 
 ## Architecture diagram
 
-The visual architecture overview is located at [`../elliot_architecture.png`](../elliot_architecture.png).
+The visual architecture overview is available as an interactive HTML diagram at [`../elliot-system-diagram.html`](../elliot-system-diagram.html) (viewable via GitHub Pages or locally in a browser).
 
 ## Canonical references
 

@@ -173,10 +173,18 @@ export interface FeedbackThemeSummary {
   total: number;
 }
 
+export interface FeedbackTimelineItem {
+  theme: string;
+  category: string;
+  date: string;
+  source: string;
+}
+
 export interface AccountFeedbackResult {
   account_name: string;
   themes: FeedbackThemeSummary[];
   source_breakdown: Array<{ source: string; total: number }>;
+  timeline?: FeedbackTimelineItem[];
 }
 
 export const GET_ACCOUNT_FEEDBACK_SCHEMA = {

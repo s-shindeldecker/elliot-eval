@@ -1,0 +1,89 @@
+ELLIOT Intelligence: Cedar
+
+OPPORTUNITY SNAPSHOT
+- EIC ID (if updating): 
+- Account: Cedar
+- Opportunity: Cedar - NB - Sales - 2026
+- Opportunity Link: 
+- Stage: CW - Closed Won
+- Stage Bucket: Closed
+- Motion: 
+- AE Owner: Anuj Biyani
+- Experimentation Team Engaged?: Unknown
+- AI Configs Adjacent?: Unknown
+- Competitive Mention?: No
+- Exec Sponsor Mentioned?: 
+- Next Checkpoint: 
+- Amount: $90,000
+- Expected Revenue: 
+- Probability: 
+
+EVIDENCE
+1) Source Type: Gong
+  Source Link: gong://call/2282232332289568604
+  Timestamp: 2026-03-19T16:00:49Z
+  Snippet: "agent: hey, Brian.
+agent: Hello.
+agent: How's it going pretty good.
+agent: Pretty good.
+agent: Is that a launchdarkly shirt?
+agent: I see.
+agent: It is, yeah, nice.
+agent: Nice.
+agent: Just got it in the mail.
+agent: The.
+user: Other day?
+agent: Nice.
+agent: Is it comfortable?
+agent: It is, it's a good one.
+agent: Happy to hear that.
+agent: Hey, Evan.
+agent: Hey, Sean, how are we?
+agent: Pretty good.
+agent: Happy Friday eve.
+agent: Happy Friday eve.
+agent: Yeah.
+agent: And March madness for a..."
+
+2) Source Type: Gong
+  Source Link: gong://call/4940364282971237005
+  Timestamp: 2026-03-11T18:30:47Z
+  Snippet: "LaunchDarkly <> Cedar: Snowflake Integration — Participants: Anuj Biyani, Nicholas Guillory, Jian Tan, Aaron Montana, Evan Shantz"
+
+3) Source Type: Slack
+  Source Link: slack://message/5a05ba2f-1425-500f-a1f4-3f342c66f86b
+  Timestamp: 2026-03-11T17:17:46Z
+  Snippet: "Evan Shantz has won a deal with *Cedar - NB - Sales - 2026* for $180,000 USD View in Salesforce button &gt;*Incremental ARR*: $90,000 USD
+&gt;*Customer Success Manager*: Sean Hitchman
+&gt;*Solutions Engineer*: Matt Laster
+&gt;*Solutions Architect*: 
+&gt;*Opportunity Age*: 65 days
+&gt;
+&gt;*Internal thank yous*: Where to start. This was a colossal team victory in a competitive deal against Statsig. Matt Laster, Scott Shindeldecker, Christian Cairncross, Nicholas Guillory, Cameron Savage, Aaron..."
+
+NOTES
+- [PRAISE] General Praise For Setup with Snowflake (1 mentions)
+- [HELP] Help With Expanding Traffic Allocation Mid-experiment (1 mentions)
+- [COMPLAINT] General Complaint About Launch Darkly (1 mentions)
+- [HELP] Confusion About Connection-based Usage Metering–billing Model (2 mentions)
+- [IMPROVEMENT] Prevent Users Switching Variations After Allocation Changes (1 mentions)
+- [HELP] Help With Connection-minute Costs (1 mentions)
+- [IMPROVEMENT] Enable Seamless Data Export For External Analysis (1 mentions)
+- [COMPLAINT] Update Lag From Polling–relay Configuration (1 mentions)
+- [HELP] Help With Learning Launchdarkly (1 mentions)
+- [PRAISE] Praise For Experimentation Capabilities (1 mentions)
+- [HELP] Confusion About Experimentation Concepts (1 mentions)
+- [HELP] Confusion With Export Destination Setup (1 mentions)
+- [PRAISE] General Praise For Slack Integration (1 mentions)
+- [IMPROVEMENT] Expand Data Warehouse Coverage (1 mentions)
+- [PRAISE] Praise For Helpful Resources (1 mentions)
+- [HELP] Help With Uptime Commitments (1 mentions)
+- [HELP] Confusion About Prevent Variation Reassignment Setting (1 mentions)
+- [HELP] Help With Billing Calculations (1 mentions)
+- [COMPLAINT] Confusing Interface Navigation (1 mentions)
+- [HELP] Help With Metrics Setup (1 mentions)
+- Source breakdown: Gong: 8
+
+FEEDBACK TRAJECTORY
+- Trend: stable
+- Early (2026-01-05 to 2026-02-11): 4 COMPLAINT, 4 PRAISE, 21 HELP. Recent (2026-02-11 to 2026-03-19): 0 COMPLAINT, 3 PRAISE, 0 HELP

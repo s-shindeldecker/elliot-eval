@@ -4,7 +4,8 @@ export type { YesNoUnknown, StageBucket, Motion };
 
 export interface EvidenceItem {
   source_type: string;
-  source_link: string;
+  source_id: string;
+  source_link?: string | null;
   timestamp?: string | null;
   snippet: string;
 }
@@ -28,6 +29,20 @@ export interface OpportunitySnapshot {
   amount?: number | null;
   expected_revenue?: number | null;
   probability?: number | null;
+  account_type?: string | null;
+  arr?: number | null;
+  industry?: string | null;
+  owner?: string | null;
+  lifecycle_stage?: string | null;
+}
+
+export interface FeedbackTrajectory {
+  trend: 'improving' | 'declining' | 'stable' | 'insufficient_data';
+  early_complaints: number;
+  early_praise: number;
+  recent_complaints: number;
+  recent_praise: number;
+  summary: string;
 }
 
 export interface SignalBundle {
@@ -36,4 +51,5 @@ export interface SignalBundle {
   snapshot: OpportunitySnapshot;
   evidence: EvidenceItem[];
   notes?: string[];
+  feedbackTrajectory?: FeedbackTrajectory;
 }

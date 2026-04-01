@@ -123,6 +123,7 @@ function buildEvidence(r: SalesforceOpportunityRecord): EvidenceItem[] {
 
   items.push({
     source_type: 'Salesforce',
+    source_id: r.id,
     source_link: r.opportunityUrl,
     timestamp: null,
     snippet: primarySnippet,
@@ -131,6 +132,7 @@ function buildEvidence(r: SalesforceOpportunityRecord): EvidenceItem[] {
   if (nonEmpty(r.nextStepsDetails) && r.nextStepsDetails !== primarySnippet) {
     items.push({
       source_type: 'Salesforce Activity',
+      source_id: `${r.id}-activities`,
       source_link: `${r.opportunityUrl}/activities`,
       timestamp: null,
       snippet: r.nextStepsDetails!,
@@ -140,6 +142,7 @@ function buildEvidence(r: SalesforceOpportunityRecord): EvidenceItem[] {
   if (nonEmpty(r.businessImpactNotes) && r.businessImpactNotes !== primarySnippet) {
     items.push({
       source_type: 'Business Impact',
+      source_id: `${r.id}-impact`,
       source_link: `${r.opportunityUrl}/impact`,
       timestamp: null,
       snippet: r.businessImpactNotes!,
@@ -149,6 +152,7 @@ function buildEvidence(r: SalesforceOpportunityRecord): EvidenceItem[] {
   if (nonEmpty(r.launchXNotes)) {
     items.push({
       source_type: 'LaunchX',
+      source_id: `${r.id}-launchx`,
       source_link: `${r.opportunityUrl}/launchx`,
       timestamp: null,
       snippet: r.launchXNotes!,
@@ -158,6 +162,7 @@ function buildEvidence(r: SalesforceOpportunityRecord): EvidenceItem[] {
   if (nonEmpty(r.competitionNotes)) {
     items.push({
       source_type: 'Competition Intel',
+      source_id: `${r.id}-competition`,
       source_link: `${r.opportunityUrl}/competition`,
       timestamp: null,
       snippet: r.competitionNotes!,
@@ -172,6 +177,7 @@ function buildEvidence(r: SalesforceOpportunityRecord): EvidenceItem[] {
       if (note === primarySnippet) continue;
       items.push({
         source_type: 'Salesforce Note',
+        source_id: `${r.id}-note-${added + 1}`,
         source_link: `${r.opportunityUrl}/notes/${added + 1}`,
         timestamp: null,
         snippet: note,
