@@ -35,11 +35,16 @@
     "eval:ld:scout:v0": "npm run build:scout:v0:dataset && tsx src/index.ts --config fixtures/eval-config.scout-v0.ld.json --stage gold",
     "test:scout:salesforce": "tsx scripts/scout-salesforce-smoke.ts",
     "build:salesforce:dataset": "tsx scripts/build-salesforce-dataset.ts",
-    "eval:ld:salesforce": "npm run build:salesforce:dataset && tsx src/index.ts --config fixtures/eval-config.salesforce-v1.ld.json --stage gold"
+    "eval:ld:salesforce": "npm run build:salesforce:dataset && tsx src/index.ts --config fixtures/eval-config.salesforce-v1.ld.json --stage gold",
+    "start:slack": "tsx src/slack/app.ts",
+    "agent:cli": "tsx scripts/agent-cli.ts",
+    "judge:test": "tsx scripts/judge-test.ts"
   },
   "dependencies": {
     "@launchdarkly/node-server-sdk": "^9.10.9",
     "@launchdarkly/server-sdk-ai": "^0.16.5",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@slack/bolt": "^4.6.0",
     "ajv": "^8.17.1",
     "commander": "^13.1.0",
     "dotenv": "^17.3.1",

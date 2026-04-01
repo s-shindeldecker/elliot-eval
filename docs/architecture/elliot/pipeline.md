@@ -2,12 +2,48 @@
 
 ## Overview
 
-The Elliot pipeline has four stages, each with a single responsibility:
+Elliot has two execution modes that share the same Curator and Judge contracts.
 
-- **Scout** — Gathers raw evidence from data sources (Gong, Slack, Salesforce, etc.), enriches it with opportunity metadata, and proposes field values. Scout does NOT make the create/no-create decision or emit EIC JSON.
+### Mode 1: Interactive Agent (Slack / CLI)
+
+The interactive pipeline runs three stages end-to-end:
+
+```
+User Query → Scout (elliot-agent AI Config + tools)
+           → Curator (deterministic code)
+           → Judge (elliot-judge AI Config)
+           → Response + Scoring
+```
+
+**Scout** is an LLM agent managed by the `elliot-agent` LD AI Config. It decides which tools to call (Wisdom, Salesforce) and synthesizes a natural-language response for the user.
+
+**Curator** is deterministic code (`curateToolResults()`) that takes the raw tool call results from Scout and normalizes them into a `SignalBundle`. Same inputs always produce the same bundle. No LLM involved.
+
+**Judge** is a separate LLM managed by the `elliot-judge` LD AI Config. It receives the curated `input_text` packet and returns a structured JSON scoring (action, confidence, human summary). Judge has no tools and no side effects.
+
+Key files:
+- `src/agent/elliot-agent.ts` — Orchestrates Scout → Curator → Judge
+- `src/curator/curate-tool-results.ts` — Deterministic tool results → SignalBundle transform
+- `src/curator/validate-bundle.ts` — SignalBundle validation
+- `src/curator/render-packet.ts` — SignalBundle → deterministic input_text
+- `src/tools/wisdom/` — Enterpret Knowledge Graph tools
+- `src/tools/salesforce/` — Salesforce API tools (stubbed)
+- `src/adapter/ld-client.ts` — LD AI Config client (tool-use + simple invoke)
+- `src/slack/` — Slack Bot transport layer
+- `scripts/agent-cli.ts` — CLI harness for testing
+
+### Mode 2: Eval Pipeline (Offline)
+
+The eval harness tests Judge in isolation with static input packets:
+
+- **Scout** — Gathers raw evidence from data sources, enriches it with opportunity metadata, and proposes field values. Scout does NOT make the create/no-create decision or emit EIC JSON.
 - **Curator** — Normalizes Scout output into a `SignalBundle`, validates it, and renders a deterministic `input_text` packet that Judge can consume. The internal `SignalBundle` type lives in `src/types/signal-bundle.ts`; the renderer is `src/curator/render-packet.ts`.
-- **Judge** — Receives an `input_text` packet and returns a strict JSON decision (`human_summary` + `json.create_eic` / `json.eic`). Judge is stateless, deterministic, and produces no side effects beyond its JSON output.
+- **Judge** — Receives an `input_text` packet and returns a strict JSON decision (`human_summary` + `json.action` / `json.eic`). Judge is stateless, deterministic, and produces no side effects beyond its JSON output.
 - **Scribe** *(future)* — Consumes Judge's JSON output plus pipeline metadata and writes to persistence targets (spreadsheets, databases, dashboards). Scribe owns all write/export operations.
+
+### Relationship Between Modes
+
+Both modes share the same Curator code (`validateBundle`, `renderPacket`) and Judge contract. The interactive agent adds `curateToolResults()` to bridge live tool results into the SignalBundle format. The eval harness can test Judge independently using static input packets and known expected outputs.
 
 ## Contracts
 

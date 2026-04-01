@@ -1,0 +1,88 @@
+ELLIOT Intelligence: Jackbox Games
+
+OPPORTUNITY SNAPSHOT
+- EIC ID (if updating): 001TR00000rqcM3YAI
+- Account: Jackbox Games
+- Opportunity: Jackbox Games - NB - Sales - 2026
+- Opportunity Link: 
+- Stage: 3 - POV
+- Stage Bucket: Mid
+- Motion: 
+- AE Owner: Cullen Kyte
+- Experimentation Team Engaged?: Yes
+- AI Configs Adjacent?: Yes
+- Competitive Mention?: No
+- Exec Sponsor Mentioned?: 
+- Next Checkpoint: 
+- Amount: $0
+- Expected Revenue: 
+- Probability: 
+
+EVIDENCE
+1) Source Type: Gong
+  Source Link: gong://call/39023002365321771
+  Timestamp: 2026-03-26T18:00:34Z
+  Snippet: "Jackbox<>LD - Quick Connect on Quote — Participants: Cullen Kyte, Jacob Strange, Joshua Gibbs"
+
+2) Source Type: Gong
+  Source Link: gong://call/8820153882479350836
+  Timestamp: 2026-03-25T15:31:02Z
+  Snippet: "Jackbox Games <> LaunchDarkly - POV Session — Participants: Scott Shindeldecker, Glynn Jordan, Daniel Lock, Jeff Honeyman, Jacob Strange, Erin Bleiweiss, Jewel Matanane, Cullen Kyte"
+
+3) Source Type: Gong
+  Source Link: gong://call/2605494141244357677
+  Timestamp: 2026-03-23T15:00:23Z
+  Snippet: "Jackbox Games <> LaunchDarkly - POV Session 3 — Participants: Jewel Matanane, Mike Overhulse, Cullen Kyte, Erin Bleiweiss, Jeff Honeyman, Scott Shindeldecker, Jacob, Daniel Lock"
+
+4) Source Type: Gong
+  Source Link: gong://call/4119959227849627383
+  Timestamp: 2026-03-19T17:30:19Z
+  Snippet: "Jackbox Games <> LaunchDarkly - POV Session 2 — Participants: Cullen Kyte, Jacob, Daniel Lock, Erin Bleiweiss, Jeff Honeyman, Jay Khatri, Jewel Matanane, Scott Shindeldecker"
+
+5) Source Type: Gong
+  Source Link: gong://call/285139432878630264
+  Timestamp: 2026-03-17T21:30:51Z
+  Snippet: "Jackbox Games - Quote Review — Participants: Cullen Kyte, Jacob Strange"
+
+6) Source Type: Gong
+  Source Link: gong://call/1833486128461747108
+  Timestamp: 2026-03-17T17:00:11Z
+  Snippet: "Jackbox Games <> LaunchDarkly - POV Session 1 — Participants: Erin Bleiweiss, Jewel Matanane, Jacob, Mike Overhulse, Cullen Kyte, Jay Khatri, Scott Shindeldecker"
+
+7) Source Type: Gong
+  Source Link: gong://call/6109567764060102911
+  Timestamp: 2026-03-12T17:31:15Z
+  Snippet: "Jacob / Cullen - Jackbox Quote — Participants: Cullen Kyte, Jacob Strange"
+
+8) Source Type: Gong
+  Source Link: gong://call/2602683695406806797
+  Timestamp: 2026-03-11T19:00:27Z
+  Snippet: "Jackbox Games <> LaunchDarkly - Technical Session 3 — Participants: Erin Bleiweiss, Jacob, Mike Overhulse, Jeff Honeyman, Cullen Kyte, Daniel Lock, Jewel Matanane, Scott Shindeldecker"
+
+9) Source Type: Gong
+  Source Link: gong://call/1539779829322242774
+  Timestamp: 2026-03-04T16:30:32Z
+  Snippet: "Jackbox Games <> LaunchDarkly - Technical Session 2 — Participants: Jewel Matanane, Cullen Kyte, Scott Shindeldecker, Jacob Strange, Dan Berkowitz, Erin Bleiweiss, Daniel Lock, Jeff Honeyman"
+
+NOTES
+- [IMPROVEMENT] General Improvement In Creating Alerts (1 mentions)
+- [HELP] General Help With Searching Sessions (1 mentions)
+- [HELP] Confusion About Aa Vs Ab Concepts (1 mentions)
+- [HELP] Help With Confusion About Variations (1 mentions)
+- [IMPROVEMENT] Improve Tag Governance (1 mentions)
+- [IMPROVEMENT] Automate Prevention–rollback For Bad Ai Configurations (1 mentions)
+- [COMPLAINT] Sdk Initialization Performance–reliability Issues (1 mentions)
+- [HELP] Confusion About Anonymous Context Key Strategy (1 mentions)
+- [COMPLAINT] Observability Pricing Concerns (1 mentions)
+- [HELP] Help With Environment Setup Best Practices (1 mentions)
+- [PRAISE] General Praise For AI Config Monitoring (1 mentions)
+- [PRAISE] Praise For Rich Error Insights (1 mentions)
+- [COMPLAINT] General Complaint About Launch Darkly (2 mentions)
+- [IMPROVEMENT] Enable Granular Metric Segmentation With Filters (1 mentions)
+- [HELP] Help With Aa Test Setup (1 mentions)
+- [HELP] Confusion About The Meaning Of Context (1 mentions)
+- [HELP] Help With Setting Up Experiments (1 mentions)
+- [HELP] Help With Commercial Terms For Product Capabilities (1 mentions)
+- [COMPLAINT] Cannot Change Variation Type After Flag Creation (1 mentions)
+- [PRAISE] Praise For Easy Integrations (1 mentions)
+- Source breakdown: Gong: 12

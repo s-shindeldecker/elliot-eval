@@ -29,6 +29,7 @@ Normalization warnings (see [decision contract warnings table](decision-contract
 | [Decision Contract](decision-contract.md) | Strict JSON output schema, evidence-to-classification mapping, and output constraints |
 | [Credibility Standards](credibility-standards.md) | Evidence tiers, minimum standards per ImpactClassification, downgrade triggers, and prohibited behaviors |
 | [Lifecycle State Machine](lifecycle-state-machine.md) | IntelligenceStatus state definitions, allowed/disallowed transitions, and audit requirements |
+| [Wisdom Integration](wisdom-integration.md) | Enterpret Knowledge Graph data sources, tools, Cypher patterns, and connection architecture |
 
 ## Related
 
