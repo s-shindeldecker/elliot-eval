@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELLIOT System Architecture</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f1117; color: #e0e0e0; padding: 32px; min-height: 100vh; }
+  h1 { text-align: center; font-size: 28px; font-weight: 600; margin-bottom: 4px; color: #fff; }
+  .subtitle { text-align: center; font-size: 14px; color: #888; margin-bottom: 32px; }
+
+  .legend { display: flex; gap: 24px; justify-content: center; margin-bottom: 32px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .legend-dot { width: 14px; height: 14px; border-radius: 3px; }
+  .legend-dot.live { background: #22c55e; }
+  .legend-dot.partial { background: #f59e0b; }
+  .legend-dot.planned { background: #6366f1; border: 2px dashed #818cf8; }
+  .legend-dot.external { background: #3b82f6; }
+
+  .pipeline { display: flex; flex-direction: column; gap: 0; max-width: 1100px; margin: 0 auto; }
+
+  .stage-row { display: flex; align-items: stretch; gap: 16px; position: relative; }
+  .stage-row + .stage-row { margin-top: 0; }
+
+  .arrow-down { display: flex; justify-content: center; padding: 8px 0; }
+  .arrow-down svg { width: 24px; height: 32px; }
+  .arrow-down path { fill: none; stroke: #555; stroke-width: 2; }
+  .arrow-down polygon { fill: #555; }
+
+  .card {
+    background: #1a1d27;
+    border: 1px solid #2a2d3a;
+    border-radius: 12px;
+    padding: 20px;
+    flex: 1;
+    position: relative;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { border-color: #444; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+
+  .card.live { border-left: 4px solid #22c55e; }
+  .card.partial { border-left: 4px solid #f59e0b; }
+  .card.planned { border-left: 4px solid #6366f1; border-style: dashed; border-left-style: solid; }
+  .card.external { border-left: 4px solid #3b82f6; }
+
+  .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .card-icon { font-size: 20px; }
+  .card-title { font-size: 16px; font-weight: 600; color: #fff; }
+  .card-badge {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: auto;
+  }
+  .badge-live { background: #22c55e22; color: #22c55e; }
+  .badge-partial { background: #f59e0b22; color: #f59e0b; }
+  .badge-planned { background: #6366f122; color: #818cf8; }
+  .badge-external { background: #3b82f622; color: #3b82f6; }
+
+  .card-desc { font-size: 13px; color: #999; line-height: 1.5; margin-bottom: 10px; }
+  .card-file { font-size: 11px; color: #666; font-family: 'SF Mono', Consolas, monospace; }
+
+  .card-items { list-style: none; padding: 0; }
+  .card-items li {
+    font-size: 12px;
+    color: #aaa;
+    padding: 4px 0;
+    border-bottom: 1px solid #1f2233;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-items li:last-child { border-bottom: none; }
+  .item-status { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .item-status.ok { background: #22c55e; }
+  .item-status.warn { background: #f59e0b; }
+  .item-status.todo { background: #6366f1; }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #555;
+    text-align: center;
+    padding: 20px 0 12px;
+  }
+
+  .cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .cols-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .cols-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+  .full-width { grid-column: 1 / -1; }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 0;
+    color: #444;
+    font-size: 20px;
+  }
+
+  .metric-bar { display: flex; gap: 16px; justify-content: center; margin: 24px 0; flex-wrap: wrap; }
+  .metric {
+    background: #1a1d27;
+    border: 1px solid #2a2d3a;
+    border-radius: 8px;
+    padding: 12px 20px;
+    text-align: center;
+    min-width: 120px;
+  }
+  .metric-value { font-size: 24px; font-weight: 700; color: #fff; }
+  .metric-label { font-size: 11px; color: #888; margin-top: 2px; }
+
+  @media (max-width: 768px) {
+    .cols-2, .cols-3, .cols-4 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<h1>ELLIOT System Architecture</h1>
+<p class="subtitle">Experimentation Line-of-sight & Impact Observation Tracker &mdash; March 2026</p>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot live"></div> Implemented &amp; Working</div>
+  <div class="legend-item"><div class="legend-dot partial"></div> Partial / Stubbed</div>
+  <div class="legend-item"><div class="legend-dot planned"></div> Planned / Not Built</div>
+  <div class="legend-item"><div class="legend-dot external"></div> External Service</div>
+</div>
+
+<div class="metric-bar">
+  <div class="metric"><div class="metric-value" style="color:#22c55e">12</div><div class="metric-label">Components Live</div></div>
+  <div class="metric"><div class="metric-value" style="color:#f59e0b">2</div><div class="metric-label">Partial / Stubbed</div></div>
+  <div class="metric"><div class="metric-value" style="color:#818cf8">5</div><div class="metric-label">Planned / To Build</div></div>
+</div>
+
+<!-- INTERFACES -->
+<div class="section-label">User Interfaces</div>
+<div class="cols-3">
+  <div class="card live">
+    <div class="card-header">
+      <span class="card-icon">&#9654;</span>
+      <span class="card-title">CLI (Interactive)</span>
+      <span class="card-badge badge-live">Live</span>
+    </div>
+    <div class="card-desc">Interactive REPL with multi-turn conversation history (10-turn rolling window), reset command, packet saving for replay.</div>
+    <div class="card-file">scripts/agent-cli.ts</div>
+  </div>
+  <div class="card partial">
+    <div class="card-header">
+      <span class="card-icon">&#128172;</span>
+      <span class="card-title">Slack Bot</span>
+      <span class="card-badge badge-partial">Partial</span>
+    </div>
+    <div class="card-desc">Bolt app with Socket Mode implemented. Registers agent + tools. Missing: conversation history threading across messages.</div>
+    <div class="card-file">src/slack/app.ts, handler.ts, format.ts</div>
+  </div>
+  <div class="card planned">
+    <div class="card-header">
+      <span class="card-icon">&#128640;</span>
+      <span class="card-title">Batch Scheduler</span>
+      <span class="card-badge badge-planned">Planned</span>
+    </div>
+    <div class="card-desc">Automated sweep across accounts on a schedule. No scheduler/worker infrastructure built yet.</div>
+    <div class="card-file">&mdash;</div>
+  </div>
+</div>
+
+<div class="flow-arrow">&darr;</div>
+
+<!-- AGENT CORE -->
+<div class="section-label">Agent Core &mdash; Scout &rarr; Curator &rarr; Judge</div>
+<div class="cols-3">
+  <div class="card live">
+    <div class="card-header">
+      <span class="card-icon">&#128269;</span>
+      <span class="card-title">Scout</span>
+      <span class="card-badge badge-live">Live</span>
+    </div>
+    <div class="card-desc">LLM agent powered by LD AI Config. Uses OpenAI function calling with tool loop (max 10 iterations). Handles disambiguation, drill-in on key calls, parallel tool gathering.</div>
+    <ul class="card-items">
+      <li><span class="item-status ok"></span> LD AI Config prompt management</li>
+      <li><span class="item-status ok"></span> Multi-turn conversation context</li>
+      <li><span class="item-status ok"></span> Tool call dedup / loop guard</li>
+      <li><span class="item-status ok"></span> Enriched search + account dedup</li>
+    </ul>
+    <div class="card-file">src/agent/elliot-agent.ts &rarr; runScout()</div>
+  </div>
+  <div class="card live">
+    <div class="card-header">
+      <span class="card-icon">&#128230;</span>
+      <span class="card-title">Curator</span>
+      <span class="card-badge badge-live">Live</span>
+    </div>
+    <div class="card-desc">Deterministic transform: raw tool results &rarr; SignalBundle &rarr; validated &rarr; rendered packet. No LLM involved &mdash; predictable, testable.</div>
+    <ul class="card-items">
+      <li><span class="item-status ok"></span> Gong calls &rarr; engagement signals</li>
+      <li><span class="item-status ok"></span> Zendesk tickets &rarr; support health</li>
+      <li><span class="item-status ok"></span> Feedback themes &rarr; categories</li>
+      <li><span class="item-status ok"></span> Slack mentions &rarr; internal sentiment</li>
+      <li><span class="item-status ok"></span> Opportunity snapshot heuristics</li>
+    </ul>
+    <div class="card-file">src/curator/curate-tool-results.ts</div>
+  </div>
+  <div class="card live">
+    <div class="card-header">
+      <span class="card-icon">&#9878;</span>
+      <span class="card-title">Judge</span>
+      <span class="card-badge badge-live">Live</span>
+    </div>
+    <div class="card-desc">Separate LD AI Config. Receives curated packet, produces structured JSON: action (CREATE/UPDATE/NO_ACTION), EIC fields, confidence, human summary. jsonMode enforced.</div>
+    <ul class="card-items">
+      <li><span class="item-status ok"></span> CREATE / UPDATE / NO_ACTION logic</li>
+      <li><span class="item-status ok"></span> Closed influence tag enum (6 tags)</li>
+      <li><span class="item-status ok"></span> Calibrated numeric scoring</li>
+      <li><span class="item-status ok"></span> Pipeline guard (skips on disambig)</li>
+    </ul>
+    <div class="card-file">src/agent/elliot-agent.ts &rarr; runCuratorAndJudge()</div>
+  </div>
+</div>
+
+<div class="flow-arrow">&darr;</div>
+
+<!-- DATA SOURCES -->
+<div class="section-label">Data Sources &amp; Tools</div>
+<div class="cols-4">
+  <div class="card external">
+    <div class="card-header">
+      <span class="card-icon">&#128218;</span>
+      <span class="card-title">Wisdom MCP</span>
+      <span class="card-badge badge-external">Connected</span>
+    </div>
+    <div class="card-desc">Enterpret Knowledge Graph via MCP (Cypher queries). Primary intelligence source.</div>
+    <ul class="card-items">
+      <li><span class="item-status ok"></span> search_account (enriched + dedup)</li>
+      <li><span class="item-status ok"></span> get_recent_calls</li>
+      <li><span class="item-status ok"></span> get_call_details</li>
+      <li><span class="item-status ok"></span> get_support_tickets</li>
+      <li><span class="item-status ok"></span> get_account_feedback</li>
+      <li><span class="item-status ok"></span> get_slack_mentions</li>
+    </ul>
+    <div class="card-file">src/tools/wisdom/*</div>
+  </div>
+  <div class="card partial">
+    <div class="card-header">
+      <span class="card-icon">&#9729;</span>
+      <span class="card-title">Salesforce API</span>
+      <span class="card-badge badge-partial">Stubbed</span>
+    </div>
+    <div class="card-desc">Tool schemas registered; returns "not connected" at runtime. No live REST client implementation.</div>
+    <ul class="card-items">
+      <li><span class="item-status warn"></span> sf_query_opportunity</li>
+      <li><span class="item-status warn"></span> sf_search_accounts</li>
+      <li><span class="item-status warn"></span> sf_search_activities</li>
+      <li><span class="item-status warn"></span> sf_fetch_contacts</li>
+    </ul>
+    <div class="card-file">src/tools/salesforce/*</div>
+  </div>
+  <div class="card external">
+    <div class="card-header">
+      <span class="card-icon">&#127987;</span>
+      <span class="card-title">LaunchDarkly AI Configs</span>
+      <span class="card-badge badge-external">Connected</span>
+    </div>
+    <div class="card-desc">Manages prompts and model selection for Scout and Judge. Enables A/B testing prompt variations.</div>
+    <ul class="card-items">
+      <li><span class="item-status ok"></span> elliot-agent (Scout)</li>
+      <li><span class="item-status ok"></span> elliot-candidate-a (Judge)</li>
+    </ul>
+    <div class="card-file">src/adapter/ld-client.ts</div>
+  </div>
+  <div class="card external">
+    <div class="card-header">
+      <span class="card-icon">&#129302;</span>
+      <span class="card-title">OpenAI</span>
+      <span class="card-badge badge-external">Connected</span>
+    </div>
+    <div class="card-desc">GPT-4o model for both Scout (function calling) and Judge (JSON mode). Model selection via LD AI Config.</div>
+    <div class="card-file">src/adapter/ld-client.ts</div>
+  </div>
+</div>
+
+<div class="flow-arrow">&darr;</div>
+
+<!-- OUTPUTS -->
+<div class="section-label">Outputs &amp; Persistence</div>
+<div class="cols-3">
+  <div class="card live">
+    <div class="card-header">
+      <span class="card-icon">&#128196;</span>
+      <span class="card-title">EIC (JSON Output)</span>
+      <span class="card-badge badge-live">Live</span>
+    </div>
+    <div class="card-desc">Experimentation Intelligence Card: action, influence tags, strength/priority scores, confidence, human summary. Displayed in CLI/Slack.</div>
+  </div>
+  <div class="card planned">
+    <div class="card-header">
+      <span class="card-icon">&#128190;</span>
+      <span class="card-title">Scribe (CRM Write-back)</span>
+      <span class="card-badge badge-planned">Planned</span>
+    </div>
+    <div class="card-desc">Write EICs back to Salesforce or Google Sheets. Defined in architecture docs; not implemented.</div>
+    <div class="card-file">docs/architecture/elliot/pipeline.md</div>
+  </div>
+  <div class="card planned">
+    <div class="card-header">
+      <span class="card-icon">&#128451;</span>
+      <span class="card-title">EIC Store</span>
+      <span class="card-badge badge-planned">Planned</span>
+    </div>
+    <div class="card-desc">In-memory prototype exists for contract tests. Not wired to agent pipeline &mdash; no persistence layer in production path.</div>
+    <div class="card-file">src/store/* (prototype only)</div>
+  </div>
+</div>
+
+<div class="flow-arrow">&darr;</div>
+
+<!-- EVAL / QUALITY -->
+<div class="section-label">Quality &amp; Evaluation</div>
+<div class="cols-3">
+  <div class="card live">
+    <div class="card-header">
+      <span class="card-icon">&#9989;</span>
+      <span class="card-title">Eval Harness</span>
+      <span class="card-badge badge-live">Live</span>
+    </div>
+    <div class="card-desc">JSONL-based evaluation: screening + gold stages. Supports mock and LD adapters. Reports pass/fail per case with detailed scoring.</div>
+    <ul class="card-items">
+      <li><span class="item-status ok"></span> Gold dataset (v0.1, 10 cases)</li>
+      <li><span class="item-status ok"></span> Mock + LaunchDarkly adapters</li>
+      <li><span class="item-status ok"></span> Configurable thresholds</li>
+    </ul>
+    <div class="card-file">src/runner.ts, src/scorer.ts</div>
+  </div>
+  <div class="card live">
+    <div class="card-header">
+      <span class="card-icon">&#128257;</span>
+      <span class="card-title">Judge Replay Harness</span>
+      <span class="card-badge badge-live">Live</span>
+    </div>
+    <div class="card-desc">Feed saved Curator packets directly to Judge for A/B testing prompt variations without running Scout.</div>
+    <div class="card-file">scripts/judge-test.ts</div>
+  </div>
+  <div class="card planned">
+    <div class="card-header">
+      <span class="card-icon">&#129504;</span>
+      <span class="card-title">LLM Meta-Judge</span>
+      <span class="card-badge badge-planned">Planned</span>
+    </div>
+    <div class="card-desc">Use an LLM to evaluate Judge outputs beyond rule-based scoring. Interface defined (LlmJudgeStub); not implemented.</div>
+    <div class="card-file">src/scorer.ts (stub)</div>
+  </div>
+</div>
+
+<div style="height: 40px"></div>
+
+<!-- ROADMAP -->
+<div class="section-label">Delivery Roadmap</div>
+<div style="max-width: 800px; margin: 0 auto;">
+  <div style="display: grid; grid-template-columns: 120px 1fr; gap: 0; font-size: 13px;">
+
+    <div style="padding: 16px 0; color: #22c55e; font-weight: 600; border-right: 2px solid #22c55e; padding-right: 16px; text-align: right;">Done</div>
+    <div style="padding: 16px 0 16px 20px; border-left: 2px solid #22c55e; color: #ccc;">
+      Scout + Curator + Judge pipeline &bull; Wisdom MCP integration &bull; CLI with conversation history &bull; Account search enrichment + dedup &bull; Eval harness + gold dataset &bull; Judge replay harness &bull; Slack bot skeleton &bull; Prompt docs (Scout + Judge) &bull; Confluence docs
+    </div>
+
+    <div style="padding: 16px 0; color: #f59e0b; font-weight: 600; border-right: 2px solid #f59e0b; padding-right: 16px; text-align: right;">In Progress</div>
+    <div style="padding: 16px 0 16px 20px; border-left: 2px solid #f59e0b; color: #ccc;">
+      Slack conversation threading &bull; Salesforce tool stubs (schemas defined, no live API)
+    </div>
+
+    <div style="padding: 16px 0; color: #818cf8; font-weight: 600; border-right: 2px solid #6366f1; padding-right: 16px; text-align: right;">To Build</div>
+    <div style="padding: 16px 0 16px 20px; border-left: 2px solid #6366f1; color: #ccc;">
+      Salesforce REST API client &bull; Scribe (CRM write-back) &bull; EIC persistence store &bull; Batch scheduler for automated account sweeps &bull; LLM meta-judge for eval quality
+    </div>
+
+  </div>
+</div>
+
+<div style="text-align: center; margin-top: 48px; font-size: 11px; color: #555;">
+  Generated from codebase analysis &mdash; March 31, 2026
+</div>
+
+</body>
+</html>
