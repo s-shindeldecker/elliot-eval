@@ -13,6 +13,8 @@ export interface AgentRequest {
   /** Optional channel/thread metadata */
   channel?: string;
   threadId?: string;
+  /** Prior conversation turns for multi-turn context */
+  conversationHistory?: Array<{ role: 'user' | 'assistant'; content: string }>;
 }
 
 export interface AgentResult {

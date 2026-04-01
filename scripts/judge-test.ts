@@ -70,6 +70,7 @@ async function main() {
     contextKind: 'user',
     contextKey: 'judge-test',
     variables: { input_text: inputText },
+    jsonMode: true,
   });
 
   if (result.error) {

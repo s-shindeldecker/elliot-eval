@@ -16,10 +16,11 @@ export interface AccountResult {
   record_id: string;
   name: string;
   salesforce_id?: string;
+  account_type?: string;
   arr?: number;
   lifecycle_stage?: string;
-  icp_rank?: number;
   industry?: string;
+  owner?: string;
 }
 
 export const SEARCH_ACCOUNT_SCHEMA = {

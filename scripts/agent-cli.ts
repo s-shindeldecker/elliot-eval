@@ -63,17 +63,33 @@ if (judgeKey) {
 }
 console.log();
 
+// Conversation history for multi-turn context in interactive mode
+const conversationHistory: Array<{ role: 'user' | 'assistant'; content: string }> = [];
+const MAX_HISTORY_TURNS = 10;
+
 // ---------------------------------------------------------------------------
 // Run a single query
 // ---------------------------------------------------------------------------
 
-async function runQuery(message: string): Promise<void> {
+async function runQuery(message: string, trackHistory = false): Promise<void> {
   console.log(`─── Query ───────────────────────────────────`);
   console.log(message);
   console.log(`─────────────────────────────────────────────`);
   console.log();
 
-  const result = await agent.run({ message, userId: 'cli-user' });
+  const result = await agent.run({
+    message,
+    userId: 'cli-user',
+    conversationHistory: trackHistory ? conversationHistory : undefined,
+  });
+
+  if (trackHistory) {
+    conversationHistory.push({ role: 'user', content: message });
+    conversationHistory.push({ role: 'assistant', content: result.response });
+    while (conversationHistory.length > MAX_HISTORY_TURNS * 2) {
+      conversationHistory.shift();
+    }
+  }
 
   console.log(`─── Response ────────────────────────────────`);
   console.log(result.response);
@@ -139,7 +155,7 @@ async function interactive(): Promise<void> {
   });
 
   console.log('ELLIOT Agent CLI — Interactive Mode');
-  console.log('Type a message and press Enter. Type "exit" or Ctrl+C to quit.');
+  console.log('Type a message and press Enter. Type "reset" to clear history, "exit" or Ctrl+C to quit.');
   console.log();
 
   const prompt = (): Promise<string> =>
@@ -153,7 +169,12 @@ async function interactive(): Promise<void> {
   while (running) {
     const input = await prompt();
     if (!input || input.toLowerCase() === 'exit') break;
-    await runQuery(input);
+    if (input.toLowerCase() === 'reset') {
+      conversationHistory.length = 0;
+      console.log('(conversation history cleared)\n');
+      continue;
+    }
+    await runQuery(input, true);
   }
 
   rl.close();

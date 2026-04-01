@@ -68,6 +68,8 @@ export interface LDInvokeOptions {
   contextKind: string;
   contextKey: string;
   variables: Record<string, string>;
+  /** When true, sets response_format to json_object (use for Judge calls) */
+  jsonMode?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -97,6 +99,8 @@ export interface LDToolUseOptions extends LDInvokeOptions {
   userMessage: string;
   /** Max tool-call iterations before forcing a final response (default 10) */
   maxIterations?: number;
+  /** Prior conversation messages for multi-turn context (inserted before the new user message) */
+  priorMessages?: Array<{ role: 'user' | 'assistant'; content: string }>;
 }
 
 export interface LDToolUseResult extends LDInvokeResult {
@@ -147,7 +151,7 @@ export async function invokeLDAIConfig(opts: LDInvokeOptions): Promise<LDInvokeR
       openai.chat.completions.create({
         model: modelName,
         messages,
-        response_format: { type: "json_object" },
+        ...(opts.jsonMode && { response_format: { type: "json_object" as const } }),
         ...(params.temperature != null && { temperature: Number(params.temperature) }),
         ...(params.maxTokens != null && { max_tokens: Number(params.maxTokens) }),
       });
@@ -222,6 +226,12 @@ export async function invokeLDAIConfigWithTools(
         role: m.role,
         content: m.content,
       }));
+
+    if (opts.priorMessages?.length) {
+      for (const pm of opts.priorMessages) {
+        messages.push({ role: pm.role, content: pm.content });
+      }
+    }
 
     messages.push({ role: 'user', content: opts.userMessage });
 

@@ -18,6 +18,7 @@ export class LaunchDarklyAdapter implements AgentAdapter {
   private readonly aiConfigKey: string;
   private readonly contextKey: string;
   private readonly contextKind: string;
+  private readonly jsonMode: boolean;
 
   constructor(name: string, config: Record<string, unknown>) {
     this.name = name;
@@ -27,6 +28,7 @@ export class LaunchDarklyAdapter implements AgentAdapter {
       (config['contextKey'] as string) ?? process.env.LD_CONTEXT_KEY ?? 'elliot-eval';
     this.contextKind =
       (config['contextKind'] as string) ?? process.env.LD_CONTEXT_KIND ?? 'user';
+    this.jsonMode = (config['jsonMode'] as boolean) ?? true;
 
     if (!this.aiConfigKey) {
       console.error(
@@ -52,6 +54,7 @@ export class LaunchDarklyAdapter implements AgentAdapter {
       contextKind: this.contextKind,
       contextKey: this.contextKey,
       variables: { input_text: input.inputText },
+      jsonMode: this.jsonMode,
     });
 
     if (result.error) {

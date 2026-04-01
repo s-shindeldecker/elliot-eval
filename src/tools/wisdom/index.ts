@@ -79,8 +79,9 @@ export class WisdomToolRegistry implements ToolRegistry {
           name: 'search_account',
           description:
             'Search for accounts by name in the knowledge graph. ' +
-            'Returns matching accounts with Salesforce IDs, ARR, lifecycle stage, and ICP rank. ' +
-            'Handles partial matches — useful for fuzzy lookups and disambiguation.',
+            'Returns matching accounts with Salesforce IDs, type, ARR, industry, owner, and lifecycle stage. ' +
+            'Duplicate accounts with the same name are auto-merged, keeping the richest record. ' +
+            'Handles partial matches — useful for fuzzy lookups.',
           parameters: SEARCH_ACCOUNT_SCHEMA as unknown as Record<string, unknown>,
         },
       },

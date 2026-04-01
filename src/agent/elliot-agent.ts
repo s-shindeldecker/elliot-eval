@@ -61,8 +61,13 @@ export class ElliotAgent {
       },
     };
 
-    // ----- Curator + Judge (only if Judge is configured and Scout succeeded) -----
-    if (this.config.judgeAiConfigKey && scoutResult.toolCalls.length > 0 && !scoutResult.error) {
+    // ----- Curator + Judge (only if Judge is configured and Scout gathered intelligence) -----
+    const INTELLIGENCE_TOOLS = new Set([
+      'get_recent_calls', 'get_call_details', 'get_support_tickets',
+      'get_account_feedback', 'get_slack_mentions',
+    ]);
+    const hasIntelligence = scoutResult.toolCalls.some(tc => INTELLIGENCE_TOOLS.has(tc.name));
+    if (this.config.judgeAiConfigKey && hasIntelligence && !scoutResult.error) {
       try {
         const { scoring, curatorPacket } = await this.runCuratorAndJudge(
           request,
@@ -112,6 +117,7 @@ export class ElliotAgent {
       executeToolCall,
       userMessage: request.message,
       maxIterations: this.config.maxIterations ?? 10,
+      priorMessages: request.conversationHistory,
     });
   }
 
@@ -146,6 +152,7 @@ export class ElliotAgent {
       contextKind: this.config.contextKind ?? 'user',
       contextKey: request.userId ?? this.config.contextKey ?? 'elliot-agent',
       variables: { input_text: inputText },
+      jsonMode: true,
     });
 
     if (judgeResult.error) {

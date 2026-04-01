@@ -56,25 +56,38 @@ export async function searchAccount(
   client: WisdomClient,
   params: SearchAccountParams,
 ): Promise<AccountResult[]> {
-  const limit = params.limit ?? 5;
+  const limit = params.limit ?? 10;
+  const escaped = escapeCypher(params.query);
   const cypher = `
     MATCH (a:Account)
-    WHERE a.salesforce_name CONTAINS '${escapeCypher(params.query)}'
+    WHERE a.salesforce_name CONTAINS '${escaped}'
     RETURN DISTINCT
       a.record_id AS record_id,
       a.salesforce_name AS name,
-      a.salesforce_id AS salesforce_id
-    LIMIT ${limit}
+      a.salesforce_id AS salesforce_id,
+      a.salesforce_type AS account_type,
+      a.salesforce_arr_c AS arr,
+      a.salesforce_industry AS industry,
+      a.salesforce_account_owner_text_c AS owner,
+      a.salesforce_customerlifecyclestage_c AS lifecycle_stage
+    LIMIT ${limit * 2}
   `;
 
   const result = await client.executeCypher(cypher, `Search accounts matching "${params.query}"`);
   if (!result.success || !result.rows) return [];
 
-  return result.rows.map((r: Row) => ({
+  const raw: AccountResult[] = result.rows.map((r: Row) => ({
     record_id: str(r.record_id),
     name: str(r.name),
     salesforce_id: str(r.salesforce_id) || undefined,
+    account_type: str(r.account_type) || undefined,
+    arr: num(r.arr),
+    industry: str(r.industry) || undefined,
+    owner: str(r.owner) || undefined,
+    lifecycle_stage: str(r.lifecycle_stage) || undefined,
   }));
+
+  return deduplicateAccounts(raw, limit);
 }
 
 // ---------------------------------------------------------------------------
@@ -343,6 +356,34 @@ export async function getSlackMentions(
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+
+/**
+ * When multiple Account records share the same salesforce_name (common with
+ * SF duplicates), keep only the richest record per name — the one with the
+ * most populated metadata fields.  This prevents the Scout from presenting
+ * indistinguishable options like 5 identical "Capital One" entries.
+ */
+function deduplicateAccounts(accounts: AccountResult[], limit: number): AccountResult[] {
+  const byName = new Map<string, AccountResult[]>();
+  for (const a of accounts) {
+    const key = a.name.toLowerCase();
+    const group = byName.get(key) ?? [];
+    group.push(a);
+    byName.set(key, group);
+  }
+
+  const richness = (a: AccountResult): number =>
+    [a.account_type, a.industry, a.owner, a.lifecycle_stage].filter(Boolean).length
+    + (a.arr != null && a.arr > 0 ? 2 : 0);
+
+  const deduped: AccountResult[] = [];
+  for (const group of byName.values()) {
+    group.sort((a, b) => richness(b) - richness(a));
+    deduped.push(group[0]);
+  }
+
+  return deduped.slice(0, limit);
+}
 
 function escapeCypher(value: string): string {
   return value.replace(/'/g, "\\'").replace(/\\/g, '\\\\');
